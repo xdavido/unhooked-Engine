@@ -3,8 +3,8 @@
 #include "Globals.h"
 
 #include "imgui.h"
-#include "imgui_impl_sdl.h"
-#include "imgui_impl_opengl3.h"
+#include "../imgui/backends/imgui_impl_sdl.h"
+#include "../imgui/backends/imgui_impl_opengl3.h"
 
 #include "SDL/include/SDL.h"
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
@@ -25,12 +25,12 @@ int main(int argc, char ** argv)
 {
 	LOG("Starting game '%s'...", TITLE);
 
-	/*IMGUI_CHECKVERISON();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	ImGui::StyleColorsLight();
-	ImGui_ImplSdl_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init("#version 330");*/
+	//IMGUI_CHECKVERISON();
+	//ImGui::CreateContext();
+	//ImGuiIO& io = ImGui::GetIO(); (void)io;
+	//ImGui::StyleColorsLight();
+	//ImGui_ImplSdl_InitForOpenGL(window, true);
+	//ImGui_ImplOpenGL3_Init("#version 330");
 
 
 
