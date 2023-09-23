@@ -2,9 +2,15 @@
 #include "Application.h"
 #include "Globals.h"
 
+#include "imgui.h"
+#include "imgui_impl_sdl.h"
+#include "imgui_impl_opengl3.h"
+
 #include "SDL/include/SDL.h"
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "SDL/libx86/SDL2main.lib" )
+
+
 
 enum main_states
 {
@@ -18,6 +24,15 @@ enum main_states
 int main(int argc, char ** argv)
 {
 	LOG("Starting game '%s'...", TITLE);
+
+	/*IMGUI_CHECKVERISON();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui::StyleColorsLight();
+	ImGui_ImplSdl_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init("#version 330");*/
+
+
 
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
