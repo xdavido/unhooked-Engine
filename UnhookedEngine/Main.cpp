@@ -25,12 +25,6 @@ int main(int argc, char ** argv)
 {
 	LOG("Starting game '%s'...", TITLE);
 
-	//IMGUI_CHECKVERISON();
-	//ImGui::CreateContext();
-	//ImGuiIO& io = ImGui::GetIO(); (void)io;
-	//ImGui::StyleColorsLight();
-	//ImGui_ImplSdl_InitForOpenGL(window, true);
-	//ImGui_ImplOpenGL3_Init("#version 330");
 
 
 

@@ -282,7 +282,10 @@
     <ClInclude Include="imgui\backends\imgui_impl_opengl3_loader.h">
       <Filter>Sources\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="imgui\backends\imgui_impl_sdl.h">
+    <ClInclude Include="ModuleEditor.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\backends\imgui_impl_sdl2.h">
       <Filter>Sources\imgui</Filter>
     </ClInclude>
   </ItemGroup>
@@ -434,11 +437,14 @@
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>Sources\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\backends\imgui_impl_sdl.cpp">
-      <Filter>Sources\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="imgui\backends\imgui_impl_opengl3.cpp">
       <Filter>Sources\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\backends\imgui_impl_sdl2.cpp">
+      <Filter>Sources\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleEditor.cpp">
+      <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
