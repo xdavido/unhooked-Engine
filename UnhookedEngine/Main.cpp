@@ -3,8 +3,8 @@
 #include "Globals.h"
 
 #include "imgui.h"
-#include "../imgui/backends/imgui_impl_sdl.h"
-#include "../imgui/backends/imgui_impl_opengl3.h"
+#include "../ImGui/backends/imgui_impl_sdl2.h"
+#include "../ImGui/backends/imgui_impl_opengl3.h"
 
 #include "SDL/include/SDL.h"
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )

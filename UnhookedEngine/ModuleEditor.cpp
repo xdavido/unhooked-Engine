@@ -1,7 +1,7 @@
 #include "ModuleEditor.h"
-#include "imgui/imgui.h"
-#include "../imgui/backends/imgui_impl_opengl3.h"
-#include "../imgui/backends/imgui_impl_sdl2.h"
+#include "../ImGui/imgui.h"
+#include "../ImGui/backends/imgui_impl_opengl3.h"
+#include "../ImGui/backends/imgui_impl_sdl2.h"
 #include "Application.h"
 #include "Modulewindow.h"
 #include "ModuleRenderer3D.h"
@@ -30,7 +30,7 @@ bool ModuleEditor::Init()
 
 	
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
-	ImGui_ImplOpenGL3_Init();
+	ImGui_ImplOpenGL3_Init("#version 130");
 
 
  return false;
@@ -39,4 +39,39 @@ bool ModuleEditor::Init()
 void ModuleEditor::DrawEdior()
 {
 	ImGui_ImplSDL2_NewFrame();
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui::NewFrame();
+
+
+	ImGui::ShowDemoWindow();
+
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+
+
 }
+
+bool ModuleEditor::CleanUp()
+{
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
+
+	/*SDL_GL_DeleteContext(App->renderer3D->context);*/
+
+	return true;
+}
+
+//void ModuleEditor::OnResize(int width, int height)
+//{
+//	glViewport(0, 0, width, height);
+//
+//	glMatrixMode(GL_PROJECTION);
+//	glLoadIdentity();
+//	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
+//	glLoadMatrixf(&ProjectionMatrix);
+//
+//	glMatrixMode(GL_MODELVIEW);
+//	glLoadIdentity();
+//}
+

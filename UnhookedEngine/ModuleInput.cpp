@@ -1,7 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleInput.h"
-#include "../imgui/backends/imgui_impl_sdl2.h"
+#include "../ImGui/backends/imgui_impl_sdl2.h"
 
 #define MAX_KEYS 300
 
@@ -89,7 +89,7 @@ update_status ModuleInput::PreUpdate(float dt)
 	SDL_Event e;
 	while(SDL_PollEvent(&e))
 	{
-		ImGui_ImplSDL2_ProcessEvent(&e);
+		ImGui_ImplSDL2_ProcessEvent(&e);//
 
 		switch(e.type)
 		{

@@ -24,10 +24,12 @@ Application::Application()
 	AddModule(camera);
 	AddModule(input);
 	
-	
 	// Renderer last!
 	AddModule(renderer3D);
+
+	//editor
 	AddModule(editor);
+	
 
 }
 
