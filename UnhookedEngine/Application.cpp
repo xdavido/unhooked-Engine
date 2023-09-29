@@ -1,11 +1,13 @@
 #include "Application.h"
 
+
 Application::Application()
 {
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
+	editor = new ModuleEditor(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -18,6 +20,7 @@ Application::Application()
 
 	// Renderer last!
 	AddModule(renderer3D);
+	AddModule(editor);
 }
 
 Application::~Application()
@@ -45,7 +48,7 @@ bool Application::Init()
 	{
 		(*it)->Start();
 	}
-	
+
 	ms_timer.Start();
 	return ret;
 }
@@ -67,21 +70,23 @@ update_status Application::Update()
 {
 	update_status ret = UPDATE_CONTINUE;
 	PrepareUpdate();
-	
+
 	for (std::vector<Module*>::const_iterator it = list_modules.cbegin(); it != list_modules.cend() && ret == UPDATE_CONTINUE; ++it)
 	{
-		(*it)->PreUpdate(dt);
+		ret = (*it)->PreUpdate(dt);
 	}
 
 	for (std::vector<Module*>::const_iterator it = list_modules.cbegin(); it != list_modules.cend() && ret == UPDATE_CONTINUE; ++it)
 	{
-		(*it)->Update(dt);
+		ret = (*it)->Update(dt);
 	}
 
 	for (std::vector<Module*>::const_iterator it = list_modules.cbegin(); it != list_modules.cend() && ret == UPDATE_CONTINUE; ++it)
 	{
-		(*it)->PostUpdate(dt);
+		ret = (*it)->PostUpdate(dt);
 	}
+
+	editor->AddFPS(dt);
 
 	FinishUpdate();
 	return ret;

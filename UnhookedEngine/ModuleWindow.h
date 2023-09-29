@@ -18,6 +18,8 @@ public:
 	bool Init();
 	bool CleanUp();
 
+	void SetNewWindow(int height, int width, bool fullscreen, bool resizable, bool borderless, bool fullscreendesktop);
+
 	void SetTitle(const char* title);
 
 public:

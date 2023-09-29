@@ -1,7 +1,11 @@
 #pragma once
+
+#include <string>
+
 #include "Module.h"
 #include "Globals.h"
 #include "Light.h"
+#include "gl/gl.h"
 
 #include "MathGeoLib/include/Math/float3x3.h"
 #include "MathGeoLib/include/Math/float4x4.h"
@@ -23,6 +27,8 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
+	void ChangeColorScene(Color color);
+
 	void OnResize(int width, int height);
 
 public:
@@ -30,7 +36,9 @@ public:
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
 	CPlane Grid;
-	
+
+	bool TurnOff = false;
+
 	//You won't need this after using Frustum
 	mat4x4 ProjectionMatrix;
 };

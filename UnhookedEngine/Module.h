@@ -1,11 +1,12 @@
 #pragma once
+#include "Globals.h"
 
 class Application;
 struct PhysBody3D;
 
 class Module
 {
-private :
+private:
 	bool enabled;
 
 public:
@@ -17,9 +18,9 @@ public:
 	virtual ~Module()
 	{}
 
-	virtual bool Init() 
+	virtual bool Init()
 	{
-		return true; 
+		return true;
 	}
 
 	virtual bool Start()
@@ -42,9 +43,9 @@ public:
 		return UPDATE_CONTINUE;
 	}
 
-	virtual bool CleanUp() 
-	{ 
-		return true; 
+	virtual bool CleanUp()
+	{
+		return true;
 	}
 
 	virtual void OnCollision(PhysBody3D* body1, PhysBody3D* body2)
