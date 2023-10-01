@@ -137,6 +137,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	Grid.Render();
 	App->editor->Draw();
 	SDL_GL_SwapWindow(App->window->window);
+	
+
 
 	if (TurnOff)
 	{
@@ -180,4 +182,52 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+void ModuleRenderer3D::RenderCube()
+{
+	glBegin(GL_QUADS);
+
+	// Front face
+	glColor3f(1.0f, 0.0f, 0.0f);  // Red
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+
+	// Back face
+	glColor3f(0.0f, 1.0f, 0.0f);  // Green
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+
+	// Left face
+	glColor3f(0.0f, 0.0f, 1.0f);  // Blue
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+
+	// Right face
+	glColor3f(1.0f, 1.0f, 0.0f);  // Yellow
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+
+	// Top face
+	glColor3f(1.0f, 0.0f, 1.0f);  // Magenta
+	glVertex3f(-0.5f, 0.5f, -0.5f);
+	glVertex3f(0.5f, 0.5f, -0.5f);
+	glVertex3f(0.5f, 0.5f, 0.5f);
+	glVertex3f(-0.5f, 0.5f, 0.5f);
+
+	// Bottom face
+	glColor3f(0.0f, 1.0f, 1.0f);  // Cyan
+	glVertex3f(-0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, -0.5f, -0.5f);
+	glVertex3f(0.5f, -0.5f, 0.5f);
+	glVertex3f(-0.5f, -0.5f, 0.5f);
+
+	glEnd();
 }
