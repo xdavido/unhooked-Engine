@@ -3,12 +3,12 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleEditor.h"
 #include "SDL\include\SDL_opengl.h"
-#include <gl/GL.h>
-#include <gl/GLU.h>
+
 
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "glu32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "Glew/libx86/glew32.lib")
+
 
 #ifdef _DEBUG
 #pragma comment (lib, "MathGeoLib/libx86/Debug/MathGeoLib.lib") /* link Microsoft OpenGL lib   */
@@ -25,11 +25,49 @@ ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Modul
 ModuleRenderer3D::~ModuleRenderer3D()
 {}
 
+static const GLfloat CubeVertices[] = {
+		  //front
+		  0.2f, 0.2f, 0.0f, 1.0f, 1.0f,    // top right
+		  0.2f, -0.2f, 0.0f, 1.0f, 0.0f,   // bottom right
+		  -0.2f, -0.2f, 0.0f, 0.0f, 0.0f,  // bottom left
+		  -0.2f, 0.2f, 0.0f, 0.0f, 1.0f,   // top left 
+
+		  //back
+		  0.2f, 0.2f, -0.4f, 1.0f, 1.0f,   // top right
+		  0.2f, -0.2f, -0.4f, 1.0f, 0.0f,  // bottom right
+		  -0.2f, -0.2f, -0.4f, 0.0f, 0.0f, // bottom left
+		  -0.2f, 0.2f, -0.4f, 0.0f, 1.0f,  // top left 
+
+};
+static const GLuint CubeIndices[] = {
+
+	  // front
+	  0, 1, 3,
+	  1, 2, 3,
+	  // back
+	  4, 5, 7,
+	  5, 6, 7,
+	  // right
+	  0, 1, 4,
+	  1, 4, 5,
+	  // left
+	  2, 3, 7,
+	  2, 6, 7,
+	  // top
+	  0, 3, 4,
+	  3, 4, 7,
+	  // bottom
+	  1, 2, 5,
+	  2, 5, 6
+};
+
 // Called before render is available
 bool ModuleRenderer3D::Init()
 {
 	LOG("Creating 3D Renderer context");
 	bool ret = true;
+
+	
 
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
@@ -103,12 +141,35 @@ bool ModuleRenderer3D::Init()
 		lights[0].Active(true);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
+
+		glewInit();
 	}
 
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	Grid.axis = true;
+
+	VBO = 0;
+	glGenBuffers (1,&VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(CubeVertices) , CubeVertices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	EBO = 0;
+	glGenBuffers(1, &EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(CubeIndices), CubeIndices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	VAO = 0;
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	glBindVertexArray(0);
+
+
 
 	return ret;
 }
@@ -136,17 +197,26 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	Grid.Render();
 
-	App->editor->Draw();
-
-	////Draw Test
+	//Draw Test
 	//glLineWidth(2.0f);
 	//glBegin(GL_TRIANGLES);
-	//glVertex3f(0.f, 0.f, 0.f);
-	//glVertex3f(0.f, 10.f, 0.f);
+	//glVertex3d(0.f, 0.f, 0.f); glVertex3d(1.f, 1.f, 0.f); glVertex3d(0.f, 1.f, 1.f);
+	//
 	//glEnd();
 	//glLineWidth(1.0f);
 
+;
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT,NULL);
+
+	
+	App->editor->Draw();
 	
 	SDL_GL_SwapWindow(App->window->window);
 
@@ -165,6 +235,10 @@ bool ModuleRenderer3D::CleanUp()
 {
 	LOG("Destroying 3D Renderer");
 
+	if (!VBO == 0) {
+		
+		glDeleteBuffers(1, &VBO);
+	}
 	SDL_GL_DeleteContext(context);
 
 	return true;
