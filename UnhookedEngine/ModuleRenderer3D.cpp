@@ -135,8 +135,22 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	Grid.Render();
+
 	App->editor->Draw();
+
+	////Draw Test
+	//glLineWidth(2.0f);
+	//glBegin(GL_TRIANGLES);
+	//glVertex3f(0.f, 0.f, 0.f);
+	//glVertex3f(0.f, 10.f, 0.f);
+	//glEnd();
+	//glLineWidth(1.0f);
+
+
+	
 	SDL_GL_SwapWindow(App->window->window);
+
+	
 
 	if (TurnOff)
 	{
