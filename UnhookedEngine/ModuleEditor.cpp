@@ -44,10 +44,10 @@ void ModuleEditor::Draw()
     {
         if (ImGui::Begin("About Uss"))
         {
-            ImGui::SeparatorText("ABOUT ODYSSEY ENGINE:");
-            ImGui::Text("Odyssey Engine v.0.1");
+            ImGui::SeparatorText("ABOUT UNHOOKED ENGINE:");
+            ImGui::Text("Unhooked Engine v.0.1");
             ImGui::Text("The new 3D Game Engine under CITM development");
-            ImGui::Text("By Jose Antonio Tur Izquierdo & Guillem Aixut Anderiz");
+            ImGui::Text("David Ruiz Luengo & Pau Garriga Brotons");
             ImGui::Text("3rd party Libraries:");
 
             ImGui::End();
