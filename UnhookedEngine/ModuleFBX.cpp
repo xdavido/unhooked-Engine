@@ -9,7 +9,33 @@
 
 #define MAX_KEYS 300
 
+struct aiLogStream stream;
 
+struct MeshData {
+    uint id_index = 0;   // Index buffer ID in VRAM
+    uint num_index = 0;  // Number of indices
+    uint* index = nullptr;  // Index data
+
+    uint id_vertex = 0;  // Vertex buffer ID in VRAM
+    uint num_vertex = 0;  // Number of vertices
+    float* vertex = nullptr;  // Vertex data
+
+    // Constructor to initialize members
+    MeshData() : id_index(0), num_index(0), index(nullptr), id_vertex(0), num_vertex(0), vertex(nullptr) {}
+
+    // Destructor to release allocated memory
+    ~MeshData() {
+        if (index) {
+            delete[] index;
+            index = nullptr;
+        }
+
+        if (vertex) {
+            delete[] vertex;
+            vertex = nullptr;
+        }
+    }
+};
 
 ModuleFBX::ModuleFBX(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -25,7 +51,7 @@ ModuleFBX::~ModuleFBX()
 // Called before render is available
 bool ModuleFBX::Init()
 {
-	struct aiLogStream stream;
+	
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
