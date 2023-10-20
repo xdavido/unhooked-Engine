@@ -76,10 +76,29 @@ struct MeshData {
     
 };
 void LoadFBX(const char* file_path) {
-    const aiScene* scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
-    if (scene != nullptr && aiScene > HasMeshes())
-    {
-        // Use scene->mNumMeshes to iterate on scene->mMeshes array
-        aiReleaseImport(scene);
-    }
+    //const aiScene* scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
+    //if (scene != nullptr && aiScene->HasMeshes())
+    //{
+    //    // Use scene->mNumMeshes to iterate on scene->mMeshes array
+    //    aiReleaseImport(scene);
+    //}
+
+    //// copy vertices
+    //ourMesh.num_vertices = aiMesh->mNumVertices;
+    //ourMesh.vertices = new float[ourMesh.num_vertices * 3];
+    //memcpy(ourMesh.vertices, aiMesh->mVertices, sizeof(float) * ourMesh.num_vertices * 3);
+
+    //// copy faces
+    //if (aiMesh->HasFaces())
+    //{
+    //    ourMesh.num_indices = aiMesh->mNumFaces * 3;
+    //    ourMesh.indices = new uint[m.num_indices]; // assume each face is a triangle
+    //    for (uint i = 0; i < aiMesh->mNumFaces; ++i)
+    //    {
+    //        if (aiMesh->mFaces[i].mNumIndices != 3)
+    //            LOG("WARNING, geometry face with != 3 indices!");
+    //        else
+    //            memcpy(&m.indices[i * 3], new_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
+    //    }
+    //}
 }
