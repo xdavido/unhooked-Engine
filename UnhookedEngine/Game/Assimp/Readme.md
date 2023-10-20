@@ -1,121 +1,134 @@
-Open Asset Import Library (assimp)
-==================================
+Open Asset Import Library (assimp) 
+========
 
 Open Asset Import Library is a library to load various 3d file formats into a shared, in-memory format. It supports more than __40 file formats__ for import and a growing selection of file formats for export.
 
-### Current project status ###
-[![Financial Contributors on Open Collective](https://opencollective.com/assimp/all/badge.svg?label=financial+contributors)](https://opencollective.com/assimp) 
-![C/C++ CI](https://github.com/assimp/assimp/workflows/C/C++%20CI/badge.svg)
-<a href="https://scan.coverity.com/projects/5607">
+APIs are provided for C and C++. There are various bindings to other languages (C#, Java, Python, Delphi, D). Assimp also runs on Android and iOS.
+
+Additionally, assimp features various __mesh post processing tools__: normals and tangent space generation, triangulation, vertex cache locality optimization, removal of degenerate primitives and duplicate vertices, sorting by primitive type, merging of redundant materials and many more.
+
+This is the development trunk containing the latest features and bugfixes. For productive use though, we recommend one of the stable releases available from [assimp.sf.net](http://assimp.sf.net) or from *nix package repositories.
+The current build status is:
+
+Linux [![Linux Build Status](https://travis-ci.org/assimp/assimp.png)](https://travis-ci.org/assimp/assimp)
+Windows [![Windows Build Status](https://ci.appveyor.com/api/projects/status/tmo433wax6u6cjp4?svg=true)](https://ci.appveyor.com/project/kimkulling/assimp)
+Coverity<a href="https://scan.coverity.com/projects/5607">
   <img alt="Coverity Scan Build Status"
        src="https://scan.coverity.com/projects/5607/badge.svg"/>
 </a>
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/9973693b7bdd4543b07084d5d9cf4745)](https://www.codacy.com/gh/assimp/assimp/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=assimp/assimp&amp;utm_campaign=Badge_Grade)
 
-[![Coverage Status](https://coveralls.io/repos/github/assimp/assimp/badge.svg?branch=master)](https://coveralls.io/github/assimp/assimp?branch=master)
-[![Join the chat at https://gitter.im/assimp/assimp](https://badges.gitter.im/assimp/assimp.svg)](https://gitter.im/assimp/assimp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/assimp/assimp.svg)](http://isitmaintained.com/project/assimp/assimp "Average time to resolve an issue")
-[![Percentage of issues still open](http://isitmaintained.com/badge/open/assimp/assimp.svg)](http://isitmaintained.com/project/assimp/assimp "Percentage of issues still open")
-<br>
-
-APIs are provided for C and C++. There are various bindings to other languages (C#, Java, Python, Delphi, D). Assimp also runs on Android and iOS.
-Additionally, assimp features various __mesh post processing tools__: normals and tangent space generation, triangulation, vertex cache locality optimization, removal of degenerate primitives and duplicate vertices, sorting by primitive type, merging of redundant materials and many more.
-
-### Latest Doc's ###
-Please check the latest documents at [Asset-Importer-Lib-Doc](https://assimp-docs.readthedocs.io/en/latest/). 
-
-### Prebuild binaries ###
-Please check our [Itchi Projectspace](https://kimkulling.itch.io/the-asset-importer-lib)
-
-If you want to check our Model-Database, use the following repo: https://github.com/assimp/assimp-mdb
-
-### Communities ###
-- Ask a question at [The Assimp-Discussion Board](https://github.com/assimp/assimp/discussions)
-- Ask on [Assimp-Community on Reddit](https://www.reddit.com/r/Assimp/)
-- Ask on [StackOverflow with the assimp-tag](http://stackoverflow.com/questions/tagged/assimp?sort=newest). 
-- Nothing has worked? File a question or an issue-report at [The Assimp-Issue Tracker](https://github.com/assimp/assimp/issues)
-
-And we also have a Gitter-channel:Gitter [![Join the chat at https://gitter.im/assimp/assimp](https://badges.gitter.im/assimp/assimp.svg)](https://gitter.im/assimp/assimp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)<br>
+__[open3mod](https://github.com/acgessler/open3mod) is a powerful 3D model viewer based on Assimp's import and export abilities.__
 
 #### Supported file formats ####
-You can find the complete list of supported file-formats [here](https://github.com/assimp/assimp/blob/master/doc/Fileformats.md)
 
+A full list [is here](http://assimp.sourceforge.net/main_features_formats.html).
+__Importers__:
+
+- 3DS
+- BLEND (Blender)
+- DAE/Collada
+- FBX
+- IFC-STEP 
+- ASE
+- DXF
+- HMP
+- MD2
+- MD3 
+- MD5
+- MDC
+- MDL
+- NFF
+- PLY
+- STL
+- X 
+- OBJ
+- OpenGEX
+- SMD
+- LWO 
+- LXO 
+- LWS  
+- TER 
+- AC3D 
+- MS3D 
+- COB
+- Q3BSP
+- XGL
+- CSM
+- BVH
+- B3D
+- NDO
+- Ogre Binary
+- Ogre XML
+- Q3D
+- ASSBIN (Assimp custom format)
+ 
+Additionally, some formats are supported by dependency on non-free code or external SDKs (not built by default):
+
+- C4D (https://github.com/acgessler/assimp-cinema4d)
+
+__Exporters__:
+
+- DAE (Collada)
+- STL
+- OBJ
+- PLY
+- X
+- 3DS
+- JSON (for WebGl, via https://github.com/acgessler/assimp2json)
+- ASSBIN
+	
 ### Building ###
-Take a look into the https://github.com/assimp/assimp/blob/master/Build.md file. We are available in vcpkg, and our build system is CMake; if you used CMake before there is a good chance you know what to do.
 
-### Ports ###
-* [Android](port/AndroidJNI/README.md)
-* [Python](port/PyAssimp/README.md)
-* [.NET](https://bitbucket.org/Starnick/assimpnet/src/master/)
-* [Pascal](port/AssimpPascal/Readme.md)
-* [Javascript (Alpha)](https://github.com/makc/assimp2json)
-* [Javascript/Node.js Interface](https://github.com/kovacsv/assimpjs)
-* [Unity 3d Plugin](https://ricardoreis.net/trilib-2/)
-* [Unreal Engine Plugin](https://github.com/irajsb/UE4_Assimp/)
-* [JVM](https://github.com/kotlin-graphics/assimp) Full jvm port (current [status](https://github.com/kotlin-graphics/assimp/wiki/Status))
-* [HAXE-Port](https://github.com/longde123/assimp-haxe) The Assimp-HAXE-port.
-* [Rust](https://github.com/jkvargas/russimp)
 
-### Other tools ###
-[open3mod](https://github.com/acgessler/open3mod) is a powerful 3D model viewer based on Assimp's import and export abilities.
+Take a look into the `INSTALL` file. Our build system is CMake, if you used CMake before there is a good chance you know what to do.
+
 
 #### Repository structure ####
-Open Asset Import Library is implemented in C++. The directory structure looks like:
+
+
+Open Asset Import Library is implemented in C++. The directory structure is:
 
 	/code		Source code
 	/contrib	Third-party libraries
 	/doc		Documentation (doxysource and pre-compiled docs)
-	/fuzz           Contains the test-code for the Google-Fuzzer project
 	/include	Public header C and C++ header files
 	/scripts 	Scripts used to generate the loading code for some formats
 	/port		Ports to other languages and scripts to maintain those.
 	/test		Unit- and regression tests, test suite of models
 	/tools		Tools (old assimp viewer, command line `assimp`)
-	/samples	A small number of samples to illustrate possible use-cases for Assimp
+	/samples	A small number of samples to illustrate possible 
+                        use cases for Assimp
+	/workspaces	Build enviroments for vc,xcode,... (deprecated,
+			CMake has superseeded all legacy build options!)
 
-The source code is organized in the following way:
 
-	code/Common			The base implementation for importers and the infrastructure
-	code/CApi                       Special implementations which are only used for the C-API
-	code/Geometry                   A collection of geometry tools
-	code/Material                   The material system
-	code/PBR                        An exporter for physical based models
-	code/PostProcessing		The post-processing steps
-	code/AssetLib/<FormatName>	Implementation for import and export for the format
+### Where to get help ###
+
+
+For more information, visit [our website](http://assimp.sourceforge.net/). Or check out the `./doc`- folder, which contains the official documentation in HTML format.
+(CHMs for Windows are included in some release packages and should be located right here in the root folder).
+
+If the docs don't solve your problem, ask on [StackOverflow](http://stackoverflow.com/questions/tagged/assimp?sort=newest). If you think you found a bug, please open an issue on Github.
+
+For development discussions, there is also a (very low-volume) mailing list, _assimp-discussions_
+  [(subscribe here)]( https://lists.sourceforge.net/lists/listinfo/assimp-discussions) 
+
+And we also have an IRC-channel at freenode: #assetimporterlib . You can easily join us via: [KiwiIRC/freenote](https://kiwiirc.com/client/irc.freenode.net), choose your nickname and type
+> /join #assetimporterlib
 
 ### Contributing ###
-Contributions to assimp are highly appreciated. The easiest way to get involved is to submit
+
+Contributions to assimp are highly appreciated. The easiest way to get involved is to submit 
 a pull request with your changes against the main repository's `master` branch.
 
-## Contributors
-
-### Code Contributors
-
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-
-<a href="https://github.com/assimp/assimp/graphs/contributors"><img src="https://opencollective.com/assimp/contributors.svg?width=890&button=false" /></a>
-
-### Financial Contributors
-
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/assimp/contribute)]
-
-#### Individuals
-
-<a href="https://opencollective.com/assimp"><img src="https://opencollective.com/assimp/individuals.svg?width=890"></a>
-
-
-#### Organizations
-
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/assimp/contribute)]
-
-<a href="https://opencollective.com/assimp/organization/0/website"><img src="https://opencollective.com/assimp/organization/0/avatar.svg"></a>
-
 ### License ###
-Our license is based on the modified, __3-clause BSD__-License.
 
-An _informal_ summary is: do whatever you want, but include Assimp's license text with your product -
+Our license is based on the modified, __3-clause BSD__-License. 
+
+An _informal_ summary is: do whatever you want, but include Assimp's license text with your product - 
 and don't sue us if our code doesn't work. Note that, unlike LGPLed code, you may link statically to Assimp.
-For the legal details, see the `LICENSE` file.
+For the legal details, see the `LICENSE` file. 
 
 ### Why this name ###
+
 Sorry, we're germans :-), no english native speakers ...
