@@ -24,6 +24,7 @@ public:
 
 	bool Init();
 	update_status PreUpdate(float dt);
+	void LoadFBX(const char* file_path);
 	
 	bool CleanUp();
 
