@@ -16,6 +16,8 @@
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "glu32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "Glew/libx86/glew32.lib")
+#pragma comment (lib, "DevIL/libx86/DevIL.lib")
+
 
 
 #ifdef _DEBUG
@@ -239,6 +241,8 @@ update_status ModuleRenderer3D::Update(float dt)
 	for (const MeshData& mesh : MeshVertex)
 	{
 		Draw(mesh);
+		//ILboolean ilLoadImage(char* FileName);
+
 	}
 
 	if (App->input->droped)
