@@ -164,6 +164,63 @@ void MeshData::CreateBufferTex(const void* checkerImage)
 	//glEnable(GL_TEXTURE_2D);
 }
 
+void CalculateFaceNormal(const float vertex1[3], const float vertex2[3], const float vertex3[3], float normal[3]) {
+	float v1[3], v2[3];
+
+	// Calcula dos vectores que representan los lados del triángulo
+	for (int i = 0; i < 3; ++i) {
+		v1[i] = vertex2[i] - vertex1[i];
+		v2[i] = vertex3[i] - vertex1[i];
+	}
+
+	// Calcula la normal de la cara
+	normal[0] = (v1[1] * v2[2]) - (v1[2] * v2[1]);
+	normal[1] = (v1[2] * v2[0]) - (v1[0] * v2[2]);
+	normal[2] = (v1[0] * v2[1]) - (v1[1] * v2[0]);
+}
+
+void MeshData::CalculateVertexNormals() {
+    if (num_vertex == 0 || num_index == 0) {
+        return;
+    }
+
+    // Inicializa todas las normales de los vértices a (0, 0, 0)
+    normals = new float[num_vertex * 3](); // Inicializa con ceros
+
+    for (uint i = 0; i < num_index; i += 3) {
+        uint index1 = index[i] * 3;
+        uint index2 = index[i + 1] * 3;
+        uint index3 = index[i + 2] * 3;
+
+        // Obtiene los vértices de la cara
+        float vertex1[3] = { vertex[index1], vertex[index1 + 1], vertex[index1 + 2] };
+        float vertex2[3] = { vertex[index2], vertex[index2 + 1], vertex[index2 + 2] };
+        float vertex3[3] = { vertex[index3], vertex[index3 + 1], vertex[index3 + 2] };
+
+        // Calcula la normal de la cara
+        float faceNormal[3];
+        CalculateFaceNormal(vertex1, vertex2, vertex3, faceNormal);
+
+        // Agrega la normal de la cara a las normales de los vértices
+        for (int j = 0; j < 3; ++j) {
+            normals[index1 + j] += faceNormal[j];
+            normals[index2 + j] += faceNormal[j];
+            normals[index3 + j] += faceNormal[j];
+        }
+    }
+
+    // Normaliza todas las normales de los vértices
+    for (uint i = 0; i < num_vertex * 3; i += 3) {
+        float normal[3] = { normals[i], normals[i + 1], normals[i + 2] };
+        NormalizeVector(normal[0], normal[1], normal[2]);
+        normals[i] = normal[0];
+        normals[i + 1] = normal[1];
+        normals[i + 2] = normal[2];
+    }
+}
+
+
+
 void MeshData::DrawFBX()
 {
 	/*glPushMatrix();

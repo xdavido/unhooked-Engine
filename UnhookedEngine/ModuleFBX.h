@@ -35,9 +35,35 @@ struct MeshData {
 	float* texCoords = nullptr;
 	GLuint textureID;
 
+	uint num_normals = 0;
+	float* normals = nullptr;
+
     void CreateBuffer();
     void CreateBufferTex(const void* checkerImage);
+	void CalculateVertexNormals();
     void DrawFBX();
+
+    void NormalizeNormals() {
+        for (uint i = 0; i < num_normals; i += 3) {
+            float x = normals[i];
+            float y = normals[i + 1];
+            float z = normals[i + 2];
+            NormalizeVector(x, y, z);
+            normals[i] = x;
+            normals[i + 1] = y;
+            normals[i + 2] = z;
+        }
+    }
+
+private:
+    void NormalizeVector(float& x, float& y, float& z) {
+        float length = sqrt(x * x + y * y + z * z);
+        if (length != 0.0f) {
+            x /= length;
+            y /= length;
+            z /= length;
+        }
+    }
 };
 
 class ModuleFBX : public Module
@@ -51,6 +77,7 @@ public:
     update_status Update(float dt) override;
     update_status PostUpdate(float dt) override;
 	void LoadFBX(const char* file_path, std::vector<MeshData>& MeshVertex);
+	
 
 	bool CleanUp();
 
