@@ -26,7 +26,7 @@ public:
 	void AddFPS(float aFPS);
 
 	std::vector<float> mFPSLog;
-	bool wireframe = false;
+	bool wireframe = true;
 
 
 	//

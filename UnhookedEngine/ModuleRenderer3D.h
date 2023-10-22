@@ -33,10 +33,12 @@ public:
 	bool CleanUp();
 
 	void ChangeColorScene(Color color);
-
+	void Draw(const MeshData& mesh);
 	void OnResize(int width, int height);
 
 public:
+
+	
 
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;

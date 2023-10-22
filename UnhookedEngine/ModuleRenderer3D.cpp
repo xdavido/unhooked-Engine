@@ -236,6 +236,11 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 update_status ModuleRenderer3D::Update(float dt)
 {
 	//drawCube();
+	for (const MeshData& mesh : MeshVertex)
+	{
+		Draw(mesh);
+	}
+
 	if (App->input->droped)
 	{
 		App->FBX->LoadFBX(App->input->dropped_filedir, MeshVertex);
@@ -278,7 +283,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//glLineWidth(1.0f);
 
 ;
-	/*glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
@@ -290,7 +295,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	
 	App->editor->Draw();
 
-	*/
+	
 	SDL_GL_SwapWindow(App->window->window);
 
 	
@@ -317,6 +322,23 @@ bool ModuleRenderer3D::CleanUp()
 	return true;
 }
 
+void ModuleRenderer3D::Draw(const MeshData& mesh)
+{
+	// Bind vertex and index buffers
+	glBindBuffer(GL_ARRAY_BUFFER, mesh.id_vertex);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.id_index);
+
+	// Enable vertex position and normal attributes (modify according to your data)
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, 0);
+
+	// Draw the mesh
+	glDrawElements(GL_TRIANGLES, mesh.num_index, GL_UNSIGNED_INT, 0);
+
+	// Unbind buffers
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
 
 void ModuleRenderer3D::ChangeColorScene(Color color)
 {
