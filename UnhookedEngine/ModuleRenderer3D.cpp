@@ -169,6 +169,9 @@ bool ModuleRenderer3D::Init()
 		glewInit();
 	}
 
+	App->FBX->Load("Assets/BakerHouse.fbx");
+
+
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -241,6 +244,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	
 	App->editor->Draw();
+
 	
 	SDL_GL_SwapWindow(App->window->window);
 

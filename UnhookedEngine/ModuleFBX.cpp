@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleFBX.h"
@@ -29,7 +31,7 @@ bool ModuleFBX::Init()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
-
+    return true;
 
 }
 
@@ -40,65 +42,39 @@ update_status ModuleFBX::PreUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
+void ModuleFBX::LoadFBX(const char* file_path) {
+	
+	// copy vertices
+	ourMesh.num_vertices = aiMesh->mNumVertices;
+	ourMesh.vertices = new float[ourMesh.num_vertices * 3];
+	memcpy(ourMesh.vertices, aiMesh->mVertices, sizeof(float) * ourMesh.num_vertices * 3);
+	LOG("New mesh with %d vertices", m.num_vertices);
+	// copy faces
+	if (aiMesh->HasFaces())
+	{
+		ourMesh.num_indices = aiMesh->mNumFaces * 3;
+		ourMesh.indices = new uint[m.num_indices]; // assume each face is a triangle
+		for (uint i = 0; i < aiMesh->mNumFaces; ++i)
+		{
+			if (aiMesh->mFaces[i].mNumIndices != 3)
+				LOG("WARNING, geometry face with != 3 indices!");
+			else
+				memcpy(&m.indices[i * 3], new_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
+		}
+	}
+}
 
 
 // Called before quitting
 bool ModuleFBX::CleanUp()
 {
+    LOG("Deleting 3D Render");
 	// detach log stream
 	aiDetachAllLogStreams();
+    return true;
+
 }
 
-struct MeshData {
-    uint id_index = 0;   // Index buffer ID in VRAM
-    uint num_index = 0;  // Number of indices
-    uint* index = nullptr;  // Index data
 
-    uint id_vertex = 0;  // Vertex buffer ID in VRAM
-    uint num_vertex = 0;  // Number of vertices
-    float* vertex = nullptr;  // Vertex data
 
-    // Constructor to initialize members
-    MeshData() : id_index(0), num_index(0), index(nullptr), id_vertex(0), num_vertex(0), vertex(nullptr) {}
 
-    // Destructor to release allocated memory
-    ~MeshData() {
-        if (index) {
-            delete[] index;
-            index = nullptr;
-        }
-
-        if (vertex) {
-            delete[] vertex;
-            vertex = nullptr;
-        }
-    }
-    
-};
-void LoadFBX(const char* file_path) {
-    //const aiScene* scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
-    //if (scene != nullptr && aiScene->HasMeshes())
-    //{
-    //    // Use scene->mNumMeshes to iterate on scene->mMeshes array
-    //    aiReleaseImport(scene);
-    //}
-
-    //// copy vertices
-    //ourMesh.num_vertices = aiMesh->mNumVertices;
-    //ourMesh.vertices = new float[ourMesh.num_vertices * 3];
-    //memcpy(ourMesh.vertices, aiMesh->mVertices, sizeof(float) * ourMesh.num_vertices * 3);
-
-    //// copy faces
-    //if (aiMesh->HasFaces())
-    //{
-    //    ourMesh.num_indices = aiMesh->mNumFaces * 3;
-    //    ourMesh.indices = new uint[m.num_indices]; // assume each face is a triangle
-    //    for (uint i = 0; i < aiMesh->mNumFaces; ++i)
-    //    {
-    //        if (aiMesh->mFaces[i].mNumIndices != 3)
-    //            LOG("WARNING, geometry face with != 3 indices!");
-    //        else
-    //            memcpy(&m.indices[i * 3], new_mesh->mFaces[i].mIndices, 3 * sizeof(uint));
-    //    }
-    //}
-}
