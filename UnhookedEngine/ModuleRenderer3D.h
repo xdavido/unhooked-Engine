@@ -5,6 +5,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "Light.h"
+#include "ModuleFBX.h"
 
 #include "MathGeoLib/include/Math/float3x3.h"
 #include "MathGeoLib/include/Math/float4x4.h"
@@ -15,6 +16,7 @@
 //todo: REMOVE this before 1st delivery!!
 #include "glmath.h"
 
+#include <vector>
 
 #define MAX_LIGHTS 8
 
@@ -26,6 +28,7 @@ public:
 
 	bool Init();
 	update_status PreUpdate(float dt);
+	update_status Update(float dt) override;
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
@@ -41,12 +44,15 @@ public:
 
 	bool TurnOff = false;
 
-	//You won't need this after using Frustum
-	mat4x4 ProjectionMatrix;
+	mat3x3 NormalMatrix;
+	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 
 	uint VBO;
 	uint EBO;
 	uint VAO;
 
+
+	
+	std::vector<MeshData> MeshVertex;
 
 };

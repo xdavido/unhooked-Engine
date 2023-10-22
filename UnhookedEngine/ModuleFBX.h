@@ -1,5 +1,5 @@
-#ifndef MODULEFBXA_H
-#define MODULEFBXA_H
+#ifndef MODULEFBX_H
+#define MODULEFBX_H
 #include "Module.h"
 #include "Globals.h"
 #include "Light.h"
@@ -28,21 +28,16 @@ struct MeshData {
     uint num_vertex = 0;  // Number of vertices
     float* vertex = nullptr;  // Vertex data
 
-    // Constructor to initialize members
-    MeshData() : id_index(0), num_index(0), index(nullptr), id_vertex(0), num_vertex(0), vertex(nullptr) {};
+	//Tex
+	uint id_tex = 0;
+	//uint textureID = 0;
+	uint num_tex = 0;
+	float* texCoords = nullptr;
+	GLuint textureID;
 
-    // Destructor to release allocated memory
-    ~MeshData() {
-        if (index) {
-            delete[] index;
-            index = nullptr;
-        }
-
-        if (vertex) {
-            delete[] vertex;
-            vertex = nullptr;
-        }
-    }
+    void CreateBuffer();
+    void CreateBufferTex(const void* checkerImage);
+    void DrawFBX();
 };
 
 class ModuleFBX : public Module
@@ -53,7 +48,9 @@ public:
 
 	bool Init() override;
 	update_status PreUpdate(float dt);
-	void LoadFBX(const char* file_path);
+    update_status Update(float dt) override;
+    update_status PostUpdate(float dt) override;
+	void LoadFBX(const char* file_path, std::vector<MeshData>& MeshVertex);
 
 	bool CleanUp();
 
@@ -62,4 +59,4 @@ public:
 
 };
 
-#endif // MODULEFBXA_H
+#endif // MODULEFBX_H

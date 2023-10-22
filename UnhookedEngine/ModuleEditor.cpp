@@ -196,19 +196,13 @@ void ModuleEditor::SettingsMenu()
                     MSG.push_back("GL_TEXTURE_2D Disabled");
                 }
             }
-            if (ImGui::Checkbox("GL_WIREFRAME", &gl_WIREFRAME))
+            if (ImGui::Checkbox("Wireframe Mode", &wireframe))
             {
-                if (gl_WIREFRAME)
-                {
-                    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                    MSG.push_back("GL_WIREFRAME Enabled");
-                }
-                else
-                {
-                    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-                    MSG.push_back("GL_WIREFRAME Disabled");
-                }
+                SetWireFrameMode(wireframe);
             }
+            //ImGui::Checkbox("Vsync", &vsync);
+            //SetVsync(vsync);
+            
         }
 
         if (ImGui::CollapsingHeader("Window Settings"))
@@ -259,5 +253,20 @@ void ModuleEditor::AddFPS(float aFPS)
     {
         mFPSLog.erase(mFPSLog.begin());
         mFPSLog.push_back(aFPS);
+    }
+}
+
+void ModuleEditor::SetWireFrameMode(bool wireframe)
+{
+    if (wireframe)
+    {
+        glPolygonMode(GL_FRONT, GL_FILL);
+        glPolygonMode(GL_BACK, GL_FILL);
+
+    }
+    else
+    {
+        glPolygonMode(GL_FRONT, GL_LINE);
+        glPolygonMode(GL_BACK, GL_LINE);
     }
 }

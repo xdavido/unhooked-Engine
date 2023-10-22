@@ -2,8 +2,16 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleEditor.h"
+#include "glew/include/glew.h"
 #include "SDL\include\SDL_opengl.h"
+#include "ModuleFbx.h"
+#include "ModuleInput.h"
+#include "Game/Assimp/include/cimport.h"
+#include "Game/Assimp/include/scene.h"
+#include "Game/Assimp/include/postprocess.h"
+#include <cmath>
 
+#include <vector>
 
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 #pragma comment (lib, "glu32.lib") /* link Microsoft OpenGL lib   */
@@ -25,65 +33,65 @@ ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Modul
 ModuleRenderer3D::~ModuleRenderer3D()
 {}
 
-static const GLfloat CubeVertices[] = {
-		  //front
-		  //0.2f, 0.2f, 0.0f, 1.0f, 1.0f,    // top right
-		  //0.2f, -0.2f, 0.0f, 1.0f, 0.0f,   // bottom right
-		  //-0.2f, -0.2f, 0.0f, 0.0f, 0.0f,  // bottom left
-		  //-0.2f, 0.2f, 0.0f, 0.0f, 1.0f,   // top left 
-
-		  ////back
-		  //0.2f, 0.2f, -0.4f, 1.0f, 1.0f,   // top right
-		  //0.2f, -0.2f, -0.4f, 1.0f, 0.0f,  // bottom right
-		  //-0.2f, -0.2f, -0.4f, 0.0f, 0.0f, // bottom left
-		  //-0.2f, 0.2f, -0.4f, 0.0f, 1.0f,  // top left 
-	-1,-1,-1, 0, 0,
-	 1,-1,-1, 1, 0,
-	 1, 1,-1, 2, 0,
-	-1, 1,-1, 3, 0,
-	-1,-1,-1, 4, 0,
-
-	-1,-1, 1, 0, 1,
-	 1,-1, 1, 1, 1,
-	 1, 1, 1, 2, 1,
-	-1, 1, 1, 3, 1,
-	-1,-1, 1, 4, 1,
-
-	-1, 1,-1, 0,-1,
-	 1, 1,-1, 1,-1,
-
-	-1, 1, 1, 0, 2,
-	 1, 1, 1, 1, 2
-
-};
-static const GLuint CubeIndices[] = {
-
-	  //// front
-	  //0, 1, 3,
-	  //1, 2, 3,
-	  //// back
-	  //4, 5, 7,
-	  //5, 6, 7,
-	  //// right
-	  //0, 1, 4,
-	  //1, 4, 5,
-	  //// left
-	  //2, 3, 7,
-	  //2, 6, 7,
-	  //// top
-	  //0, 3, 4,
-	  //3, 4, 7,
-	  //// bottom
-	  //1, 2, 5,
-	  //2, 5, 6
-
-	0, 1, 5,  5, 1, 6,
-	 1, 2, 6,  6, 2, 7,
-	 2, 3, 7,  7, 3, 8,
-	 3, 4, 8,  8, 4, 9,
-	10,11, 0,  0,11, 1,
-	 5, 6,12, 12, 6,13
-};
+//static const GLfloat CubeVertices[] = {
+//		  //front
+//		  //0.2f, 0.2f, 0.0f, 1.0f, 1.0f,    // top right
+//		  //0.2f, -0.2f, 0.0f, 1.0f, 0.0f,   // bottom right
+//		  //-0.2f, -0.2f, 0.0f, 0.0f, 0.0f,  // bottom left
+//		  //-0.2f, 0.2f, 0.0f, 0.0f, 1.0f,   // top left 
+//
+//		  ////back
+//		  //0.2f, 0.2f, -0.4f, 1.0f, 1.0f,   // top right
+//		  //0.2f, -0.2f, -0.4f, 1.0f, 0.0f,  // bottom right
+//		  //-0.2f, -0.2f, -0.4f, 0.0f, 0.0f, // bottom left
+//		  //-0.2f, 0.2f, -0.4f, 0.0f, 1.0f,  // top left 
+//	-1,-1,-1, 0, 0,
+//	 1,-1,-1, 1, 0,
+//	 1, 1,-1, 2, 0,
+//	-1, 1,-1, 3, 0,
+//	-1,-1,-1, 4, 0,
+//
+//	-1,-1, 1, 0, 1,
+//	 1,-1, 1, 1, 1,
+//	 1, 1, 1, 2, 1,
+//	-1, 1, 1, 3, 1,
+//	-1,-1, 1, 4, 1,
+//
+//	-1, 1,-1, 0,-1,
+//	 1, 1,-1, 1,-1,
+//
+//	-1, 1, 1, 0, 2,
+//	 1, 1, 1, 1, 2
+//
+//};
+//static const GLuint CubeIndices[] = {
+//
+//	  //// front
+//	  //0, 1, 3,
+//	  //1, 2, 3,
+//	  //// back
+//	  //4, 5, 7,
+//	  //5, 6, 7,
+//	  //// right
+//	  //0, 1, 4,
+//	  //1, 4, 5,
+//	  //// left
+//	  //2, 3, 7,
+//	  //2, 6, 7,
+//	  //// top
+//	  //0, 3, 4,
+//	  //3, 4, 7,
+//	  //// bottom
+//	  //1, 2, 5,
+//	  //2, 5, 6
+//
+//	0, 1, 5,  5, 1, 6,
+//	 1, 2, 6,  6, 2, 7,
+//	 2, 3, 7,  7, 3, 8,
+//	 3, 4, 8,  8, 4, 9,
+//	10,11, 0,  0,11, 1,
+//	 5, 6,12, 12, 6,13
+//};
 
 // Called before render is available
 bool ModuleRenderer3D::Init()
@@ -91,7 +99,13 @@ bool ModuleRenderer3D::Init()
 	LOG("Creating 3D Renderer context");
 	bool ret = true;
 
-	
+	//OpenGL initialitzation
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
@@ -169,7 +183,7 @@ bool ModuleRenderer3D::Init()
 		glewInit();
 	}
 
-	App->FBX->Load("Assets/BakerHouse.fbx");
+	App->FBX->LoadFBX("Assets/BakerHouse.fbx", MeshVertex);
 
 
 	// Projection matrix for
@@ -177,7 +191,7 @@ bool ModuleRenderer3D::Init()
 
 	Grid.axis = true;
 
-	VBO = 0;
+	/*VBO = 0;
 	glGenBuffers (1,&VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(CubeVertices) , CubeVertices, GL_STATIC_DRAW);
@@ -194,7 +208,7 @@ bool ModuleRenderer3D::Init()
 	glBindVertexArray(VAO);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	glBindVertexArray(0);
+	glBindVertexArray(0);*/
 
 
 
@@ -219,6 +233,37 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
+update_status ModuleRenderer3D::Update(float dt)
+{
+	//drawCube();
+	if (App->input->droped)
+	{
+		App->FBX->LoadFBX(App->input->dropped_filedir, MeshVertex);
+		App->input->droped = false;
+	}
+	if (App->editor->wireframe)
+	{
+		glPolygonMode(GL_FRONT, GL_LINE);
+		glPolygonMode(GL_BACK, GL_LINE);
+		for (int i = 0; i < MeshVertex.size(); ++i)
+		{
+			MeshVertex[i].DrawFBX();
+		}
+	}
+	else {
+		glPolygonMode(GL_FRONT, GL_FILL);
+		glPolygonMode(GL_BACK, GL_FILL);
+		for (int i = 0; i < MeshVertex.size(); ++i)
+		{
+			MeshVertex[i].DrawFBX();
+		}
+	}
+
+
+	return UPDATE_CONTINUE;
+
+}
+
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
@@ -233,7 +278,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//glLineWidth(1.0f);
 
 ;
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	/*glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
@@ -245,7 +290,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	
 	App->editor->Draw();
 
-	
+	*/
 	SDL_GL_SwapWindow(App->window->window);
 
 	
