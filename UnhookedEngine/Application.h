@@ -12,6 +12,8 @@
 #include "ModuleCamera3D.h"
 #include "ModuleEditor.h"
 #include "ModuleFBX.h"
+#include "ModuleTextures.h"
+
 
 class Application
 {
@@ -22,6 +24,7 @@ public:
 	ModuleCamera3D* camera;
 	ModuleEditor* editor;
 	ModuleFBX* FBX;
+	ModuleTextures* textures;
 
 private:
 

@@ -54,7 +54,7 @@ void ModuleEditor::Draw()
         }
     }
 
-    ImGui::ShowDemoWindow();
+    //ImGui::ShowDemoWindow();
 
     ImGui::Render();
     ImGui::EndFrame();
@@ -95,7 +95,8 @@ void ModuleEditor::MainMenuBar()
 
             if (ImGui::MenuItem("GitHub"))
             {
-                ShellExecute(NULL, "open", "https://github.com/flishflash/OdysseyEngine", 0, 0, SW_SHOWNORMAL);
+                ShellExecute(NULL, "open", "https://github.com/xdavido/unhooked-Engine", 0, 0, SW_SHOWNORMAL);
+
             }
 
             ImGui::EndMenu();
