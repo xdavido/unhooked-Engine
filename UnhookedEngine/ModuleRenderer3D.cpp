@@ -193,26 +193,6 @@ bool ModuleRenderer3D::Init()
 
 	Grid.axis = true;
 
-	/*VBO = 0;
-	glGenBuffers (1,&VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(CubeVertices) , CubeVertices, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	EBO = 0;
-	glGenBuffers(1, &EBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(CubeIndices), CubeIndices, GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-	VAO = 0;
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	glBindVertexArray(0);*/
-
-
 
 	return ret;
 }
@@ -237,14 +217,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 update_status ModuleRenderer3D::Update(float dt)
 {
-	//drawCube();
-	for (const MeshData& mesh : MeshVertex)
-	{
-		Draw(mesh);
-		//ILboolean ilLoadImage(char* FileName);
-
-	}
-
+	
 	if (App->input->droped)
 	{
 		App->FBX->LoadFBX(App->input->dropped_filedir, MeshVertex);
@@ -277,25 +250,6 @@ update_status ModuleRenderer3D::Update(float dt)
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	Grid.Render();
-
-	//Draw Test
-	//glLineWidth(2.0f);
-	//glBegin(GL_TRIANGLES);
-	//glVertex3d(0.f, 0.f, 0.f); glVertex3d(1.f, 1.f, 0.f); glVertex3d(0.f, 1.f, 1.f);
-	//
-	//glEnd();
-	//glLineWidth(1.0f);
-
-;
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT,NULL);
-
 	
 	App->editor->Draw();
 
@@ -317,32 +271,11 @@ bool ModuleRenderer3D::CleanUp()
 {
 	LOG("Destroying 3D Renderer");
 
-	if (!VBO == 0) {
-		
-		glDeleteBuffers(1, &VBO);
-	}
 	SDL_GL_DeleteContext(context);
 
 	return true;
 }
 
-void ModuleRenderer3D::Draw(const MeshData& mesh)
-{
-	// Bind vertex and index buffers
-	glBindBuffer(GL_ARRAY_BUFFER, mesh.id_vertex);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.id_index);
-
-	// Enable vertex position and normal attributes (modify according to your data)
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, 0);
-
-	// Draw the mesh
-	glDrawElements(GL_TRIANGLES, mesh.num_index, GL_UNSIGNED_INT, 0);
-
-	// Unbind buffers
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
 
 void ModuleRenderer3D::ChangeColorScene(Color color)
 {

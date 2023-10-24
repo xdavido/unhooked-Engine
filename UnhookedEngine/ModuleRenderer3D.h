@@ -33,7 +33,7 @@ public:
 	bool CleanUp();
 
 	void ChangeColorScene(Color color);
-	void Draw(const MeshData& mesh);
+	
 	void OnResize(int width, int height);
 
 public:
@@ -49,12 +49,6 @@ public:
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 
-	uint VBO;
-	uint EBO;
-	uint VAO;
-
-
-	
 	std::vector<MeshData> MeshVertex;
 
 };

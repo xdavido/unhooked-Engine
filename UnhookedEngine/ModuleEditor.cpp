@@ -82,7 +82,7 @@ void ModuleEditor::MainMenuBar()
 
         if (ImGui::BeginMenu("Menu"))
         {
-            ImGui::Text("Texto");
+            ImGui::Text("ToDo");
             ImGui::EndMenu();
         }
 

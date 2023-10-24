@@ -9,7 +9,7 @@ Application::Application()
 	camera = new ModuleCamera3D(this);
 	editor = new ModuleEditor(this);
 	FBX = new ModuleFBX(this);
-	textures = new ModuleTextures(this);
+	//textures = new ModuleTextures(this);
 
 
 	// The order of calls is very important!
@@ -25,7 +25,7 @@ Application::Application()
 	AddModule(renderer3D);
 	AddModule(editor);
 	AddModule(FBX);
-	AddModule(textures);
+	//AddModule(textures);
 }
 
 Application::~Application()

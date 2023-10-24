@@ -1,24 +1,43 @@
-#pragma once
-#ifndef _Module_Textures_
-#define _Module_Textures_
-
-#include "Module.h"
-#include "Globals.h"
-#include <vector>
-#include <string>
-
-#include "ImGui/imgui.h"
-#include "ImGui/backends/imgui_impl_sdl2.h"
-#include "ImGui/backends/imgui_impl_opengl3.h"
-
-class ModuleTextures : public Module
-{
-public:
-	ModuleTextures(Application* app, bool start_enabled = true);
-	~ModuleTextures();
-	
-private:
-
-};
-
-#endif // !_Module_Textures_
+//#pragma once
+//#ifndef _Module_Textures_
+//#define _Module_Textures_
+//
+//#include "Module.h"
+//#include "glew.h"
+//#include "il.h"
+//#include "ilu.h"
+//#include "ilut.h"
+//
+//#define CHECKERS_HEIGHT 64
+//#define CHECKERS_WIDTH 64
+//
+//enum class Tex_Types {
+//	NONE,
+//	CHECKERS,
+//	CURRENT,
+//};
+//
+//class ModuleTextures : public Module
+//{
+//public:
+//
+//	ModuleTextures(Application* app, bool start_enabled = true);
+//	~ModuleTextures() {}
+//
+//	uint LoadTexture(const char* file_path);
+//	void DestroyTexture(uint t);
+//
+//private:
+//	bool Init();
+//	bool Start();
+//	bool CleanUp();
+//
+//public:
+//	GLuint checkersID;
+//
+//private:
+//	GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4]; // height width rgba
+//
+//};
+//
+//#endif // !_Module_Textures_
