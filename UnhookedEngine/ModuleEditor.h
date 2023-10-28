@@ -29,7 +29,11 @@ public:
 	bool wireframe = true;
 	bool VertexShow = true;
 	bool FaceShow = true;
+	// Define a vector to store console messages
+	std::vector<std::string> consoleMessages;
 
+	// A flag to control scrolling to the bottom of the console
+	bool scrollToBottom;
 
 	
 	bool gl_DEPTH_TEST, gl_CULL_FACE, gl_LIGHTING, gl_COLOR_MATERIAL, gl_TEXTURE_2D, gl_WIREFRAME = true;
@@ -38,6 +42,10 @@ private:
 	const char* lastValue = "";
 	void MainMenuBar();
 	void SettingsMenu();
+	void SettingsMenu2();
+	void AssetsWindow();
+	void ConsoleWindow();
+	void AddToConsole(const std::string& message);
 	void SetWireFrameMode(bool wireframe);
 
 
@@ -50,5 +58,7 @@ private:
 	int Height = 720, Width = 1080;
 	bool fullscreen = false, resizable = true, borderless = false, fullscreendesktop = false;
 };
+
+
 
 #endif // !_Module_Editor_

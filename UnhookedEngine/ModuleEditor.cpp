@@ -3,6 +3,7 @@
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
 #include "SDL/include/SDL_opengl_glext.h"
+#include <filesystem>
 
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -38,6 +39,12 @@ void ModuleEditor::Draw()
     MainMenuBar();
 
     SettingsMenu();
+
+    SettingsMenu2();
+
+    AssetsWindow();
+
+    ConsoleWindow();
 
     if (OpenAbout == true)
     {
@@ -246,6 +253,49 @@ void ModuleEditor::SettingsMenu()
     }
     ImGui::End();
 }
+
+void ModuleEditor::SettingsMenu2()
+{
+    if (ImGui::Begin("Settings 2"))
+    {
+        // This is an empty window with no content
+    }
+    ImGui::End();
+}
+
+void ModuleEditor::AssetsWindow()
+{
+    if (ImGui::Begin("Assets"))
+    {
+        // This is an empty window with no content
+    }
+    ImGui::End();
+}
+
+void ModuleEditor::ConsoleWindow()
+{
+    if (ImGui::Begin("Console"))
+    {
+        ImGui::BeginChild("ConsoleLog", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
+
+        // Mostrar mensajes de la consola aquí
+        for (const std::string& message : consoleMessages)
+        {
+            ImGui::TextUnformatted(message.c_str());
+        }
+
+        ImGui::EndChild();
+    }
+    ImGui::End();
+}
+
+void ModuleEditor::AddToConsole(const std::string& message)
+{
+    consoleMessages.push_back(message);
+    scrollToBottom = true; // Set scrollToBottom to true to scroll to the latest message.
+}
+
+
 
 void ModuleEditor::AddFPS(float aFPS)
 {
