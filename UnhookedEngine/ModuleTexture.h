@@ -3,26 +3,26 @@
 //#define _Module_Textures_
 //
 //#include "Module.h"
-//#include "glew.h"
-//#include "il.h"
-//#include "ilu.h"
-//#include "ilut.h"
+//#include "Globals.h"
+//#include "Light.h"
+//#include "Application.h"
+//
+//#include "Glew/include/glew.h"
+//#include "DevIL/include/il.h"
+//#include "DevIL/include/ilu.h"
+//#include "DevIL/include/ilut.h"
+//
 //
 //#define CHECKERS_HEIGHT 64
 //#define CHECKERS_WIDTH 64
 //
-//enum class Tex_Types {
-//	NONE,
-//	CHECKERS,
-//	CURRENT,
-//};
 //
-//class ModuleTextures : public Module
+//class ModuleTexture : public Module
 //{
 //public:
 //
-//	ModuleTextures(Application* app, bool start_enabled = true);
-//	~ModuleTextures() {}
+//	ModuleTexture(Application* app, bool start_enabled = true);
+//	~ModuleTexture() {}
 //
 //	uint LoadTexture(const char* file_path);
 //	void DestroyTexture(uint t);
@@ -32,10 +32,11 @@
 //	bool Start();
 //	bool CleanUp();
 //
+//	
+//
 //public:
 //	GLuint checkersID;
-//
-//private:
+//	GLuint testImageID;
 //	GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4]; // height width rgba
 //
 //};

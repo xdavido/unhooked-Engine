@@ -6,9 +6,9 @@
 #include "SDL\include\SDL_opengl.h"
 #include "ModuleFbx.h"
 #include "ModuleInput.h"
-#include "Game/Assimp/include/cimport.h"
-#include "Game/Assimp/include/scene.h"
-#include "Game/Assimp/include/postprocess.h"
+#include "Assimp/include/cimport.h"
+#include "Assimp/include/scene.h"
+#include "Assimp/include/postprocess.h"
 #include <cmath>
 
 #include <vector>
@@ -184,9 +184,6 @@ bool ModuleRenderer3D::Init()
 
 		glewInit();
 	}
-
-	App->FBX->LoadFBX("Assets/BakerHouse.fbx", MeshVertex);
-
 
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);

@@ -1,39 +1,43 @@
-//#include "ModuleTextures.h"
 //#include "Globals.h"
 //#include "Application.h"
 //#include "ModuleFBX.h"
-//#include "Game/Assimp/include/cimport.h"
-//#include "Game/Assimp/include/scene.h"
-//#include "Game/Assimp/include/mesh.h"
-//#include "Game/Assimp/include/postprocess.h"
-//#pragma comment (lib, "Game/Assimp/libx86/assimp.lib")
+//#include "ModuleTexture.h"
 //#pragma comment (lib, "DevIL/libx86/DevIL.lib")
+//#include "SDL/include/SDL_opengl.h"
+//#include "Assimp/include/cimport.h"
+//#include "Assimp/include/scene.h"
+//#include "Assimp/include/mesh.h"
+//#include "Assimp/include/postprocess.h"
+//#pragma comment (lib, "Assimp/libx86/assimp.lib")
+//#include "ImGui/backends/imgui_impl_sdl2.h"
+//
+//#define max_keys 300
+//
+//
+//#include "DevIL/include/il.h"
+//#include "DevIL/include/ilu.h"
+//#include "DevIL/include/ilut.h"
+//
 //#include <gl/GL.h>
 //#include <gl/GLU.h>
 //
-//#include "ImGui/backends/imgui_impl_sdl2.h"
-//
-//#define MAX_KEYS 300
-//
-//#include <vector>
-//#include <cmath>
+//#define checkers_height 256/4
+//#define checkers_width  256/4
 //
 //
-//
-//#define CHECKERS_HEIGHT 256/4
-//#define CHECKERS_WIDTH  256/4
-//ModuleTextures::ModuleTextures(Application* app, bool start_enabled) : Module(app, start_enabled)
+//ModuleTexture::ModuleTexture(Application* app, bool start_enabled) : Module(app, start_enabled)
 //{
+//	checkersID = 0;
+//	testImageID = 0;
 //
 //}
 //
-//ModuleTextures::~ModuleTextures()
+//uint ModuleTexture::LoadTexture(const char* file_path)
 //{
-//}
+//	
 //
-//void ModuleTextures::LoadTexture(const char* file_path)
-//{//Generate DevIL buffers
-//	uint devilImageId;
+//	//Generate DevIL buffers
+//	ILuint devilImageId = 0;
 //	ilGenImages(1, &devilImageId);
 //	ilBindImage(devilImageId);
 //
@@ -41,23 +45,10 @@
 //	bool success = ilLoadImage(file_path);
 //
 //	if (!success) {
-//		LOGT(LogsType::WARNINGLOG, "Error loading texture %s", file_path);
-//		return 0;
+//		LOG("WARNING: Error loading texture %s", file_path, ilGetError());
 //	}
+//	else ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
 //
-//	success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-//
-//	if (!success) {
-//		LOGT(LogsType::WARNINGLOG, "Error converting texture %s", file_path);
-//		return 0;
-//	}
-//
-//	string ext = FileInfo(file_path).extension;
-//
-//	//Png is the only format not flipped
-//	if (ext != ".png" && ext != ".PNG") {
-//		iluFlipImage();
-//	}
 //
 //	//Extract loaded image data
 //	BYTE* data = ilGetData();
@@ -87,28 +78,34 @@
 //
 //	//Delete DevIL image buffer
 //	ilDeleteImages(1, &devilImageId);
+//	ilBindImage(0);
+//	
 //
 //	//Unbind glew buffer
 //	glBindTexture(GL_TEXTURE_2D, 0);
 //
+//	
+//
 //	return imageId;
 //}
 //
-//void ModuleTextures::DestroyTexture(uint t)
+//void ModuleTexture::DestroyTexture(uint t)
 //{
 //	glDeleteBuffers(1, &t);
 //}
 //
-//bool ModuleTextures::Init()
+//bool ModuleTexture::Init()
 //{
 //	ilInit();
 //	iluInit();
-//	ilutInit();
+//	ilutRenderer(ILUT_OPENGL);
 //
-//	return true;
+//	return true; 
 //}
 //
-//bool ModuleTextures::Start()
+//
+//
+//bool ModuleTexture::Start()
 //{
 //	//Initialize checker image
 //	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
@@ -146,11 +143,13 @@
 //	glBindTexture(GL_TEXTURE_2D, 0);
 //	glDisable(GL_TEXTURE_2D);
 //
+//	testImageID = LoadTexture("Game/Assets/texture/Baker_House.png");
 //	return true;
 //}
 //
-//bool ModuleTextures::CleanUp()
+//bool ModuleTexture::CleanUp()
 //{
 //	glDeleteBuffers(1, &checkersID);
 //	return true;
 //}
+//

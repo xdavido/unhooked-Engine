@@ -4,6 +4,7 @@
 #include "Globals.h"
 #include "Light.h"
 #include "Application.h"
+#include "ModuleTexture.h"
 
 
 #include "MathGeoLib/include/Math/float3x3.h"
@@ -11,6 +12,9 @@
 #include "Primitive.h"
 
 #include "Glew/include/glew.h"
+#include "DevIL/include/il.h"
+#include "DevIL/include/ilu.h"
+#include "DevIL/include/ilut.h"
 
 //todo: REMOVE this before 1st delivery!!
 #include "glmath.h"
@@ -38,17 +42,16 @@ struct MeshData {
     MeshData(Application& app, ModuleEditor& editor) : App(app), Editor(editor) { }*/
 
 	//Tex
-	uint id_tex = 0;
-	//uint textureID = 0;
+	/*uint id_tex = 0;
+	uint textureID = 0;
 	uint num_tex = 0;
-	float* texCoords = nullptr;
-	GLuint textureID;
-
+	float* texCoords = nullptr;*/
+	
 	uint num_normals = 0;
 	float* normals = nullptr;
 
     void CreateBuffer();
-    void CreateBufferTex(const void* checkerImage);
+   // void CreateBufferTex(const void* checkerImage);
 	void CalculateVertexNormals();
     void DrawFBX();
     void NormalizeNormals() {
@@ -81,17 +84,18 @@ public:
 	 ~ModuleFBX();
 
 	bool Init() override;
-	update_status PreUpdate(float dt);
+	update_status PreUpdate(float dt)override;
     update_status Update(float dt) override;
     update_status PostUpdate(float dt) override;
 	void LoadFBX(const char* file_path, std::vector<MeshData>& MeshVertex);
+
 	
 
 	bool CleanUp();
 
 
 public:
-
+    
 };
 
 #endif // MODULEFBX_H

@@ -3,11 +3,12 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleFBX.h"
-#include "Game/Assimp/include/cimport.h"
-#include "Game/Assimp/include/scene.h"
-#include "Game/Assimp/include/mesh.h"
-#include "Game/Assimp/include/postprocess.h"
-#pragma comment (lib, "Game/Assimp/libx86/assimp.lib")
+#include "ModuleTexture.h"
+#include "Assimp/include/cimport.h"
+#include "Assimp/include/scene.h"
+#include "Assimp/include/mesh.h"
+#include "Assimp/include/postprocess.h"
+#pragma comment (lib, "Assimp/libx86/assimp.lib")
 #include "ImGui/backends/imgui_impl_sdl2.h"
 
 #define MAX_KEYS 300
@@ -65,6 +66,7 @@ update_status ModuleFBX::PostUpdate(float dt)
 {
 	return UPDATE_CONTINUE;
 }
+
 void ModuleFBX::LoadFBX(const char* file_path, std::vector<MeshData>& MeshVertex) {
 	//meshData.CalculateVertexNormals();
 	const aiScene* scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
@@ -79,36 +81,45 @@ void ModuleFBX::LoadFBX(const char* file_path, std::vector<MeshData>& MeshVertex
 			MeshData& _MeshVertex = MeshVertex[i];
 			aiMesh* sceneM = scene->mMeshes[i];
 
-	// copy vertex
-	_MeshVertex.num_vertex = sceneM->mNumVertices;
-	_MeshVertex.vertex = new float[_MeshVertex.num_vertex * 3];
-	memcpy(_MeshVertex.vertex, sceneM->mVertices, sizeof(float) * _MeshVertex.num_vertex * 3);
+			// copy vertex
+			_MeshVertex.num_vertex = sceneM->mNumVertices;
+			_MeshVertex.vertex = new float[_MeshVertex.num_vertex * 3];
+			memcpy(_MeshVertex.vertex, sceneM->mVertices, sizeof(float) * _MeshVertex.num_vertex * 3);
 
-	LOG("New mesh with %d vertices", _MeshVertex.num_vertex);
+			LOG("New mesh with %d vertices", _MeshVertex.num_vertex);
 
-	// copy faces
-	if (sceneM->HasFaces())
-	{
-		_MeshVertex.num_index = sceneM->mNumFaces * 3;
-		_MeshVertex.index = new uint[_MeshVertex.num_index]; // each face is a triangle
-		for (uint i = 0; i < sceneM->mNumFaces; ++i)
-		{
-			if (sceneM->mFaces[i].mNumIndices != 3){
-				LOG("WARNING, geometry face with != 3 indices!");
-			}
-			else{
-				memcpy(&_MeshVertex.index[i * 3], sceneM->mFaces[i].mIndices, 3 * sizeof(uint));
-			}
+			// copy faces
+				if (sceneM->HasFaces())
+				{
+					_MeshVertex.num_index = sceneM->mNumFaces * 3;
+					_MeshVertex.index = new uint[_MeshVertex.num_index]; // each face is a triangle
+					for (uint i = 0; i < sceneM->mNumFaces; ++i)
+					{
+						if (sceneM->mFaces[i].mNumIndices != 3){
+							LOG("WARNING, geometry face with != 3 indices!");
+						}
+						else{
+							memcpy(&_MeshVertex.index[i * 3], sceneM->mFaces[i].mIndices, 3 * sizeof(uint));
+						}
+						
+						// copy tex coords
+						/*_MeshVertex.texCoords = new float[_MeshVertex.num_vertex * 2];
+						for (size_t k = 0; k < sceneM->mNumVertices; k++) {
+							if (sceneM->mTextureCoords[0]) {
+								_MeshVertex.texCoords[k * 2] = sceneM->mTextureCoords[0][k].x;
+								_MeshVertex.texCoords[k * 2 + 1] = sceneM->mTextureCoords[0][k].y;
+							}
+						}*/
+
+					}
+				}
+
+		 _MeshVertex.CreateBuffer();
 		}
-	};
-
-	_MeshVertex.CreateBuffer();
-	//_MeshVertex.CreateBufferTex(checkerImage);
-		}
-		aiReleaseImport(scene);
+	 aiReleaseImport(scene);
 	}
 	else
-		LOG("Error loading scene %s", "Assets/warrior.fbx");
+		LOG("Error loading scene %s", file_path);
 
 }
 
@@ -123,16 +134,16 @@ void MeshData::CreateBuffer()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_index, index, GL_STATIC_DRAW);
 }
 
-void MeshData::CreateBufferTex(const void* checkerImage)
-{
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, textureID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_tex, texCoords, GL_STATIC_DRAW);
-	
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
-
-}
+//void MeshData::CreateBufferTex(const void* checkerImage)
+//{
+//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, textureID);
+//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_tex, texCoords, GL_STATIC_DRAW);
+//	
+//	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+//
+//	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
+//
+//}
 
 void CalculateFaceNormal(const float vertex1[3], const float vertex2[3], const float vertex3[3], float normal[3]) {
 	float v1[3], v2[3];
@@ -194,6 +205,7 @@ void MeshData::CalculateVertexNormals() {
 void MeshData::DrawFBX()
 {
 
+
 	// Bind vertex and index buffers
 	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
@@ -206,8 +218,12 @@ void MeshData::DrawFBX()
 	glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, 0);
 
 	// Unbind buffers
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_TEXTURE_COORD_ARRAY);
+
+
 
 	
 	// Descomentar esto para ver Vertex y Face Normals
@@ -267,6 +283,7 @@ void MeshData::DrawFBX()
 	//}
 	//}
 	
+
 }
 
 // Called before quitting

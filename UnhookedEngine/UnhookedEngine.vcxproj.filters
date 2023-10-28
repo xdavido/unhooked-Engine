@@ -294,7 +294,10 @@
     <ClInclude Include="ModuleFBX.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleTextures.h">
+    <ClInclude Include="ModuleTexture.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ModulePrimitives.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
   </ItemGroup>
@@ -458,7 +461,10 @@
     <ClCompile Include="ModuleFBX.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleTextures.cpp">
+    <ClCompile Include="ModuleTexture.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ModulePrimitives.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>
