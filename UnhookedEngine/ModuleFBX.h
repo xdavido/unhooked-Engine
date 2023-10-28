@@ -27,6 +27,8 @@ struct MeshData {
     uint id_vertex = 0;  // Vertex buffer ID in VRAM
     uint num_vertex = 0;  // Number of vertices
     float* vertex = nullptr;  // Vertex data
+    bool drawVertexNormals = true;
+    bool drawFaceNormals = true;
 
 	//Tex
 	uint id_tex = 0;
@@ -42,6 +44,8 @@ struct MeshData {
     void CreateBufferTex(const void* checkerImage);
 	void CalculateVertexNormals();
     void DrawFBX();
+    void EnableDisableFaceNormals();
+    void EnableDisableVertexNormals();
 
     void NormalizeNormals() {
         for (uint i = 0; i < num_normals; i += 3) {

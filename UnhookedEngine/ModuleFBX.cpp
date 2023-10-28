@@ -286,6 +286,16 @@ void MeshData::DrawFBX()
 	}
 }
 
+void MeshData::EnableDisableFaceNormals() 
+{
+	drawFaceNormals = !drawFaceNormals;
+}
+
+void MeshData::EnableDisableFaceNormals()
+{
+	drawVertexNormals = !drawVertexNormals;
+}
+
 // Called before quitting
 bool ModuleFBX::CleanUp()
 {
