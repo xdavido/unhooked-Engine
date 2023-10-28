@@ -214,28 +214,74 @@ void MeshData::DrawFBX()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	// Draw Vertex Normals
-	for (uint i = 0; i < num_vertex * 3; i += 3) {
-		float vertexX = vertex[i];
-		float vertexY = vertex[i + 1];
-		float vertexZ = vertex[i + 2];
+	//for (uint i = 0; i < num_vertex * 3; i += 3) {
+	//	float vertexX = vertex[i];
+	//	float vertexY = vertex[i + 1];
+	//	float vertexZ = vertex[i + 2];
 
-		float normalX = normals[i];
-		float normalY = normals[i + 1];
-		float normalZ = normals[i + 2];
+	//	float normalX = normals[i];
+	//	float normalY = normals[i + 1];
+	//	float normalZ = normals[i + 2];
 
-		// Define a scaling factor for the normal length
-		float normalScale = 0.1f;
+	//	// Define a scaling factor for the normal length
+	//	float normalScale = 0.1f;
 
-		// Calculate the end point of the normal
-		float normalEndX = vertexX + normalX * normalScale;
-		float normalEndY = vertexY + normalY * normalScale;
-		float normalEndZ = vertexZ + normalZ * normalScale;
+	//	// Calculate the end point of the normal
+	//	float normalEndX = vertexX + normalX * normalScale;
+	//	float normalEndY = vertexY + normalY * normalScale;
+	//	float normalEndZ = vertexZ + normalZ * normalScale;
 
-		// Draw the vertex normal as a line
-		glBegin(GL_LINES);
-		glVertex3f(vertexX, vertexY, vertexZ);
-		glVertex3f(normalEndX, normalEndY, normalEndZ);
-		glEnd();
+	//	// Draw the vertex normal as a line
+	//	glBegin(GL_LINES);
+	//	glVertex3f(vertexX, vertexY, vertexZ);
+	//	glVertex3f(normalEndX, normalEndY, normalEndZ);
+	//	glEnd();
+
+	if (drawVertexNormals) {
+		glEnableClientState(GL_COLOR_ARRAY);
+		glColorPointer(3, GL_FLOAT, 0, 0); // You may need to set the appropriate color here
+
+		for (uint i = 0; i < num_vertex * 3; i += 3) {
+			// Calculate the end point of the vertex normal
+			float endpoint[3];
+			endpoint[0] = vertex[i] + normals[i];
+			endpoint[1] = vertex[i + 1] + normals[i + 1];
+			endpoint[2] = vertex[i + 2] + normals[i + 2];
+
+			// Draw the vertex normal as a line from the vertex position to the end point
+			glBegin(GL_LINES);
+			glVertex3fv(&vertex[i]);
+			glVertex3fv(endpoint);
+			glEnd();
+		}
+		glDisableClientState(GL_COLOR_ARRAY);
+	}
+
+	// Draw Face Normals if the flag is set
+	if (drawFaceNormals) {
+		for (uint i = 0; i < num_index; i += 3) {
+			// Calculate the face normal
+			float normal[3];
+			CalculateFaceNormal(&vertex[index[i] * 3], &vertex[index[i + 1] * 3], &vertex[index[i + 2] * 3], normal);
+
+			// Calculate the center of the face (average of vertices)
+			float center[3];
+			center[0] = (vertex[index[i] * 3] + vertex[index[i + 1] * 3] + vertex[index[i + 2] * 3]) / 3;
+			center[1] = (vertex[index[i] * 3 + 1] + vertex[index[i + 1] * 3 + 1] + vertex[index[i + 2] * 3 + 1]) / 3;
+			center[2] = (vertex[index[i] * 3 + 2] + vertex[index[i + 1] * 3 + 2] + vertex[index[i + 2] * 3 + 2]) / 3;
+
+			// Calculate the end point of the face normal
+			float endpoint[3];
+			endpoint[0] = center[0] + normal[0];
+			endpoint[1] = center[1] + normal[1];
+			endpoint[2] = center[2] + normal[2];
+
+			// Draw the face normal as a line from the center to the end point
+			glBegin(GL_LINES);
+			glVertex3fv(center);
+			glVertex3fv(endpoint);
+			glEnd();
+		}
 
 	}
 }
