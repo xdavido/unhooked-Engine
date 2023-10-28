@@ -291,7 +291,7 @@ void MeshData::EnableDisableFaceNormals()
 	drawFaceNormals = !drawFaceNormals;
 }
 
-void MeshData::EnableDisableFaceNormals()
+void MeshData::EnableDisableVertexNormals()
 {
 	drawVertexNormals = !drawVertexNormals;
 }
