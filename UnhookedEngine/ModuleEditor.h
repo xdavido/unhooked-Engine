@@ -27,6 +27,8 @@ public:
 
 	std::vector<float> mFPSLog;
 	bool wireframe = true;
+	bool VertexShow = true;
+	bool FaceShow = true;
 
 
 	

@@ -30,6 +30,13 @@ struct MeshData {
     bool drawVertexNormals = true;
     bool drawFaceNormals = true;
 
+
+    //Application& App;
+
+    /*ModuleEditor& Editor;
+
+    MeshData(Application& app, ModuleEditor& editor) : App(app), Editor(editor) { }*/
+
 	//Tex
 	uint id_tex = 0;
 	//uint textureID = 0;
@@ -44,9 +51,6 @@ struct MeshData {
     void CreateBufferTex(const void* checkerImage);
 	void CalculateVertexNormals();
     void DrawFBX();
-    void EnableDisableFaceNormals();
-    void EnableDisableVertexNormals();
-
     void NormalizeNormals() {
         for (uint i = 0; i < num_normals; i += 3) {
             float x = normals[i];

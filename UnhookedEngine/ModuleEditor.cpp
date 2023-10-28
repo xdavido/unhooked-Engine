@@ -200,6 +200,10 @@ void ModuleEditor::SettingsMenu()
             {
                 SetWireFrameMode(wireframe);
             }
+            if (ImGui::Checkbox("Show Vertex Normals", &VertexShow))
+            {
+                
+            }
             //ImGui::Checkbox("Vsync", &vsync);
             //SetVsync(vsync);
             

@@ -56,22 +56,17 @@ update_status ModuleFBX::PreUpdate(float dt)
 
 update_status ModuleFBX::Update(float dt)
 {
-
-
 	return UPDATE_CONTINUE;
-
 }
 
 
 // PostUpdate present buffer to screen
 update_status ModuleFBX::PostUpdate(float dt)
 {
-
 	return UPDATE_CONTINUE;
 }
 void ModuleFBX::LoadFBX(const char* file_path, std::vector<MeshData>& MeshVertex) {
-	
-
+	//meshData.CalculateVertexNormals();
 	const aiScene* scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
@@ -80,6 +75,7 @@ void ModuleFBX::LoadFBX(const char* file_path, std::vector<MeshData>& MeshVertex
 
 		for (int i = 0; i < scene->mNumMeshes; ++i)
 		{
+
 			MeshData& _MeshVertex = MeshVertex[i];
 			aiMesh* sceneM = scene->mMeshes[i];
 
@@ -213,7 +209,39 @@ void MeshData::DrawFBX()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	// Draw Vertex Normals
+	
+	// Descomentar esto para ver Vertex y Face Normals
+
+	// Draw Face Normals if the flag is set
+	/*if (App.editor->FaceShow) {*/
+	//for (uint i = 0; i < num_index; i += 3) {
+	//	// Calculate the face normal
+	//	float normal[3];
+	//	CalculateFaceNormal(&vertex[index[i] * 3], &vertex[index[i + 1] * 3], &vertex[index[i + 2] * 3], normal);
+
+	//	// Calculate the center of the face (average of vertices)
+	//	float center[3];
+	//	center[0] = (vertex[index[i] * 3] + vertex[index[i + 1] * 3] + vertex[index[i + 2] * 3]) / 3;
+	//	center[1] = (vertex[index[i] * 3 + 1] + vertex[index[i + 1] * 3 + 1] + vertex[index[i + 2] * 3 + 1]) / 3;
+	//	center[2] = (vertex[index[i] * 3 + 2] + vertex[index[i + 1] * 3 + 2] + vertex[index[i + 2] * 3 + 2]) / 3;
+
+	//	// Calculate the end point of the face normal
+	//	float endpoint[3];
+	//	endpoint[0] = center[0] + normal[0];
+	//	endpoint[1] = center[1] + normal[1];
+	//	endpoint[2] = center[2] + normal[2];
+
+	//	// Draw the face normal as a line from the center to the end point
+	//	glBegin(GL_LINES);
+	//	glVertex3fv(center);
+	//	glVertex3fv(endpoint);
+	//	glEnd();
+	//}
+	////}
+	//// 
+	//CalculateVertexNormals();
+	////Draw Vertex Normals
+	///*if (App.editor->VertexShow) {*/
 	//for (uint i = 0; i < num_vertex * 3; i += 3) {
 	//	float vertexX = vertex[i];
 	//	float vertexY = vertex[i + 1];
@@ -236,64 +264,9 @@ void MeshData::DrawFBX()
 	//	glVertex3f(vertexX, vertexY, vertexZ);
 	//	glVertex3f(normalEndX, normalEndY, normalEndZ);
 	//	glEnd();
-
-	if (drawVertexNormals) {
-		glEnableClientState(GL_COLOR_ARRAY);
-		glColorPointer(3, GL_FLOAT, 0, 0); // You may need to set the appropriate color here
-
-		for (uint i = 0; i < num_vertex * 3; i += 3) {
-			// Calculate the end point of the vertex normal
-			float endpoint[3];
-			endpoint[0] = vertex[i] + normals[i];
-			endpoint[1] = vertex[i + 1] + normals[i + 1];
-			endpoint[2] = vertex[i + 2] + normals[i + 2];
-
-			// Draw the vertex normal as a line from the vertex position to the end point
-			glBegin(GL_LINES);
-			glVertex3fv(&vertex[i]);
-			glVertex3fv(endpoint);
-			glEnd();
-		}
-		glDisableClientState(GL_COLOR_ARRAY);
-	}
-
-	// Draw Face Normals if the flag is set
-	if (drawFaceNormals) {
-		for (uint i = 0; i < num_index; i += 3) {
-			// Calculate the face normal
-			float normal[3];
-			CalculateFaceNormal(&vertex[index[i] * 3], &vertex[index[i + 1] * 3], &vertex[index[i + 2] * 3], normal);
-
-			// Calculate the center of the face (average of vertices)
-			float center[3];
-			center[0] = (vertex[index[i] * 3] + vertex[index[i + 1] * 3] + vertex[index[i + 2] * 3]) / 3;
-			center[1] = (vertex[index[i] * 3 + 1] + vertex[index[i + 1] * 3 + 1] + vertex[index[i + 2] * 3 + 1]) / 3;
-			center[2] = (vertex[index[i] * 3 + 2] + vertex[index[i + 1] * 3 + 2] + vertex[index[i + 2] * 3 + 2]) / 3;
-
-			// Calculate the end point of the face normal
-			float endpoint[3];
-			endpoint[0] = center[0] + normal[0];
-			endpoint[1] = center[1] + normal[1];
-			endpoint[2] = center[2] + normal[2];
-
-			// Draw the face normal as a line from the center to the end point
-			glBegin(GL_LINES);
-			glVertex3fv(center);
-			glVertex3fv(endpoint);
-			glEnd();
-		}
-
-	}
-}
-
-void MeshData::EnableDisableFaceNormals() 
-{
-	drawFaceNormals = !drawFaceNormals;
-}
-
-void MeshData::EnableDisableVertexNormals()
-{
-	drawVertexNormals = !drawVertexNormals;
+	//}
+	//}
+	
 }
 
 // Called before quitting
