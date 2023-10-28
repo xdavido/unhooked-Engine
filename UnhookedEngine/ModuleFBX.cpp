@@ -158,24 +158,24 @@ void MeshData::CalculateVertexNormals() {
         return;
     }
 
-    // Inicializa todas las normales de los vértices a (0, 0, 0)
-    normals = new float[num_vertex * 3](); // Inicializa con ceros
+    //Inicializamos todas las normales de los vértices a (0, 0, 0)
+    normals = new float[num_vertex * 3]();
 
     for (uint i = 0; i < num_index; i += 3) {
         uint index1 = index[i] * 3;
         uint index2 = index[i + 1] * 3;
         uint index3 = index[i + 2] * 3;
 
-        // Obtiene los vértices de la cara
+        //Obtenemos los vértices de la cara
         float vertex1[3] = { vertex[index1], vertex[index1 + 1], vertex[index1 + 2] };
         float vertex2[3] = { vertex[index2], vertex[index2 + 1], vertex[index2 + 2] };
         float vertex3[3] = { vertex[index3], vertex[index3 + 1], vertex[index3 + 2] };
 
-        // Calcula la normal de la cara
+        //Calcula la normal de la cara
         float faceNormal[3];
         CalculateFaceNormal(vertex1, vertex2, vertex3, faceNormal);
 
-        // Agrega la normal de la cara a las normales de los vértices
+        //Agregamos la normal de la cara a las normales de los vértices
         for (int j = 0; j < 3; ++j) {
             normals[index1 + j] += faceNormal[j];
             normals[index2 + j] += faceNormal[j];
@@ -183,7 +183,7 @@ void MeshData::CalculateVertexNormals() {
         }
     }
 
-    // Normaliza todas las normales de los vértices
+    //Normalizamos todas las normales de los vértices
     for (uint i = 0; i < num_vertex * 3; i += 3) {
         float normal[3] = { normals[i], normals[i + 1], normals[i + 2] };
         NormalizeVector(normal[0], normal[1], normal[2]);
@@ -213,7 +213,31 @@ void MeshData::DrawFBX()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	
+	// Draw Vertex Normals
+	for (uint i = 0; i < num_vertex * 3; i += 3) {
+		float vertexX = vertex[i];
+		float vertexY = vertex[i + 1];
+		float vertexZ = vertex[i + 2];
+
+		float normalX = normals[i];
+		float normalY = normals[i + 1];
+		float normalZ = normals[i + 2];
+
+		// Define a scaling factor for the normal length
+		float normalScale = 0.1f;
+
+		// Calculate the end point of the normal
+		float normalEndX = vertexX + normalX * normalScale;
+		float normalEndY = vertexY + normalY * normalScale;
+		float normalEndZ = vertexZ + normalZ * normalScale;
+
+		// Draw the vertex normal as a line
+		glBegin(GL_LINES);
+		glVertex3f(vertexX, vertexY, vertexZ);
+		glVertex3f(normalEndX, normalEndY, normalEndZ);
+		glEnd();
+
+	}
 }
 
 // Called before quitting

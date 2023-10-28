@@ -31,7 +31,6 @@ bool ModuleEditor::Init()
 
 void ModuleEditor::Draw()
 {
-    // Start the Dear ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
@@ -63,7 +62,7 @@ void ModuleEditor::Draw()
 
 bool ModuleEditor::CleanUp()
 {
-    // Cleanup
+    
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
