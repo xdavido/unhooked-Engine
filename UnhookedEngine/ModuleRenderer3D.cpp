@@ -227,6 +227,7 @@ update_status ModuleRenderer3D::Update(float dt)
 		for (int i = 0; i < MeshVertex.size(); ++i)
 		{
 			MeshVertex[i].DrawFBX();
+			
 		}
 	}
 	else {
@@ -235,6 +236,25 @@ update_status ModuleRenderer3D::Update(float dt)
 		for (int i = 0; i < MeshVertex.size(); ++i)
 		{
 			MeshVertex[i].DrawFBX();
+			
+		}
+	}
+
+	if (App->editor->gl_TEXTURE_2D)
+	{
+		
+		for (int i = 0; i < MeshVertex.size(); ++i)
+		{
+			MeshVertex[i].DrawTexture(textureID);
+
+		}
+	}
+	else {
+		
+		for (int i = 0; i < MeshVertex.size(); ++i)
+		{
+			MeshVertex[i].DrawTexture(textureID);
+
 		}
 	}
 
@@ -254,11 +274,11 @@ void ModuleRenderer3D::HandlePath(std::string path)
 		return;
 	}
 	else if (extension == "png" || extension == "PNG") {
-		App->texture->LoadTexture(App->input->dropped_filedir);
+		textureID = App->texture->LoadTexture(App->input->dropped_filedir);
 		return;
 	}
 	else if (extension == "dds" || extension == "DDS") {
-		App->texture->LoadTexture(App->input->dropped_filedir);
+		
 		return;
 	}
 

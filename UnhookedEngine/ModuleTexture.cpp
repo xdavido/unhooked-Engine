@@ -1,3 +1,4 @@
+
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleFBX.h"
@@ -5,9 +6,9 @@
 
 #define max_keys 300
 
-#include "DevIL/include/il.h"
-#include "DevIL/include/ilu.h"
-#include "DevIL/include/ilut.h"
+#pragma comment(lib, "DevIL/libx86/DevIL.lib")
+#pragma comment(lib, "DevIL/libx86/ILU.lib")
+#pragma comment(lib, "DevIL/libx86/ILUT.lib")
 
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -16,23 +17,87 @@
 #define checkers_width  256/4
 
 
+Application* ModuleTexture::App = nullptr;
+GLubyte ModuleTexture::checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4] = {};
+GLuint ModuleTexture::checkersID;
+
 ModuleTexture::ModuleTexture(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 
+
+}
+
+uint ModuleTexture::LoadTexture(const char* file_path)
+{
+	// Generate DevIL buffers
+	ILuint devilImageId = 0;
+
+	ilBindImage(devilImageId);
+
+	// Load image to binded buffer
+	bool success = ilLoadImage(file_path);
+	if (!success) {
+		LOG("WARNING: Error loading texture %s", file_path, ilGetError());
+		return 0;
+	}
+	ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+
+	// Extract loaded image data
+	BYTE* data = ilGetData();
+	ILuint imgWidth, imgHeight;
+	imgWidth = ilGetInteger(IL_IMAGE_WIDTH);
+	imgHeight = ilGetInteger(IL_IMAGE_HEIGHT);
+	int const type = ilGetInteger(IL_IMAGE_TYPE);
+	int const format = ilGetInteger(IL_IMAGE_FORMAT);
+
+	// Change DevIL buffer ID to Glew buffer ID (create buffer by copying binded buffer)
+	GLuint imageId = ilutGLBindTexImage();
+	glBindTexture(GL_TEXTURE_2D, imageId);
+
+	// How texture behaves outside 0,1 range (S->x, T->y)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+	// Texture behaviour after resize (MIN->smaller , MAG->bigger)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	// Create Texture
+	glTexImage2D(GL_TEXTURE_2D, 0, format, imgWidth, imgHeight, 0, format, type, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	// CLEANUP
+
+	// Delete DevIL image buffer
+	ilDeleteImages(1, &devilImageId);
+	ilBindImage(0);
+
+	// Unbind glew buffer
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	return imageId;
+}
+
+
+
+void ModuleTexture::DestroyTexture(uint t)
+{
+	glDeleteBuffers(1, &t);
 }
 
 bool ModuleTexture::Init()
 {
+	ilInit();
+	
 
-	return true; 
-}
-void ModuleTexture::LoadTexture(const char* file_path)
-{
-
+	return true;
 }
 
-bool ModuleTexture::CheckerTexture()
+
+
+bool ModuleTexture::Start()
 {
+
 	//Initialize checker image
 	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
 		for (int j = 0; j < CHECKERS_WIDTH; j++) {
@@ -61,26 +126,22 @@ bool ModuleTexture::CheckerTexture()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 	//Create Texture
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT,
+		0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	//unbind texture
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
 
+	//testImageID = LoadTexture("Game/Assets/texture/Baker_House.png");
 
 	return true;
-}
-
-void ModuleTexture::DrawTexture()
-{
-
 }
 
 bool ModuleTexture::CleanUp()
 {
 	glDeleteBuffers(1, &checkersID);
-
 	return true;
 }
 

@@ -13,12 +13,8 @@
 #include "ModuleEditor.h"
 //#include "ModulePrimitives.h"
 #include "ModuleFBX.h"
-<<<<<<< Updated upstream
 #include "ModuleGameObject.h"
-//#include "ModuleTexture.h"
-=======
 #include "ModuleTexture.h"
->>>>>>> Stashed changes
 
 
 
@@ -32,12 +28,8 @@ public:
 	ModuleEditor* editor;
 	//ModulePrimitives* primitives;
 	ModuleFBX* FBX;
-<<<<<<< Updated upstream
 	ModuleGameObject* gameobject;
-	//ModuleTexture* texture;
-=======
 	ModuleTexture* texture;
->>>>>>> Stashed changes
 
 private:
 

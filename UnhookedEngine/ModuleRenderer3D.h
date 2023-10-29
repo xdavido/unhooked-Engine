@@ -50,5 +50,6 @@ public:
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 
 	std::vector<MeshData> MeshVertex;
+	GLuint textureID;
 
 };

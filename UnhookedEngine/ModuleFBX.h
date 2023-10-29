@@ -5,6 +5,7 @@
 #include "Light.h"
 #include "Application.h"
 #include "ModuleTexture.h"
+#include "ModuleRenderer3D.h"
 
 
 #include "MathGeoLib/include/Math/float3x3.h"
@@ -43,19 +44,19 @@ struct MeshData {
     MeshData(Application& app, ModuleEditor& editor) : App(app), Editor(editor) { }*/
    
     //Texture
-    uint id_tex = 0;
+  /*  uint id_tex = 0;
     uint num_tex = 0;
-    float* texCoords = nullptr;
-    GLuint checkersID;
+    float* texCoords = nullptr;*/
+    
     GLuint textureID;
 	
 	uint num_normals = 0;
 	float* normals = nullptr;
 
     void CreateBuffer();
-    void CreateBufferTex(const void* checkerImage);
 	void CalculateVertexNormals();
     void DrawFBX();
+    void DrawTexture(GLuint textureID);
 
     void NormalizeNormals() {
         for (uint i = 0; i < num_normals; i += 3) {

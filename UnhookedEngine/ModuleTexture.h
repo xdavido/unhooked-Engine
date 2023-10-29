@@ -20,24 +20,25 @@
 class ModuleTexture : public Module
 {
 public:
+	static Application* App;
 	ModuleTexture(Application* app, bool start_enabled = true);
 	~ModuleTexture() {}
 
-	void LoadTexture(const char* file_path);
-	bool CheckerTexture();
-	void DrawTexture();
+	uint LoadTexture(const char* file_path);
+	void DestroyTexture(uint t);
 
 
 private:
 	bool Init();
+	bool Start();
 	bool CleanUp();
 
 	
 
 public:
-	GLuint checkersID;
+	static GLuint checkersID;
 	//GLuint testImageID;
-	GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4]; // height width rgba
+	static GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4]; // height width rgba
 
 };
 

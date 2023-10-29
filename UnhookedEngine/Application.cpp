@@ -10,12 +10,8 @@ Application::Application()
 	editor = new ModuleEditor(this);
 	//primitives = new ModulePrimitives(this);
 	FBX = new ModuleFBX(this);
-<<<<<<< Updated upstream
-	//texture = new ModuleTexture(this);
-	gameobject = new ModuleGameObject(this);
-=======
 	texture = new ModuleTexture(this);
->>>>>>> Stashed changes
+	gameobject = new ModuleGameObject(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -31,12 +27,8 @@ Application::Application()
 	AddModule(editor);
 	//AddModule(primitives);
 	AddModule(FBX);
-<<<<<<< Updated upstream
-	//AddModule(texture);
-	AddModule(gameobject);
-=======
 	AddModule(texture);
->>>>>>> Stashed changes
+	AddModule(gameobject);
 }
 
 Application::~Application()
