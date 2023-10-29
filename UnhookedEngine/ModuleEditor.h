@@ -44,7 +44,6 @@ private:
 	const char* lastValue = "";
 	void MainMenuBar();
 	void SettingsMenu();
-	void SettingsMenu2();
 	void AssetsWindow();
 	void ConsoleWindow();
 	void AddToConsole(const std::string& message);
