@@ -39,7 +39,9 @@
 //  2021-08-23: OpenGL: Fixed ES 3.0 shader ("#version 300 es") use normal precision floats to avoid wobbly rendering at HD resolutions.
 //  2021-08-19: OpenGL: Embed and use our own minimal GL loader (imgui_impl_opengl3_loader.h), removing requirement and support for third-party loader.
 //  2021-06-29: Reorganized backend to pull data from a single structure to facilitate usage with multiple-contexts (all g_XXXX access changed to bd->XXXX).
-//  2021-06-25: OpenGL: Use OES_vertex_array extension on Emscripten + backup/restore current state.
+//  2021-06-25: OpenGL: Use OES_
+// 
+// rray extension on Emscripten + backup/restore current state.
 //  2021-06-21: OpenGL: Destroy individual vertex/fragment shader objects right after they are linked into the main shader.
 //  2021-05-24: OpenGL: Access GL_CLIP_ORIGIN when "GL_ARB_clip_control" extension is detected, inside of just OpenGL 4.5 version.
 //  2021-05-19: OpenGL: Replaced direct access to ImDrawCmd::TextureId with a call to ImDrawCmd::GetTexID(). (will become a requirement)

@@ -20,6 +20,7 @@
 #include "glmath.h"
 #include <vector>
 
+#define VERTEX_ARGUMENTS 5
 
 #define MAX_LIGHTS 8
 
@@ -40,20 +41,22 @@ struct MeshData {
     /*ModuleEditor& Editor;
 
     MeshData(Application& app, ModuleEditor& editor) : App(app), Editor(editor) { }*/
-
-	//Tex
-	/*uint id_tex = 0;
-	uint textureID = 0;
-	uint num_tex = 0;
-	float* texCoords = nullptr;*/
+   
+    //Texture
+    uint id_tex = 0;
+    uint num_tex = 0;
+    float* texCoords = nullptr;
+    GLuint checkersID;
+    GLuint textureID;
 	
 	uint num_normals = 0;
 	float* normals = nullptr;
 
     void CreateBuffer();
-   // void CreateBufferTex(const void* checkerImage);
+    void CreateBufferTex(const void* checkerImage);
 	void CalculateVertexNormals();
     void DrawFBX();
+
     void NormalizeNormals() {
         for (uint i = 0; i < num_normals; i += 3) {
             float x = normals[i];

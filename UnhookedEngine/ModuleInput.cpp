@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleInput.h"
+#include "ModuleREnderer3D.h"
 
 #include "ImGui/backends/imgui_impl_sdl2.h"
 
@@ -110,18 +111,10 @@ update_status ModuleInput::PreUpdate(float dt)
 			quit = true;
 			break;
 		case (SDL_DROPFILE):
-			//App->window->window = SDL_CreateWindow(  // Create a window
-			//	"SDL_DropEvent usage, please drop the file on window",
-			//	SDL_WINDOWPOS_CENTERED,
-			//	SDL_WINDOWPOS_CENTERED,
-			//	640,
-			//	480,
-			//	SDL_WINDOW_OPENGL
-			//);
+			
 			dropped_filedir = e.drop.file;
 			droped = true;
 			// Shows directory of dropped file
-			//App->m_fbx->Load(App->input->dropped_filedir, App->renderer3D->v);
 			SDL_ShowSimpleMessageBox(
 				SDL_MESSAGEBOX_INFORMATION,
 				"File dropped on window",
@@ -144,6 +137,7 @@ update_status ModuleInput::PreUpdate(float dt)
 
 	return UPDATE_CONTINUE;
 }
+
 
 // Called before quitting
 bool ModuleInput::CleanUp()

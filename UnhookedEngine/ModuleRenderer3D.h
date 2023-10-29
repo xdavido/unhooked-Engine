@@ -38,7 +38,7 @@ public:
 
 public:
 
-	
+	void HandlePath(std::string path);
 
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;

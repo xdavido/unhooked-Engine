@@ -69,6 +69,20 @@ update_status ModuleFBX::PostUpdate(float dt)
 
 void ModuleFBX::LoadFBX(const char* file_path, std::vector<MeshData>& MeshVertex) {
 	//meshData.CalculateVertexNormals();
+	
+	//Initialize checker image
+	GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4]; // height width rgba
+
+	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
+		for (int j = 0; j < CHECKERS_WIDTH; j++) {
+			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
+			checkerImage[i][j][0] = (GLubyte)c;
+			checkerImage[i][j][1] = (GLubyte)c;
+			checkerImage[i][j][2] = (GLubyte)c;
+			checkerImage[i][j][3] = (GLubyte)255;
+		}
+	}
+
 	const aiScene* scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
@@ -103,20 +117,21 @@ void ModuleFBX::LoadFBX(const char* file_path, std::vector<MeshData>& MeshVertex
 						}
 						
 						// copy tex coords
-						/*_MeshVertex.texCoords = new float[_MeshVertex.num_vertex * 2];
+						_MeshVertex.texCoords = new float[_MeshVertex.num_vertex * 2];
 						for (size_t k = 0; k < sceneM->mNumVertices; k++) {
 							if (sceneM->mTextureCoords[0]) {
 								_MeshVertex.texCoords[k * 2] = sceneM->mTextureCoords[0][k].x;
 								_MeshVertex.texCoords[k * 2 + 1] = sceneM->mTextureCoords[0][k].y;
 							}
-						}*/
+						}
 
 					}
 				}
 
-		 _MeshVertex.CreateBuffer();
+				_MeshVertex.CreateBuffer();
+				_MeshVertex.CreateBufferTex(checkerImage);
 		}
-	 aiReleaseImport(scene);
+		aiReleaseImport(scene);
 	}
 	else
 		LOG("Error loading scene %s", file_path);
@@ -134,16 +149,21 @@ void MeshData::CreateBuffer()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_index, index, GL_STATIC_DRAW);
 }
 
-//void MeshData::CreateBufferTex(const void* checkerImage)
-//{
-//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, textureID);
-//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_tex, texCoords, GL_STATIC_DRAW);
-//	
-//	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-//
-//	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
-//
-//}
+void MeshData::CreateBufferTex(const void* checkerImage)
+{
+	glGenBuffers(1, &textureID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, textureID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_tex, texCoords, GL_STATIC_DRAW);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkerImage);
+}
 
 void CalculateFaceNormal(const float vertex1[3], const float vertex2[3], const float vertex3[3], float normal[3]) {
 	float v1[3], v2[3];
@@ -204,25 +224,33 @@ void MeshData::CalculateVertexNormals() {
 
 void MeshData::DrawFBX()
 {
-
-
-	// Bind vertex and index buffers
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_TEXTURE_2D);
+	//-- Buffers--//
 	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	glBindBuffer(GL_ARRAY_BUFFER, textureID);
+	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+	
+	glBindTexture(GL_TEXTURE_2D, textureID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
 
-	// Enable vertex position and normal attributes (modify according to your data)
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, 0);
 
-	// Draw the mesh
-	glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, 0);
+	//-- Draw --//
+	glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
 
-	// Unbind buffers
+	//-- UnBind Buffers--//
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_TEXTURE_COORD_ARRAY, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_TEXTURE_COORD_ARRAY);
 
+	//--Disables States--//
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 
 	
@@ -285,6 +313,7 @@ void MeshData::DrawFBX()
 	
 
 }
+
 
 // Called before quitting
 bool ModuleFBX::CleanUp()

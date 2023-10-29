@@ -202,7 +202,7 @@ void ModuleEditor::SettingsMenu()
                     MSG.push_back("GL_COLOR_MATERIAL Disabled");
                 }
             }
-            if (ImGui::Checkbox("GL_TEXTURE_2D", &gl_TEXTURE_2D))
+            if (ImGui::Checkbox("Texture", &gl_TEXTURE_2D))
             {
                 if (gl_TEXTURE_2D)
                 {

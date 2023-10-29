@@ -217,7 +217,7 @@ update_status ModuleRenderer3D::Update(float dt)
 	
 	if (App->input->droped)
 	{
-		App->FBX->LoadFBX(App->input->dropped_filedir, MeshVertex);
+		HandlePath(App->input->dropped_filedir);
 		App->input->droped = false;
 	}
 	if (App->editor->wireframe)
@@ -239,10 +239,31 @@ update_status ModuleRenderer3D::Update(float dt)
 	}
 
 
+
 	return UPDATE_CONTINUE;
 
 }
 
+void ModuleRenderer3D::HandlePath(std::string path)
+{
+	std::string extension = path.substr(path.find_last_of(".") + 1);
+
+	if (extension == "fbx" || extension == "FBX") {
+
+		App->FBX->LoadFBX(App->input->dropped_filedir, MeshVertex);
+		return;
+	}
+	else if (extension == "png" || extension == "PNG") {
+		App->texture->LoadTexture(App->input->dropped_filedir);
+		return;
+	}
+	else if (extension == "dds" || extension == "DDS") {
+		App->texture->LoadTexture(App->input->dropped_filedir);
+		return;
+	}
+
+	LOG("File extension from path does not match any of the supported: %s", path.c_str());
+}
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {

@@ -1,7 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
-
+#include <string>
 #define MAX_MOUSE_BUTTONS 5
 
 enum KEY_STATE
@@ -70,4 +70,5 @@ public:
 
 	char* dropped_filedir;
 	bool droped = false;
+	
 };
