@@ -13,6 +13,7 @@
 #include "ModuleEditor.h"
 //#include "ModulePrimitives.h"
 #include "ModuleFBX.h"
+#include "ModuleGameObject.h"
 //#include "ModuleTexture.h"
 
 
@@ -27,6 +28,7 @@ public:
 	ModuleEditor* editor;
 	//ModulePrimitives* primitives;
 	ModuleFBX* FBX;
+	ModuleGameObject* gameobject;
 	//ModuleTexture* texture;
 
 private:

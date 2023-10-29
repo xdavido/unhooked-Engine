@@ -11,6 +11,7 @@ Application::Application()
 	//primitives = new ModulePrimitives(this);
 	FBX = new ModuleFBX(this);
 	//texture = new ModuleTexture(this);
+	gameobject = new ModuleGameObject(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -27,6 +28,7 @@ Application::Application()
 	//AddModule(primitives);
 	AddModule(FBX);
 	//AddModule(texture);
+	AddModule(gameobject);
 }
 
 Application::~Application()
