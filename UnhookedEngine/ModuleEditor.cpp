@@ -4,6 +4,7 @@
 #include "ModuleRenderer3D.h"
 #include "SDL/include/SDL_opengl_glext.h"
 #include <filesystem>
+#include "Globals.h"
 
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -40,7 +41,7 @@ void ModuleEditor::Draw()
 
     SettingsMenu();
 
-    SettingsMenu2();
+    //SettingsMenu2();
 
     AssetsWindow();
 
@@ -114,6 +115,17 @@ void ModuleEditor::MainMenuBar()
 
 void ModuleEditor::SettingsMenu()
 {
+    float Settings2WindowWidth = 200.0f;
+
+    float gameAreaWidth = ImGui::GetIO().DisplaySize.x - Settings2WindowWidth;
+
+    if (gameAreaWidth < 200.0f)
+        gameAreaWidth = 200.0f;
+
+    // AssetsWindow anclada a la derecha
+    ImGui::SetNextWindowPos(ImVec2(gameAreaWidth, 19));
+    ImGui::SetNextWindowSize(ImVec2(Settings2WindowWidth, ImGui::GetIO().DisplaySize.y - 19));
+
     if (ImGui::Begin("Settings"))
     {
         ImGui::PlotHistogram("FPS", mFPSLog.data(), mFPSLog.size(), 2, lastValue);
@@ -254,45 +266,89 @@ void ModuleEditor::SettingsMenu()
     ImGui::End();
 }
 
-void ModuleEditor::SettingsMenu2()
-{
-    if (ImGui::Begin("Settings 2"))
-    {
-        // This is an empty window with no content
-    }
-    ImGui::End();
-}
+//void ModuleEditor::SettingsMenu2()
+//{
+//    
+//
+//    if (ImGui::Begin("Settings2", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse))
+//    {
+//        
+//        if (ImGui::TreeNode("Root Object"))
+//        {
+//      
+//            if (ImGui::TreeNode("Child Object 1"))
+//            {
+//               
+//                ImGui::Text("Position: (x, y, z)");
+//                
+//                ImGui::TreePop();
+//            }
+//            // Add more game objects here
+//
+//            ImGui::TreePop();
+//        }
+//
+//        ImGui::End();
+//    }
+//}
 
 void ModuleEditor::AssetsWindow()
 {
-    if (ImGui::Begin("Assets"))
+    float assetsWindowWidth = 200.0f;
+
+    // AssetsWindow anclada a la izquierda
+    ImGui::SetNextWindowPos(ImVec2(0, 19));
+    ImGui::SetNextWindowSize(ImVec2(assetsWindowWidth, ImGui::GetIO().DisplaySize.y - 19));
+
+    
+
+    if (ImGui::Begin("Assets", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse))
     {
-        // This is an empty window with no content
+        
+        if (ImGui::TreeNode("Root Object"))
+        {
+            if (ImGui::TreeNode("Child Object 1"))
+            {
+                ImGui::Text("Position: (x, y, z)");
+                ImGui::TreePop();
+            }
+            ImGui::TreePop();
+        }
+        ImGui::End();
     }
-    ImGui::End();
 }
 
 void ModuleEditor::ConsoleWindow()
 {
-    if (ImGui::Begin("Console"))
+    float consoleWindowHeight = 200.0f;
+    float leftWindowWidth = 200.0f;
+    float rightWindowWidth = 200.0f;
+
+    float consoleWindowX = leftWindowWidth;
+    float consoleWindowY = ImGui::GetIO().DisplaySize.y - consoleWindowHeight;
+
+    //ConsoleWindow anclada abajo
+    ImGui::SetNextWindowPos(ImVec2(consoleWindowX, consoleWindowY));
+    ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x - leftWindowWidth - rightWindowWidth, consoleWindowHeight));
+
+    if (ImGui::Begin("Console", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse))
     {
         ImGui::BeginChild("ConsoleLog", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
 
-        // Mostrar mensajes de la consola aquí
         for (const std::string& message : consoleMessages)
         {
             ImGui::TextUnformatted(message.c_str());
         }
 
         ImGui::EndChild();
+        ImGui::End();
     }
-    ImGui::End();
 }
 
 void ModuleEditor::AddToConsole(const std::string& message)
 {
     consoleMessages.push_back(message);
-    scrollToBottom = true; // Set scrollToBottom to true to scroll to the latest message.
+    scrollToBottom = true;
 }
 
 

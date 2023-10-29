@@ -29,6 +29,8 @@ public:
 	bool wireframe = true;
 	bool VertexShow = true;
 	bool FaceShow = true;
+	float screenWidth;
+	float screenHeight;
 	// Define a vector to store console messages
 	std::vector<std::string> consoleMessages;
 
