@@ -5,13 +5,9 @@
 #include "ModuleFBX.h"
 #include "ModuleTexture.h"
 #include "ModuleRenderer3D.h"
-
-#include "Assimp/include/cimport.h"
-#include "Assimp/include/scene.h"
-#include "Assimp/include/mesh.h"
-#include "Assimp/include/postprocess.h"
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 #include "ImGui/backends/imgui_impl_sdl2.h"
+#include "Primitive.h"
 
 #define MAX_KEYS 300
 
@@ -35,11 +31,19 @@ ModuleFBX::~ModuleFBX()
 }
 
 // Called before render is available
-bool ModuleFBX::Init()
+bool ModuleFBX::Start()
 {
 	LOG("Creating 3D Renderer context");
 	bool ret = true;
 
+	// Stream log messages to Debug window
+	struct aiLogStream stream;
+	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
+	aiAttachLogStream(&stream);
+
+	//House_Path = "Assets/BakerHouse.fbx";
+
+	LoadFBX(House_Path);
 
 	return ret;
 	
@@ -50,10 +54,6 @@ bool ModuleFBX::Init()
 update_status ModuleFBX::PreUpdate(float dt)
 {
 	
-	// Stream log messages to Debug window
-	struct aiLogStream stream;
-	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
-	aiAttachLogStream(&stream);
 
 	return UPDATE_CONTINUE;
 }
@@ -70,53 +70,49 @@ update_status ModuleFBX::PostUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
-void ModuleFBX::LoadFBX(const char* file_path, std::vector<MeshData>& MeshVertex) {
+void ModuleFBX::LoadFBX(string file_path) {
 	//meshData.CalculateVertexNormals();
 	
-	//Initialize checker image
-	/*GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
+	
 
-	for (int i = 0; i < CHECKERS_HEIGHT; i++) {
-		for (int j = 0; j < CHECKERS_WIDTH; j++) {
-			int c = ((((i & 0x8) == 0) ^ (((j & 0x8)) == 0))) * 255;
-			checkerImage[i][j][0] = (GLubyte)c;
-			checkerImage[i][j][1] = (GLubyte)c;
-			checkerImage[i][j][2] = (GLubyte)c;
-			checkerImage[i][j][3] = (GLubyte)255;
-		}
-	}*/
-
-	const aiScene* scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
+	const aiScene* scene = aiImportFile(file_path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		// Use scene->mNumMeshes to iterate on scene->mMeshes array
-		MeshVertex.resize(scene->mNumMeshes);
-
-		for (int i = 0; i < scene->mNumMeshes; ++i)
+		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
 
-			MeshData& _MeshVertex = MeshVertex[i];
-			aiMesh* sceneM = scene->mMeshes[i];
+			MeshData* _MeshVertex =new MeshData();
 
 			// copy vertex
-			_MeshVertex.num_vertex = sceneM->mNumVertices;
-			_MeshVertex.vertex = new float[_MeshVertex.num_vertex * 3];
-			memcpy(_MeshVertex.vertex, sceneM->mVertices, sizeof(float) * _MeshVertex.num_vertex * 3);
+			_MeshVertex->num_vertex = scene->mMeshes[i]->mNumVertices;
+			_MeshVertex->vertex = new float[_MeshVertex->num_vertex * VERTEX_ARGUMENTS];
+			
+			for (int k = 0; k < _MeshVertex->num_vertex; k++) {
 
-			LOG("New mesh with %d vertices", _MeshVertex.num_vertex);
+				_MeshVertex->vertex[k * VERTEX_ARGUMENTS] = scene->mMeshes[i]->mVertices[k].x;
+				_MeshVertex->vertex[k * VERTEX_ARGUMENTS + 1] = scene->mMeshes[i]->mVertices[k].y;
+				_MeshVertex->vertex[k * VERTEX_ARGUMENTS + 2] = scene->mMeshes[i]->mVertices[k].z;
+
+				_MeshVertex->vertex[k * VERTEX_ARGUMENTS + 3] = scene->mMeshes[i]->mTextureCoords[0][k].x;
+				_MeshVertex->vertex[k * VERTEX_ARGUMENTS + 4] = 1 - scene->mMeshes[i]->mTextureCoords[0][k].y;
+
+			}
+
+			LOG("New mesh with %d vertices", _MeshVertex->num_vertex);
 
 			// copy faces
-				if (sceneM->HasFaces())
+				if (scene->mMeshes[i]->HasFaces())
 				{
-					_MeshVertex.num_index = sceneM->mNumFaces * 3;
-					_MeshVertex.index = new uint[_MeshVertex.num_index]; // each face is a triangle
-					for (uint i = 0; i < sceneM->mNumFaces; ++i)
+					_MeshVertex->num_index = scene->mMeshes[i]->mNumFaces * 3;
+					_MeshVertex->index = new uint[_MeshVertex->num_index]; // each face is a triangle
+
+					for (uint j = 0; j < scene->mMeshes[i]->mNumFaces; j++)
 					{
-						if (sceneM->mFaces[i].mNumIndices != 3){
+						if (scene->mMeshes[i]->mFaces[j].mNumIndices != 3){
 							LOG("WARNING, geometry face with != 3 indices!");
 						}
 						else{
-							memcpy(&_MeshVertex.index[i * 3], sceneM->mFaces[i].mIndices, 3 * sizeof(uint));
+							memcpy(&_MeshVertex->index[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
 						}
 						
 						// copy tex coords
@@ -129,10 +125,20 @@ void ModuleFBX::LoadFBX(const char* file_path, std::vector<MeshData>& MeshVertex
 						}*/
 
 					}
-				}
 
-				_MeshVertex.CreateBuffer();
-				//_MeshVertex.CreateBufferTex(checkerImage);
+					_MeshVertex->texture_id = App->texture->textureID;
+					_MeshVertex->texture_height = App->texture->textureWidth;
+					_MeshVertex->texture_width = App->texture->textureWidth;
+				
+
+					CreateBuffer(_MeshVertex);
+					//_MeshVertex.CreateBufferTex(checkerImage);
+				
+				}
+				else {
+
+					delete _MeshVertex;
+				}
 		}
 		aiReleaseImport(scene);
 	}
@@ -141,16 +147,22 @@ void ModuleFBX::LoadFBX(const char* file_path, std::vector<MeshData>& MeshVertex
 
 }
 
-void MeshData::CreateBuffer()
+void ModuleFBX::CreateBuffer(MeshData* Mesh_Vertex)
 {
-	glGenBuffers(1, &id_vertex);
-	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertex * 3, vertex, GL_STATIC_DRAW);
+	//vertex
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glGenBuffers(1, (GLuint*)&(Mesh_Vertex->id_vertex));
+	glBindBuffer(GL_ARRAY_BUFFER, Mesh_Vertex->id_vertex);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * Mesh_Vertex->num_vertex * VERTEX_ARGUMENTS, Mesh_Vertex->vertex, GL_STATIC_DRAW);
+	// index
+	glGenBuffers(1, (GLuint*)&(Mesh_Vertex->id_index));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Mesh_Vertex->id_index);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * Mesh_Vertex->num_index, Mesh_Vertex->index, GL_STATIC_DRAW);
+	
+	glDisableClientState(GL_VERTEX_ARRAY);
 
-	glGenBuffers(1, &id_index);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_index, index, GL_STATIC_DRAW);
-
+	//Add mesh to meshes vector
+	MeshVertex.push_back(Mesh_Vertex);
 
 }
 
@@ -210,36 +222,47 @@ void MeshData::CalculateVertexNormals() {
     }
 }
 
-
+void ModuleFBX::DrawMesh()
+{
+	for (int i = 0; i < MeshVertex.size(); i++) {
+		MeshVertex[i]->DrawFBX();
+	}
+}
 
 void MeshData::DrawFBX()
 {
+	// textures
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_COORD_ARRAY);
+	glEnableClientState(GL_VERTEX_ARRAY);
+
 	// Bind vertex and index buffers
 	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
+	glVertexPointer(3, GL_FLOAT, sizeof(float) * VERTEX_ARGUMENTS, NULL);
+	glTexCoordPointer(2, GL_FLOAT, sizeof(float) * VERTEX_ARGUMENTS, (void*)(sizeof(float) * 3));
+
+	// bind texture
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
-
-	// Enable vertex position and normal attributes (modify according to your data)
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, 0);
-
 	// Draw the mesh
-	glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
 
-	// Unbind buffers
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
+
 	glDisableClientState(GL_VERTEX_ARRAY);
+	// Cleaning tex
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_TEXTURE_COORD_ARRAY);
-	glDisable(GL_TEXTURE_COORD_ARRAY);
-
-
 	
+	
+
+
+
 	// Descomentar esto para ver Vertex y Face Normals
 
-	// Draw Face Normals if the flag is set
-	/*if (App.editor->FaceShow) {*/
+	//// Draw Face Normals if the flag is set
+	///*if (App.editor->FaceShow) {*/
 	//for (uint i = 0; i < num_index; i += 3) {
 	//	// Calculate the face normal
 	//	float normal[3];
@@ -291,54 +314,20 @@ void MeshData::DrawFBX()
 	//	glVertex3f(normalEndX, normalEndY, normalEndZ);
 	//	glEnd();
 	//}
-	//}
-	
-
+	///*}*/
 }
-
-void MeshData::DrawTexture(GLuint textureID)
-{
-	//Bind checker texture
 	
-	glEnable(GL_TEXTURE_COORD_ARRAY);
-	glEnable(GL_TEXTURE_2D);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindTexture(GL_TEXTURE_2D, textureID);
-
-	// Binding buffers
-	glBindBuffer(GL_ARRAY_BUFFER, id_vertex);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
-	
-	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * num_tex, texCoords, GL_STATIC_DRAW);
-
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	// Tell OpenGL that array vertex is [ x, y, z, u, v ]
-	glVertexPointer(3, GL_FLOAT, sizeof(float) * VERTEX_ARGUMENTS, NULL);
-	glTexCoordPointer(2, GL_FLOAT, sizeof(float) * VERTEX_ARGUMENTS, (void*)(3 * sizeof(float)));
-
-	// Apply Transform matrix to set Draw offset, then draw 
-	glPushMatrix(); // Bind transform matrix
-
-
-	// Draw
-	glDrawElements(GL_TRIANGLES, id_index, GL_UNSIGNED_INT, NULL);
-
-	glPopMatrix(); // Unbind transform matrix
-
-	// Unbind buffers
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_TEXTURE_COORD_ARRAY);
-}
 
 // Called before quitting
 bool ModuleFBX::CleanUp()
 {
     LOG("Deleting 3D Render");
+	//Delete Meshes array
+	for (int i = 0; i < MeshVertex.size(); i++) {
+		delete MeshVertex[i];
+		MeshVertex[i] = nullptr;
+	}
+	MeshVertex.clear();
 	// detach log stream
 	aiDetachAllLogStreams();
     return true;

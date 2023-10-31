@@ -11,7 +11,6 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleEditor.h"
-//#include "ModulePrimitives.h"
 #include "ModuleFBX.h"
 #include "ModuleGameObject.h"
 #include "ModuleTexture.h"
@@ -26,7 +25,6 @@ public:
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
 	ModuleEditor* editor;
-	//ModulePrimitives* primitives;
 	ModuleFBX* FBX;
 	ModuleGameObject* gameobject;
 	ModuleTexture* texture;

@@ -7,6 +7,11 @@
 #include "ModuleTexture.h"
 #include "ModuleRenderer3D.h"
 
+#include "Assimp/include/cimport.h"
+#include "Assimp/include/scene.h"
+#include "Assimp/include/mesh.h"
+#include "Assimp/include/postprocess.h"
+
 
 #include "MathGeoLib/include/Math/float3x3.h"
 #include "MathGeoLib/include/Math/float4x4.h"
@@ -20,6 +25,7 @@
 //todo: REMOVE this before 1st delivery!!
 #include "glmath.h"
 #include <vector>
+using namespace std;
 
 #define VERTEX_ARGUMENTS 5
 
@@ -33,31 +39,22 @@ struct MeshData {
     uint id_vertex = 0;  // Vertex buffer ID in VRAM
     uint num_vertex = 0;  // Number of vertices
     float* vertex = nullptr;  // Vertex data
+    
+    GLuint texture_id = 0, texture_width = 0, texture_height = 0;;
+	
+    //Draw Mesh
+    void DrawFBX();
+
+    // Normals
+
     bool drawVertexNormals = true;
     bool drawFaceNormals = true;
 
-
-    //Application& App;
-
-    /*ModuleEditor& Editor;
-
-    MeshData(Application& app, ModuleEditor& editor) : App(app), Editor(editor) { }*/
-   
-    //Texture
-  /*  uint id_tex = 0;
-    uint num_tex = 0;
-    float* texCoords = nullptr;*/
-    
-    GLuint textureID;
-	
 	uint num_normals = 0;
 	float* normals = nullptr;
 
-    void CreateBuffer();
 	void CalculateVertexNormals();
-    void DrawFBX();
-    void DrawTexture(GLuint textureID);
-
+ 
     void NormalizeNormals() {
         for (uint i = 0; i < num_normals; i += 3) {
             float x = normals[i];
@@ -87,18 +84,20 @@ public:
 	 ModuleFBX(Application* app, bool start_enabled = true);
 	 ~ModuleFBX();
 
-	bool Init() override;
+	bool Start() override;
 	update_status PreUpdate(float dt)override;
     update_status Update(float dt) override;
     update_status PostUpdate(float dt) override;
-	void LoadFBX(const char* file_path, std::vector<MeshData>& MeshVertex);
-
-	
+	void LoadFBX(string file_path);
+    void CreateBuffer(MeshData* Mesh_Vertex);
 
 	bool CleanUp();
+    void DrawMesh();
 
+    vector<MeshData*> MeshVertex;
+    string House_Path = "";
 
-public:
+private:
     
 };
 

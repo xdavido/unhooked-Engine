@@ -158,7 +158,6 @@
     <ClInclude Include="ModuleEditor.h" />
     <ClInclude Include="ModuleFBX.h" />
     <ClInclude Include="ModuleGameObject.h" />
-    <ClInclude Include="ModulePrimitives.h" />
     <ClInclude Include="ModuleRenderer3D.h" />
     <ClInclude Include="Module.h" />
     <ClInclude Include="ModuleInput.h" />
@@ -218,7 +217,6 @@
     <ClCompile Include="ModuleFBX.cpp" />
     <ClCompile Include="ModuleGameObject.cpp" />
     <ClCompile Include="ModuleInput.cpp" />
-    <ClCompile Include="ModulePrimitives.cpp" />
     <ClCompile Include="ModuleRenderer3D.cpp" />
     <ClCompile Include="ModuleTexture.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
