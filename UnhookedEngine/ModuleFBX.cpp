@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Globals.h"
-#include "Application.h"
+//#include "Application.h"
 #include "ModuleFBX.h"
 #include "ModuleTexture.h"
 #include "ModuleRenderer3D.h"
@@ -186,7 +186,7 @@ void MeshData::CalculateVertexNormals() {
     if (num_vertex == 0 || num_index == 0) {
         return;
     }
-
+	
     //Inicializamos todas las normales de los vértices a (0, 0, 0)
     normals = new float[num_vertex * 3]();
 

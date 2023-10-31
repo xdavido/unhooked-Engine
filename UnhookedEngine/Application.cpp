@@ -3,6 +3,9 @@
 
 Application::Application()
 {
+	Application myApp;
+	app = &myApp;
+
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
 	renderer3D = new ModuleRenderer3D(this);
