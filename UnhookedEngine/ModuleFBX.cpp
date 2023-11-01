@@ -224,9 +224,12 @@ void MeshData::CalculateVertexNormals() {
 
 void ModuleFBX::DrawMesh()
 {
+	//App->editor->AddToConsole("Drawing MeshVertex");
 	for (int i = 0; i < MeshVertex.size(); i++) {
 		MeshVertex[i]->DrawFBX();
+		
 	}
+	//App->editor->AddToConsole("Finalized Drawing MeshVertex");
 }
 
 void MeshData::DrawFBX()

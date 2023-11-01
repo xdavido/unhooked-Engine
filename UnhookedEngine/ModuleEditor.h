@@ -24,6 +24,7 @@ public:
 	bool CleanUp() override;
 
 	void AddFPS(float aFPS);
+	void AddToConsole(const std::string& message);
 
 	std::vector<float> mFPSLog;
 	bool wireframe = true;
@@ -46,7 +47,7 @@ private:
 	void SettingsMenu();
 	void AssetsWindow();
 	void ConsoleWindow();
-	void AddToConsole(const std::string& message);
+	
 	void SetWireFrameMode(bool wireframe);
 
 
