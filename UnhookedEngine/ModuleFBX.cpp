@@ -50,6 +50,20 @@ bool ModuleFBX::Start()
 
 }
 
+void MeshData::InnitAABB() {
+	float* vertices_positions = new float[num_vertex * 3];
+	for (size_t i = 0; i < num_vertex; i++)
+	{
+		vertices_positions[i * 3] = vertex[i * VERTEX_ARGUMENTS];
+		vertices_positions[i * 3 + 1] = vertex[i * VERTEX_ARGUMENTS + 1];
+		vertices_positions[i * 3 + 2] = vertex[i * VERTEX_ARGUMENTS + 2];
+	}
+
+	localAABB.SetNegativeInfinity();
+	localAABB.Enclose((float3*)vertices_positions, num_vertex);
+	delete[] vertices_positions;
+}
+
 // Called every draw update
 update_status ModuleFBX::PreUpdate(float dt)
 {
@@ -320,6 +334,19 @@ void MeshData::DrawFBX()
 	///*}*/
 }
 	
+void ModuleFBX::DestroyFBX(MeshData* _MeshVertex)
+{
+	for (size_t i = 0; i < MeshVertex.size(); i++)
+	{
+		if (MeshVertex[i] == _MeshVertex) {
+			MeshVertex.erase(MeshVertex.begin() + i);
+			delete MeshVertex;
+			//MeshVertex = nullptr;
+			return;
+		}
+	}
+
+}
 
 // Called before quitting
 bool ModuleFBX::CleanUp()

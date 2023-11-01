@@ -1,9 +1,7 @@
-
 #pragma once
 #include "Color.h"
-#include "MathGeoLib/include/Math/float4x4.h"
-#include "MathGeoLib/include/Math/float3.h"
-#include "MathGeoLib/include/Math/TransformOps.h"
+#include "MathGeoLib/include/MathGeoLib.h"
+#include "ImGui/imgui.h"
 
 enum PrimitiveTypes
 {
@@ -20,67 +18,83 @@ class Primitive
 public:
 
 	Primitive();
+	Primitive(float4x4 _transform);
 
 	virtual void	Render() const;
 	virtual void	InnerRender() const;
-	void			SetPos(float x, float y, float z);
-	void			SetRotation(float angle, const float3& u);
-	void			Scale(float x, float y, float z);
+	virtual void	Inspector();
 	PrimitiveTypes	GetType() const;
 
 public:
-	
+
 	Color color;
 	float4x4 transform;
-	bool axis,wire;
+	bool axis, wire;
 
 protected:
 	PrimitiveTypes type;
 };
 
 // ============================================
-class Cube : public Primitive
+class CubeC : public Primitive
 {
-public :
-	Cube();
-	Cube(float sizeX, float sizeY, float sizeZ);
+public:
+	CubeC();
+	CubeC(float sizeX, float sizeY, float sizeZ);
 	void InnerRender() const;
+	void Inspector();
 public:
 	float3 size;
+	float3 pos;
 };
 
-// ============================================
-class CCylinder : public Primitive
+class SphereC : public Primitive
 {
 public:
-	CCylinder();
-	CCylinder(float radius, float height);
+	SphereC();
+	SphereC(float3 _pos, float _radius);
 	void InnerRender() const;
+	void Inspector();
 public:
+	float3 pos;
+	float radius;
+
+};
+
+class CylinderC : public Primitive
+{
+public:
+	CylinderC();
+	CylinderC(float3 _pos, float _radius, float _height);
+	void InnerRender() const;
+	void Inspector();
+public:
+	float3 pos;
 	float radius;
 	float height;
 };
 
-// ============================================
-class CLine : public Primitive
+class LineC : public Primitive
 {
 public:
-	CLine();
-	CLine(float x, float y, float z);
+	LineC();
+	LineC(float3 _destination);
+	LineC(float3 _origin, float3 _destination);
 	void InnerRender() const;
+	void Inspector();
 public:
-	float3 origin;
-	float3 destination;
+	float3 origin, destination;
 };
 
-// ============================================
-class CPlane : public Primitive
+class PlaneC : public Primitive
 {
 public:
-	CPlane();
-	CPlane(float x, float y, float z, float d);
+	PlaneC();
+	PlaneC(float3 _normal, float d);
 	void InnerRender() const;
+	
 public:
+	float3 pos;
 	float3 normal;
 	float constant;
 };

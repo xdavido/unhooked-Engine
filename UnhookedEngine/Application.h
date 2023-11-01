@@ -12,7 +12,6 @@
 #include "ModuleCamera3D.h"
 #include "ModuleEditor.h"
 #include "ModuleFBX.h"
-#include "ModuleGameObject.h"
 #include "ModuleTexture.h"
 
 //Application* app = nullptr;
@@ -26,7 +25,6 @@ public:
 	ModuleCamera3D* camera;
 	ModuleEditor* editor;
 	ModuleFBX* FBX;
-	ModuleGameObject* gameobject;
 	ModuleTexture* texture;
 
 private:
@@ -35,10 +33,19 @@ private:
 	float	dt;
 	std::vector<Module*> list_modules;
 
+	static Application* app;
+
+
 public:
+
+	int fps = 60;
+	Uint32 MsFrame;
 
 	Application();
 	~Application();
+
+	static Application* GetApp();
+
 
 	bool Init();
 	update_status Update();
@@ -50,3 +57,5 @@ private:
 	void PrepareUpdate();
 	void FinishUpdate();
 };
+
+extern Application* externalapp;

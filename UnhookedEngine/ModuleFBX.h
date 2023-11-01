@@ -12,7 +12,7 @@
 #include "Assimp/include/mesh.h"
 #include "Assimp/include/postprocess.h"
 
-
+#include "MathGeoLib/include/MathGeoLib.h"
 #include "MathGeoLib/include/Math/float3x3.h"
 #include "MathGeoLib/include/Math/float4x4.h"
 #include "Primitive.h"
@@ -31,6 +31,9 @@ using namespace std;
 
 #define MAX_LIGHTS 8
 
+class GameObject;
+class Primitive;
+
 struct MeshData {
     uint id_index = 0;   // Index buffer ID in VRAM
     uint num_index = 0;  // Number of indices
@@ -44,6 +47,16 @@ struct MeshData {
 	
     //Draw Mesh
     void DrawFBX();
+
+    //GO_Owner
+    GameObject* Owner;
+
+    //MathGeolib
+    AABB localAABB;
+    AABB aabb;
+    OBB obb;
+
+    void InnitAABB();
 
     // Normals
 
@@ -93,8 +106,10 @@ public:
 
 	bool CleanUp();
     void DrawMesh();
+    void DestroyFBX(MeshData* MeshVertex);
 
     vector<MeshData*> MeshVertex;
+    vector<Primitive*> GO_PrimitiveList;
     string House_Path = "";
 
 private:

@@ -42,7 +42,7 @@ public:
 
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
-	CPlane Grid;
+	//CPlane Grid;
 
 	bool TurnOff = false;
 

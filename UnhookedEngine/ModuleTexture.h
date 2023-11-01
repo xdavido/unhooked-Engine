@@ -39,6 +39,7 @@ public:
 
 	GLubyte checkerImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 	GLuint textureID = 0,textureWidth = 0, textureHeight = 0;
+	GLuint checkerID;
 	string House_Texture_Path = "";
 
 };

@@ -7,12 +7,6 @@
     <Filter Include="Sources\Modules">
       <UniqueIdentifier>{7b418be2-1631-4a31-9ef2-8a8b234a7339}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources\Containers">
-      <UniqueIdentifier>{afc36133-f401-499a-aa33-0da1e500fb52}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Tools">
-      <UniqueIdentifier>{7e4dfaf7-022c-4f7d-92aa-f3b3fa9d6248}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sources\Helpers">
       <UniqueIdentifier>{121f8e6b-df36-4ab0-be0d-601ddfc9e503}</UniqueIdentifier>
     </Filter>
@@ -43,6 +37,12 @@
     <Filter Include="Externals\ImGui\backends">
       <UniqueIdentifier>{f6da8a8b-e348-48a7-9744-1ab2f3e7f75c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\GameObjects">
+      <UniqueIdentifier>{d74a1afb-8809-4ce5-8e37-0abcd83f9b2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\GameObjects\COMPonents">
+      <UniqueIdentifier>{8a989a4e-bfac-49ce-9ae5-c88e722cffb3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -69,14 +69,8 @@
     <ClInclude Include="Primitive.h">
       <Filter>Sources\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="Color.h">
-      <Filter>Sources\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>Sources\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Sources\Tools</Filter>
     </ClInclude>
     <ClInclude Include="MathGeoLib\include\MathBuildConfig.h">
       <Filter>Externals\MathGeoLib</Filter>
@@ -297,8 +291,29 @@
     <ClInclude Include="ModuleTexture.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleGameObject.h">
-      <Filter>Sources\Modules</Filter>
+    <ClInclude Include="Color.h">
+      <Filter>Sources\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Sources\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Sources\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Sources\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="COMP_Transform.h">
+      <Filter>Sources\GameObjects\COMPonents</Filter>
+    </ClInclude>
+    <ClInclude Include="COMP_Texture.h">
+      <Filter>Sources\GameObjects\COMPonents</Filter>
+    </ClInclude>
+    <ClInclude Include="COMP_Mesh.h">
+      <Filter>Sources\GameObjects\COMPonents</Filter>
+    </ClInclude>
+    <ClInclude Include="COMP_Camera.h">
+      <Filter>Sources\GameObjects\COMPonents</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -314,12 +329,6 @@
     <ClCompile Include="ModuleWindow.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="log.cpp">
-      <Filter>Sources\Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Sources\Tools</Filter>
-    </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
@@ -328,9 +337,6 @@
     </ClCompile>
     <ClCompile Include="Primitive.cpp">
       <Filter>Sources\Helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="Color.cpp">
-      <Filter>Sources\Containers</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Sources\Helpers</Filter>
@@ -464,8 +470,32 @@
     <ClCompile Include="ModuleTexture.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleGameObject.cpp">
-      <Filter>Sources\Modules</Filter>
+    <ClCompile Include="Color.cpp">
+      <Filter>Sources\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="log.cpp">
+      <Filter>Sources\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Sources\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Sources\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Sources\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="COMP_Transform.cpp">
+      <Filter>Sources\GameObjects\COMPonents</Filter>
+    </ClCompile>
+    <ClCompile Include="COMP_Camera.cpp">
+      <Filter>Sources\GameObjects\COMPonents</Filter>
+    </ClCompile>
+    <ClCompile Include="COMP_Mesh.cpp">
+      <Filter>Sources\GameObjects\COMPonents</Filter>
+    </ClCompile>
+    <ClCompile Include="COMP_Texture.cpp">
+      <Filter>Sources\GameObjects\COMPonents</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

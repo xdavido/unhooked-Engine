@@ -1,5 +1,18 @@
 #include "Application.h"
+#include "ModuleEditor.h"
+#include<string>
+#include "Globals.h"
 
+extern Application* externalapp = nullptr;
+
+Application* Application::GetApp()
+{
+	if (externalapp == nullptr)
+	{
+		externalapp = new Application();
+	}
+	return externalapp;
+}
 
 Application::Application()
 {
@@ -13,7 +26,7 @@ Application::Application()
 	editor = new ModuleEditor(this);
 	FBX = new ModuleFBX(this);
 	texture = new ModuleTexture(this);
-	gameobject = new ModuleGameObject(this);
+	
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -29,16 +42,17 @@ Application::Application()
 	AddModule(editor);
 	AddModule(FBX);
 	AddModule(texture);
-	AddModule(gameobject);
+	
 }
 
 Application::~Application()
 {
-	for (std::vector<Module*>::iterator it = list_modules.begin(); it != list_modules.end(); ++it)
+	for (int i = list_modules.size() - 1; i >= 0; i--)
 	{
-		delete (*it);
-		(*it) = nullptr;
+		delete list_modules[i];
+		list_modules[i] = nullptr;
 	}
+	list_modules.clear();
 }
 
 bool Application::Init()
@@ -46,16 +60,17 @@ bool Application::Init()
 	bool ret = true;
 
 	// Call Init() in all modules
-	for (std::vector<Module*>::const_iterator it = list_modules.cbegin(); it != list_modules.cend() && ret; ++it)
+	LOG("Application Init --------------");
+	for (size_t i = 0; i < list_modules.size(); i++)
 	{
-		(*it)->Init();
+		ret = list_modules[i]->Init();
 	}
 
 	// After all Init calls we call Start() in all modules
 	LOG("Application Start --------------");
-	for (std::vector<Module*>::const_iterator it = list_modules.cbegin(); it != list_modules.cend() && ret; ++it)
+	for (size_t i = 0; i < list_modules.size(); i++)
 	{
-		(*it)->Start();
+		ret = list_modules[i]->Start();
 	}
 
 	ms_timer.Start();
@@ -72,6 +87,9 @@ void Application::PrepareUpdate()
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
+	MsFrame = ms_timer.Read();
+	float FrameWait = (1000.f / (float)fps) - (float)MsFrame;
+	SDL_Delay(static_cast<Uint32>(fabs(FrameWait)));
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
@@ -80,22 +98,20 @@ update_status Application::Update()
 	update_status ret = UPDATE_CONTINUE;
 	PrepareUpdate();
 
-	for (std::vector<Module*>::const_iterator it = list_modules.cbegin(); it != list_modules.cend() && ret == UPDATE_CONTINUE; ++it)
+	for (size_t i = 0; i < list_modules.size() && ret == UPDATE_CONTINUE; i++)
 	{
-		ret = (*it)->PreUpdate(dt);
+		ret = list_modules[i]->PreUpdate(dt);
 	}
 
-	for (std::vector<Module*>::const_iterator it = list_modules.cbegin(); it != list_modules.cend() && ret == UPDATE_CONTINUE; ++it)
+	for (size_t i = 0; i < list_modules.size() && ret == UPDATE_CONTINUE; i++)
 	{
-		ret = (*it)->Update(dt);
+		ret = list_modules[i]->Update(dt);
 	}
 
-	for (std::vector<Module*>::const_iterator it = list_modules.cbegin(); it != list_modules.cend() && ret == UPDATE_CONTINUE; ++it)
+	for (size_t i = 0; i < list_modules.size() && ret == UPDATE_CONTINUE; i++)
 	{
-		ret = (*it)->PostUpdate(dt);
+		ret = list_modules[i]->PostUpdate(dt);
 	}
-
-	editor->AddFPS(dt);
 
 	FinishUpdate();
 	return ret;
@@ -104,10 +120,15 @@ update_status Application::Update()
 bool Application::CleanUp()
 {
 	bool ret = true;
-	for (std::vector<Module*>::reverse_iterator it = list_modules.rbegin(); it != list_modules.rend() && ret; ++it)
+
+	for (int i = list_modules.size() - 1; i >= 0; i--)
 	{
-		ret = (*it)->CleanUp();
+		list_modules[i]->CleanUp();
+		delete list_modules[i];
+		list_modules[i] = nullptr;
 	}
+
+	list_modules.clear();
 	return ret;
 }
 
