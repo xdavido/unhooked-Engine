@@ -85,9 +85,6 @@ update_status ModuleFBX::PostUpdate(float dt)
 }
 
 void ModuleFBX::LoadFBX(string file_path) {
-	//meshData.CalculateVertexNormals();
-	
-	
 
 	const aiScene* scene = aiImportFile(file_path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
@@ -128,15 +125,6 @@ void ModuleFBX::LoadFBX(string file_path) {
 						else{
 							memcpy(&_MeshVertex->index[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
 						}
-						
-						// copy tex coords
-						/*_MeshVertex.texCoords = new float[_MeshVertex.num_vertex * 2];
-						for (size_t k = 0; k < sceneM->mNumVertices; k++) {
-							if (sceneM->mTextureCoords[0]) {
-								_MeshVertex.texCoords[k * 2] = sceneM->mTextureCoords[0][k].x;
-								_MeshVertex.texCoords[k * 2 + 1] = sceneM->mTextureCoords[0][k].y;
-							}
-						}*/
 
 					}
 

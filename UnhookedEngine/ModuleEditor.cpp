@@ -223,9 +223,7 @@ void ModuleEditor::SettingsMenu()
             {
                 
             }
-            //ImGui::Checkbox("Vsync", &vsync);
-            //SetVsync(vsync);
-            
+          
         }
 
         if (ImGui::CollapsingHeader("Window Settings"))
@@ -242,7 +240,7 @@ void ModuleEditor::SettingsMenu()
 
             if (ImGui::Button("Apply Changes"))
             {
-                //App->window->SetNewWindow(Height, Width, fullscreen, resizable, borderless, fullscreendesktop);
+                // init de ModuleWindow
                 MSG.push_back("Window Changes Applied");
             }
 

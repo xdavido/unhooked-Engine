@@ -8,6 +8,7 @@ enum class COMP_Type;
 class Component;
 class COMP_Transform;
 class COMP_Mesh;
+//class COMP_Camera;
 
 class GameObject
 {
@@ -24,7 +25,7 @@ public:
 	COMP_Transform* mTransform;
 
 	std::string name;
-	char string[128] = "gameObject";
+	char string[128] = "Game_Object";
 
 	void DeleteChild(GameObject* child);
 	bool ChangeParent(GameObject* NewParent);

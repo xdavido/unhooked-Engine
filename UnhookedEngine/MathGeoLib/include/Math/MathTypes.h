@@ -4,7 +4,7 @@
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
 
-	   http://www.apache.org/licenses/LICENSE-2.0
+       http://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,8 +13,8 @@
    limitations under the License. */
 #pragma once
 
-   /** @file Types.h
-	   @brief Provides platform-independent fixed size types. */
+/** @file Types.h
+	@brief Provides platform-independent fixed size types. */
 
 #ifdef MATH_TUNDRA_INTEROP
 #include "CoreTypes.h"
@@ -22,9 +22,9 @@
 
 #ifndef KNET_NO_FIXEDWIDTH_TYPES
 
-	   // As a reminder: http://predef.sourceforge.net/prestd.html
+// As a reminder: http://predef.sourceforge.net/prestd.html
 
-	   // If we have C99, take the types from there.
+// If we have C99, take the types from there.
 #if (__STDC_VERSION__ >= 199901L) || (_MSC_VER >= 1600)
 
 #include <cstdint>

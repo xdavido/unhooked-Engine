@@ -6,7 +6,7 @@
 
 GameObject::GameObject()
 {
-	name = "gameObject";
+	name = "Game_Object";
 	mParent = nullptr;
 	fixed = false;
 
@@ -16,7 +16,7 @@ GameObject::GameObject()
 
 GameObject::GameObject(GameObject* parent)
 {
-	name = "gameObject";
+	name = "Game_Object";
 	this->mParent = parent;
 	fixed = false;
 
