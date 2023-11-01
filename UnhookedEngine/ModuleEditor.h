@@ -33,6 +33,9 @@ public:
 	bool FaceShow = true;
 	float screenWidth;
 	float screenHeight;
+	bool showSettingsWindow;
+	bool showAssetsWindow;
+	bool showConsoleWindow;
 	// Define a vector to store console messages
 	std::vector<std::string> consoleMessages;
 

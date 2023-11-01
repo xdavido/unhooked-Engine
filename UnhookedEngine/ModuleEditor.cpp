@@ -45,11 +45,14 @@ void ModuleEditor::Draw()
 
     MainMenuBar();
 
-    SettingsMenu();
+    if (showSettingsWindow)
+        SettingsMenu();
 
-    AssetsWindow();
+    if (showAssetsWindow)
+        AssetsWindow();
 
-    ConsoleWindow();
+    if (showConsoleWindow)
+        ConsoleWindow();
 
     if (OpenAbout == true)
     {
@@ -93,7 +96,9 @@ void ModuleEditor::MainMenuBar()
 
         if (ImGui::BeginMenu("Menu"))
         {
-            ImGui::Text("ToDo");
+            ImGui::MenuItem("Settings", NULL, &showSettingsWindow);
+            ImGui::MenuItem("Assets", NULL, &showAssetsWindow);
+            ImGui::MenuItem("Console", NULL, &showConsoleWindow);
             ImGui::EndMenu();
         }
 
@@ -150,15 +155,6 @@ void ModuleEditor::SettingsMenu()
             ImGui::Text("SDL Version: %d.%d.%d", version.major, version.minor, version.patch);
             ImGui::Text("OpenGL Version: %s", glGetString(GL_VERSION));
             ImGui::Text("GLSL Version: %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
-
-            //ImGui::TextColored(ImVec4(1, 1, 0, 1), "Console");
-
-            /*ImGui::BeginChild("Scrolling");
-            for (size_t i = 0; i < MSG.size(); i++)
-            {
-                ImGui::TextColored(ImVec4(0.78, 1, 1, 1), "%s", MSG.at(i).data());
-            }
-            ImGui::EndChild();*/
         }
 
         if (ImGui::CollapsingHeader("Render Options"))
