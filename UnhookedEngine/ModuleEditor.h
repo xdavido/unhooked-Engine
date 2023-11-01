@@ -25,6 +25,7 @@ public:
 
 	void AddFPS(float aFPS);
 	void AddToConsole(const std::string& message);
+	double GetMemoryUsageInMB();
 
 	std::vector<float> mFPSLog;
 	bool wireframe = true;
@@ -47,6 +48,7 @@ private:
 	void SettingsMenu();
 	void AssetsWindow();
 	void ConsoleWindow();
+	
 	
 	void SetWireFrameMode(bool wireframe);
 

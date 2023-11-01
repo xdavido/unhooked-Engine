@@ -5,6 +5,7 @@
 #include "SDL/include/SDL_opengl_glext.h"
 #include <filesystem>
 #include "Globals.h"
+#include <windows.h>
 
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -17,6 +18,9 @@ ModuleEditor::~ModuleEditor()
 
 bool ModuleEditor::Init()
 {
+
+    
+
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
@@ -113,6 +117,8 @@ void ModuleEditor::MainMenuBar()
     }
 }
 
+
+
 void ModuleEditor::SettingsMenu()
 {
     float Settings2WindowWidth = 200.0f;
@@ -137,15 +143,22 @@ void ModuleEditor::SettingsMenu()
             ImGui::Text("Renderer: %s", glGetString(GL_RENDERER));
             ImGui::Text("OpenGL version supported %s", glGetString(GL_VERSION));
             ImGui::Text("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+            SDL_version version;
+            SDL_GetVersion(&version);
+            ImGui::SeparatorText("System Information:");
+            //ImGui::Text("Memory Usage: %.2f MB", GetMemoryUsageInMB());
+            ImGui::Text("SDL Version: %d.%d.%d", version.major, version.minor, version.patch);
+            ImGui::Text("OpenGL Version: %s", glGetString(GL_VERSION));
+            ImGui::Text("GLSL Version: %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
-            ImGui::TextColored(ImVec4(1, 1, 0, 1), "Console");
+            //ImGui::TextColored(ImVec4(1, 1, 0, 1), "Console");
 
-            ImGui::BeginChild("Scrolling");
+            /*ImGui::BeginChild("Scrolling");
             for (size_t i = 0; i < MSG.size(); i++)
             {
                 ImGui::TextColored(ImVec4(0.78, 1, 1, 1), "%s", MSG.at(i).data());
             }
-            ImGui::EndChild();
+            ImGui::EndChild();*/
         }
 
         if (ImGui::CollapsingHeader("Render Options"))
@@ -222,6 +235,10 @@ void ModuleEditor::SettingsMenu()
             if (ImGui::Checkbox("Show Vertex Normals", &VertexShow))
             {
                 
+            }
+            if (ImGui::Checkbox("Show Face Normals", &FaceShow))
+            {
+
             }
             //ImGui::Checkbox("Vsync", &vsync);
             //SetVsync(vsync);
