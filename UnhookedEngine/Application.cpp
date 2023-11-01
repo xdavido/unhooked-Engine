@@ -17,13 +17,8 @@ Application::Application()
 	editor = new ModuleEditor(this);
 	FBX = new ModuleFBX(this);
 	texture = new ModuleTexture(this);
-	hierarchy = new ModuleHierarchy(this);
-	scene = new ModuleScene(this);
-	
-
-	// The order of calls is very important!
-	// Modules will Init() Start() and Update in this order
-	// They will CleanUp() in reverse order
+	//hierarchy = new ModuleHierarchy(this);
+	//scene = new ModuleScene(this);
 
 	// Main Modules
 	AddModule(window);
@@ -33,8 +28,8 @@ Application::Application()
 
 	AddModule(editor);
 	AddModule(FBX);
-	AddModule(hierarchy);
-	AddModule(scene);
+	//AddModule(hierarchy);
+	//AddModule(scene);
 
 	// Renderer last!
 	AddModule(renderer3D);
@@ -82,14 +77,12 @@ bool Application::Init()
 	return ret;
 }
 
-// ---------------------------------------------
 void Application::PrepareUpdate()
 {
 	dt = (float)ms_timer.Read() / 1000.0f;
 	ms_timer.Start();
 }
 
-// ---------------------------------------------
 void Application::FinishUpdate()
 {
 	MsFrame = ms_timer.Read();
@@ -97,7 +90,6 @@ void Application::FinishUpdate()
 	SDL_Delay(static_cast<Uint32>(fabs(FrameWait)));
 }
 
-// Call PreUpdate, Update and PostUpdate on all modules
 update_status Application::Update()
 {
 	update_status ret = UPDATE_CONTINUE;

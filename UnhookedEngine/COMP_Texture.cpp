@@ -22,16 +22,16 @@ COMP_Texture::~COMP_Texture()
 
 }
 
-void COMP_Texture::LinkTexture(std::string file_path)
-{
-	if (textureID != 0)
-	{
-		Application::GetApp()->texture->DestroyTexture(textureID);
-	}
-	textureID = Application::GetApp()->texture->LoadTexture(file_path);
-
-	RefreshTexture();
-}
+//void COMP_Texture::LinkTexture(std::string file_path)
+//{
+//	if (textureID != 0)
+//	{
+//		Application::GetApp()->texture->DestroyTexture(textureID);
+//	}
+//	textureID = Application::GetApp()->texture->LoadTexture(file_path);
+//
+//	RefreshTexture();
+//}
 
 void COMP_Texture::RefreshTexture()
 {

@@ -20,7 +20,7 @@ public:
 
 	bool PrintLoaded = true;
 
-	void LinkTexture(std::string file_path);
+	//void LinkTexture(std::string file_path);
 
 	void RefreshTexture();
 

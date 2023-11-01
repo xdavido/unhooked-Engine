@@ -242,7 +242,7 @@ void ModuleEditor::SettingsMenu()
 
             if (ImGui::Button("Apply Changes"))
             {
-                App->window->SetNewWindow(Height, Width, fullscreen, resizable, borderless, fullscreendesktop);
+                //App->window->SetNewWindow(Height, Width, fullscreen, resizable, borderless, fullscreendesktop);
                 MSG.push_back("Window Changes Applied");
             }
 

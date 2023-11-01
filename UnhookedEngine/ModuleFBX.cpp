@@ -341,7 +341,7 @@ void ModuleFBX::DestroyFBX(MeshData* _MeshVertex)
 		if (MeshVertex[i] == _MeshVertex) {
 			MeshVertex.erase(MeshVertex.begin() + i);
 			delete MeshVertex;
-			//MeshVertex = nullptr;
+			MeshVertex = nullptr;
 			return;
 		}
 	}

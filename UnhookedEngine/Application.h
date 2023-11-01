@@ -13,8 +13,8 @@
 #include "ModuleEditor.h"
 #include "ModuleFBX.h"
 #include "ModuleTexture.h"
-#include "ModuleHierarchy.h"
-#include "ModuleScene.h"
+//#include "ModuleHierarchy.h"
+//#include "ModuleScene.h"
 
 
 
@@ -30,8 +30,8 @@ public:
 	ModuleEditor* editor;
 	ModuleFBX* FBX;
 	ModuleTexture* texture;
-	ModuleHierarchy hierarchy;
-	ModuleScene* scene;
+	//ModuleHierarchy hierarchy;
+	//ModuleScene* scene;
 
 
 private:
