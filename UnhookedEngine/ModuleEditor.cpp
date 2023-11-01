@@ -6,6 +6,7 @@
 #include <filesystem>
 #include "Globals.h"
 #include <windows.h>
+#include <psapi.h>
 
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -151,7 +152,7 @@ void ModuleEditor::SettingsMenu()
             SDL_version version;
             SDL_GetVersion(&version);
             ImGui::SeparatorText("System Information:");
-            //ImGui::Text("Memory Usage: %.2f MB", GetMemoryUsageInMB());
+            ImGui::Text("Memory Usage: %.2f MB", GetMemoryUsageInMB());
             ImGui::Text("SDL Version: %d.%d.%d", version.major, version.minor, version.patch);
             ImGui::Text("OpenGL Version: %s", glGetString(GL_VERSION));
             ImGui::Text("GLSL Version: %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
@@ -374,6 +375,21 @@ void ModuleEditor::AddFPS(float aFPS)
         mFPSLog.erase(mFPSLog.begin());
         mFPSLog.push_back(aFPS);
     }
+}
+
+#include <windows.h>
+
+double ModuleEditor::GetMemoryUsageInMB()
+{
+    PROCESS_MEMORY_COUNTERS_EX pmc;
+    GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc));
+
+    SIZE_T virtualMemory = pmc.PrivateUsage;
+
+    // Convert bytes to megabytes
+    double memoryInMB = static_cast<double>(virtualMemory) / (1024.0 * 1024.0);
+
+    return memoryInMB;
 }
 
 void ModuleEditor::SetWireFrameMode(bool wireframe)
