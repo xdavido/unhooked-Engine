@@ -39,118 +39,155 @@ bool ModuleCamera3D::CleanUp()
 // -----------------------------------------------------------------
 update_status ModuleCamera3D::Update(float dt)
 {
-	// Implement a debug camera with keys and mouse
-	// Now we can make this movememnt frame rate independant!
+    // Implement a debug camera with keys and mouse
+    // Now we can make this movement frame rate independent!
 
-	float3 newPos(0,0,0);
-	float speed = 1.0f * dt;
-	float zoomspeed = 0.0f * dt;
+    float3 newPos(0, 0, 0);
+    float speed = 1.0f * dt;
+    float zoomspeed = 0.0f * dt;
 
-	if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
-	{
-		// Adjust zoom speed when Ctrl is pressed
-		zoomspeed = 25.0f * dt;
-	}
+    if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
+    {
+        // Adjust zoom speed when Ctrl is pressed
+        zoomspeed = 25.0f * dt;
+    }
 
-	if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT)
-	{
-		int dx = -App->input->GetMouseXMotion();
-		int dy = App->input->GetMouseYMotion();
+    if (App->input->GetMouseButton(SDL_BUTTON_MIDDLE) == KEY_REPEAT)
+    {
+        int dx = -App->input->GetMouseXMotion();
+        int dy = App->input->GetMouseYMotion();
 
+        float moveSpeed = 1.0f * dt;
 
-		float moveSpeed = 1.0f * dt;
+        // Calculate the movement vector based on mouse input
+        float3 moveVector = X * (dx * moveSpeed) + Y * (dy * moveSpeed);
 
-		// Calculate the movement vector based on mouse input
-		float3 moveVector = X * (dx * moveSpeed) + Y * (dy * moveSpeed);
+        // Update the camera's position and reference
+        Position += moveVector;
+        Reference += moveVector;
+    }
+    if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+    {
+        // Reset the camera's position to (0, 0, 0)
+        Position = float3(0.0f, 0.0f, 0.0f);
+    }
 
-		// Update the camera's position and reference
-		Position += moveVector;
-		Reference += moveVector;
-	}
-	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
-	{
-		// Reset the camera's position to (0, 0, 0)
-		Position = float3(0.0f, 0.0f, 0.0f);
-	}
+    // Mouse wheel zoom
+    if (App->input->GetMouseZ() != 0)
+    {
+        // Get the mouse wheel delta
+        int wheelDelta = App->input->GetMouseZ();
 
+        // Adjust the camera's position based on the wheelDelta
+        float3 zoomVector = Z * (wheelDelta * zoomspeed);
+        Position -= zoomVector;
+    }
 
-	// Mouse wheel zoom
-	if (App->input->GetMouseZ() != 0)
-	{
-		// Get the mouse wheel delta
-		int wheelDelta = App->input->GetMouseZ();
+    if (App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
+    {
+        int dx = -App->input->GetMouseXMotion();
+        int dy = -App->input->GetMouseYMotion();
 
-		// Adjust the camera's position based on the wheelDelta
-		float3 zoomVector = Z * (wheelDelta * zoomspeed);
-		Position -= zoomVector;
-	}
+        float Sensitivity = 0.35f * dt;
 
-	if(App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
-		speed = 8.0f * dt;
+        // Define the custom reference point. This will change according to
+        float3 customReference(1.0f, 1.0f, 1.0f);
 
-	if(App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
-	if(App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
+        // Calculate the position relative to the custom reference point
+        float3 relativePosition = Position - customReference;
 
-	if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
-	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
+        if (dx != 0)
+        {
+            float DeltaX = (float)dx * Sensitivity;
 
+            float3 rotationAxis(0.0f, 1.0f, 0.0f);
+            Quat rotationQuat = Quat::RotateAxisAngle(rotationAxis, DeltaX);
 
-	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
-	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
+            // Apply rotation to the position relative to the custom reference point
+            relativePosition = rotationQuat * relativePosition;
+        }
 
-	Position += newPos;
-	Reference += newPos;
+        if (dy != 0)
+        {
+            float DeltaY = (float)dy * Sensitivity;
 
-	// Mouse motion ----------------
+            Quat rotationQuat = Quat::RotateAxisAngle(X, DeltaY);
 
-	if(App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
-	{
-		int dx = -App->input->GetMouseXMotion();
-		int dy = -App->input->GetMouseYMotion();
+            // Apply rotation to the relative position
+            relativePosition = rotationQuat * relativePosition;
 
-		float Sensitivity = 0.35f * dt;
+            // Ensure the Y vector maintains the correct orientation
+            /*if (relativePosition.y < 0.0f)
+            {
+                relativePosition.y = 0.0f;
+            }*/
+        }
 
-		Position -= Reference;
+        // Update the camera's Position based on the custom reference point
+        Position = customReference + relativePosition;
+    }
 
-		if(dx != 0)
-		{
-			float DeltaX = (float)dx * Sensitivity;
+    if (App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+        speed = 8.0f * dt;
 
-			float3 rotationAxis(0.0f, 1.0f, 0.0f);
-			Quat rotationQuat = Quat::RotateAxisAngle(rotationAxis, DeltaX);
+    if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
+    if (App->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
 
-			X = rotationQuat * X;
-			Y = rotationQuat * Y;
-			Z = rotationQuat * Z;
-		}
+    if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
+    if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
 
-		if(dy != 0)
-		{
-			float DeltaY = (float)dy * Sensitivity;
+    if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
+    if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
 
-			Quat rotationQuat = Quat::RotateAxisAngle(X, DeltaY);
+    Position += newPos;
+    Reference += newPos;
 
-			Y = rotationQuat * Y;
-			Z = rotationQuat * Z;
+    if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+    {
+        int dx = -App->input->GetMouseXMotion();
+        int dy = -App->input->GetMouseYMotion();
 
-			if(Y.y < 0.0f)
-			{
-				Z = float3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-				Y = Z.Cross(X);
-			}
-		}
+        float Sensitivity = 0.35f * dt;
 
-		Position = Reference + Z * Position.Length();
-	}
+        Position -= Reference;
 
-	LookAt(Reference);
+        if (dx != 0)
+        {
+            float DeltaX = (float)dx * Sensitivity;
 
-	// Recalculate matrix -------------
-	CalculateViewMatrix();
+            float3 rotationAxis(0.0f, 1.0f, 0.0f);
+            Quat rotationQuat = Quat::RotateAxisAngle(rotationAxis, DeltaX);
 
-	return UPDATE_CONTINUE;
+            X = rotationQuat * X;
+            Y = rotationQuat * Y;
+            Z = rotationQuat * Z;
+        }
+
+        if (dy != 0)
+        {
+            float DeltaY = (float)dy * Sensitivity;
+
+            Quat rotationQuat = Quat::RotateAxisAngle(X, DeltaY);
+
+            Y = rotationQuat * Y;
+            Z = rotationQuat * Z;
+
+            if (Y.y < 0.0f)
+            {
+                Z = float3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
+                Y = Z.Cross(X);
+            }
+        }
+
+        Position = Reference + Z * Position.Length();
+    }
+
+    LookAt(Reference);
+
+    CalculateViewMatrix();
+
+    return UPDATE_CONTINUE;
 }
-
 // -----------------------------------------------------------------
 void ModuleCamera3D::Look(const float3&Position, const float3&Reference, bool RotateAroundReference)
 {
@@ -181,6 +218,7 @@ void ModuleCamera3D::LookAt( const float3&Spot)
 
 	CalculateViewMatrix();
 }
+
 
 
 // -----------------------------------------------------------------
