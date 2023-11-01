@@ -5,7 +5,6 @@
 #include "Module.h"
 #include "Globals.h"
 #include "Light.h"
-#include "Application.h"
 #include "ModuleRenderer3D.h"
 #include "Glew/include/glew.h"
 #include "DevIL/include/il.h"

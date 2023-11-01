@@ -88,43 +88,28 @@ bool ModuleWindow::CleanUp()
 	return true;
 }
 
-void ModuleWindow::SetNewWindow(int height, int width, bool fullscreen, bool resizable, bool borderless, bool fullscreendesktop)
-{
-	Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
-
-	if (fullscreen == true)
-	{
-		flags |= SDL_WINDOW_FULLSCREEN;
-	}
-
-	if (resizable == true)
-	{
-		SDL_SetWindowResizable(window, SDL_TRUE);
-	}
-	else
-	{
-		SDL_SetWindowResizable(window, SDL_FALSE);
-	}
-
-	if (borderless == true)
-	{
-		SDL_SetWindowBordered(window, SDL_FALSE);
-	}
-	else
-	{
-		SDL_SetWindowBordered(window, SDL_TRUE);
-	}
-
-	if (fullscreendesktop == true)
-	{
-		flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
-	}
-
-	SDL_SetWindowFullscreen(window, flags);
-	SDL_SetWindowSize(window, width, height);
-}
-
 void ModuleWindow::SetTitle(const char* title)
 {
 	SDL_SetWindowTitle(window, title);
+}
+
+void ModuleWindow::SwitchScreen()
+{
+	if (resizable == true)
+	{
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_RESIZABLE);
+	}
+	if (fullScreen == true)
+	{
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+	}
+	if (borderless == true)
+	{
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_BORDERLESS);
+	}
+	if (desktop == true)
+	{
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+	}
+
 }

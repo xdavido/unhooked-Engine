@@ -315,6 +315,12 @@
     <ClInclude Include="COMP_Camera.h">
       <Filter>Sources\GameObjects\COMPonents</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleHierarchy.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleScene.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -496,6 +502,12 @@
     </ClCompile>
     <ClCompile Include="COMP_Texture.cpp">
       <Filter>Sources\GameObjects\COMPonents</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleHierarchy.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleScene.cpp">
+      <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

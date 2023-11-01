@@ -30,7 +30,7 @@
 #include <cstdint>
 
 typedef
-u8; ///< a single byte: 0-255.
+uint8_t u8; ///< a single byte: 0-255.
 typedef uint16_t u16; ///< 2 bytes: 0 - 65535.
 typedef uint32_t u32; ///< 4 bytes: 0 - 4,294,967,295 ~ 4000 million or 4e9.
 typedef uint64_t u64; ///< 8 bytes: 18,446,744,073,709,551,615 ~1.8e19.

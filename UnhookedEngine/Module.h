@@ -1,6 +1,5 @@
 #pragma once
-#include "Globals.h"
-
+#include <time.h>
 class Application;
 struct PhysBody3D;
 
@@ -25,6 +24,7 @@ public:
 
 	virtual bool Start()
 	{
+		srand(time(NULL));
 		return true;
 	}
 
@@ -50,4 +50,6 @@ public:
 
 	virtual void OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 	{}
+
+
 };

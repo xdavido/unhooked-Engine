@@ -13,6 +13,10 @@
 #include "ModuleEditor.h"
 #include "ModuleFBX.h"
 #include "ModuleTexture.h"
+#include "ModuleHierarchy.h"
+#include "ModuleScene.h"
+
+
 
 //Application* app = nullptr;
 
@@ -26,14 +30,15 @@ public:
 	ModuleEditor* editor;
 	ModuleFBX* FBX;
 	ModuleTexture* texture;
+	ModuleHierarchy hierarchy;
+	ModuleScene* scene;
+
 
 private:
 
 	Timer	ms_timer;
 	float	dt;
 	std::vector<Module*> list_modules;
-
-	static Application* app;
 
 
 public:

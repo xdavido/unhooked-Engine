@@ -18,9 +18,10 @@ public:
 	bool Init();
 	bool CleanUp();
 
-	void SetNewWindow(int height, int width, bool fullscreen, bool resizable, bool borderless, bool fullscreendesktop);
-
 	void SetTitle(const char* title);
+
+	//void SwitchScreen(int s);
+	void SwitchScreen();
 
 public:
 	//The window we'll be rendering to
@@ -28,6 +29,12 @@ public:
 
 	//The surface contained by the window
 	SDL_Surface* screen_surface;
+
+	bool fullScreen = false,
+		resizable = true,
+		borderless = false,
+		desktop = false;
+	int screenType;
 };
 
 #endif // __ModuleWindow_H__

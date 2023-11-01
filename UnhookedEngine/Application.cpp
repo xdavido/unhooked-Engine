@@ -1,23 +1,14 @@
 #include "Application.h"
-#include "ModuleEditor.h"
 #include<string>
 #include "Globals.h"
 
 extern Application* externalapp = nullptr;
 
-Application* Application::GetApp()
-{
-	if (externalapp == nullptr)
-	{
-		externalapp = new Application();
-	}
-	return externalapp;
-}
-
 Application::Application()
 {
 	/*Application myApp;
 	app = &myApp;*/
+	externalapp = this;
 
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
@@ -26,6 +17,8 @@ Application::Application()
 	editor = new ModuleEditor(this);
 	FBX = new ModuleFBX(this);
 	texture = new ModuleTexture(this);
+	hierarchy = new ModuleHierarchy(this);
+	scene = new ModuleScene(this);
 	
 
 	// The order of calls is very important!
@@ -37,12 +30,24 @@ Application::Application()
 	AddModule(camera);
 	AddModule(input);
 
-	// Renderer last!
-	AddModule(renderer3D);
+
 	AddModule(editor);
 	AddModule(FBX);
-	AddModule(texture);
+	AddModule(hierarchy);
+	AddModule(scene);
+
+	// Renderer last!
+	AddModule(renderer3D);
 	
+}
+
+Application* Application::GetApp()
+{
+	if (externalapp == nullptr)
+	{
+		externalapp = new Application();
+	}
+	return externalapp;
 }
 
 Application::~Application()
