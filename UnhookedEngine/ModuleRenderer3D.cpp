@@ -1,5 +1,5 @@
 #include "Globals.h"
-//#include "Application.h"
+#include "Application.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleEditor.h"
 #include "glew/include/glew.h"

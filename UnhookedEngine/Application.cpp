@@ -3,8 +3,8 @@
 
 Application::Application()
 {
-	Application myApp;
-	app = &myApp;
+	/*Application myApp;
+	app = &myApp;*/
 
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);

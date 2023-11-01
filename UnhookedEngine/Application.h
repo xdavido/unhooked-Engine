@@ -15,7 +15,7 @@
 #include "ModuleGameObject.h"
 #include "ModuleTexture.h"
 
-Application* app = nullptr;
+//Application* app = nullptr;
 
 class Application
 {

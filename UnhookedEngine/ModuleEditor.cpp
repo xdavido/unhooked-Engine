@@ -1,5 +1,5 @@
 #include "ModuleEditor.h"
-//#include "Application.h"
+#include "Application.h"
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
 #include "SDL/include/SDL_opengl_glext.h"

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Globals.h"
-//#include "Application.h"
+#include "Application.h"
 #include "ModuleFBX.h"
 #include "ModuleTexture.h"
 #include "ModuleRenderer3D.h"

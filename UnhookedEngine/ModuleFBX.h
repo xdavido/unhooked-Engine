@@ -3,7 +3,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "Light.h"
-//#include "Application.h"
+#include "Application.h"
 #include "ModuleTexture.h"
 #include "ModuleRenderer3D.h"
 
