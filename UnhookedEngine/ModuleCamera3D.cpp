@@ -44,6 +44,24 @@ update_status ModuleCamera3D::Update(float dt)
 
 	float3 newPos(0,0,0);
 	float speed = 3.0f * dt;
+
+	if (App->input->GetKey(SDL_SCANCODE_LCTRL) == KEY_REPEAT)
+	{
+		// Adjust zoom speed when Ctrl is pressed
+		speed = 25.0f * dt;
+	}
+
+	// Mouse wheel zoom
+	if (App->input->GetMouseZ() != 0)
+	{
+		// Get the mouse wheel delta
+		int wheelDelta = App->input->GetMouseZ();
+
+		// Adjust the camera's position based on the wheelDelta
+		float3 zoomVector = Z * (wheelDelta * speed);
+		Position -= zoomVector;
+	}
+
 	if(App->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		speed = 8.0f * dt;
 

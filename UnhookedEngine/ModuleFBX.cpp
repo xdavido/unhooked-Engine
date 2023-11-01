@@ -33,6 +33,7 @@ ModuleFBX::~ModuleFBX()
 // Called before render is available
 bool ModuleFBX::Start()
 {
+	App->editor->AddToConsole("Initializing external libraries...");
 	LOG("Creating 3D Renderer context");
 	bool ret = true;
 
@@ -44,6 +45,8 @@ bool ModuleFBX::Start()
 	//House_Path = "Assets/BakerHouse.fbx";
 
 	LoadFBX(House_Path);
+
+	App->editor->AddToConsole("External libraries initialization complete");
 
 	return ret;
 	
@@ -72,7 +75,7 @@ update_status ModuleFBX::PostUpdate(float dt)
 
 void ModuleFBX::LoadFBX(string file_path) {
 	//meshData.CalculateVertexNormals();
-	
+	App->editor->AddToConsole("Loading FBX...");
 	
 
 	const aiScene* scene = aiImportFile(file_path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
@@ -141,9 +144,12 @@ void ModuleFBX::LoadFBX(string file_path) {
 				}
 		}
 		aiReleaseImport(scene);
+		App->editor->AddToConsole("Fbx load successful");
 	}
-	else
+	else {
 		LOG("Error loading scene %s", file_path);
+		App->editor->AddToConsole("Error loading Fbx");
+	}
 
 }
 
