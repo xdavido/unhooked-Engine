@@ -258,66 +258,75 @@ void MeshData::DrawFBX()
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_TEXTURE_COORD_ARRAY);
 	
-	
-
-
 
 	// Descomentar esto para ver Vertex y Face Normals
 
-	//// Draw Face Normals if the flag is set
-	///*if (App.editor->FaceShow) {*/
-	//for (uint i = 0; i < num_index; i += 3) {
-	//	// Calculate the face normal
-	//	float normal[3];
-	//	CalculateFaceNormal(&vertex[index[i] * 3], &vertex[index[i + 1] * 3], &vertex[index[i + 2] * 3], normal);
+	/*DrawFacesN();
+	DrawVertexN();*/
+	
+	/*if (App->editor->FaceShow) {
+		DrawFacesN();
+	}
 
-	//	// Calculate the center of the face (average of vertices)
-	//	float center[3];
-	//	center[0] = (vertex[index[i] * 3] + vertex[index[i + 1] * 3] + vertex[index[i + 2] * 3]) / 3;
-	//	center[1] = (vertex[index[i] * 3 + 1] + vertex[index[i + 1] * 3 + 1] + vertex[index[i + 2] * 3 + 1]) / 3;
-	//	center[2] = (vertex[index[i] * 3 + 2] + vertex[index[i + 1] * 3 + 2] + vertex[index[i + 2] * 3 + 2]) / 3;
+	if (App->editor->VertexShow) {
+		DrawVertexN();
+	}*/
+}
 
-	//	// Calculate the end point of the face normal
-	//	float endpoint[3];
-	//	endpoint[0] = center[0] + normal[0];
-	//	endpoint[1] = center[1] + normal[1];
-	//	endpoint[2] = center[2] + normal[2];
+void MeshData::DrawFacesN() {
+	for (uint i = 0; i < num_index; i += 3) {
+		// Calculate the face normal
+		float normal[3];
+		CalculateFaceNormal(&vertex[index[i] * 3], &vertex[index[i + 1] * 3], &vertex[index[i + 2] * 3], normal);
 
-	//	// Draw the face normal as a line from the center to the end point
-	//	glBegin(GL_LINES);
-	//	glVertex3fv(center);
-	//	glVertex3fv(endpoint);
-	//	glEnd();
-	//}
-	////}
-	//// 
-	//CalculateVertexNormals();
-	////Draw Vertex Normals
-	///*if (App.editor->VertexShow) {*/
-	//for (uint i = 0; i < num_vertex * 3; i += 3) {
-	//	float vertexX = vertex[i];
-	//	float vertexY = vertex[i + 1];
-	//	float vertexZ = vertex[i + 2];
+		// Calculate the center of the face (average of vertices)
+		float center[3];
+		center[0] = (vertex[index[i] * 3] + vertex[index[i + 1] * 3] + vertex[index[i + 2] * 3]) / 3;
+		center[1] = (vertex[index[i] * 3 + 1] + vertex[index[i + 1] * 3 + 1] + vertex[index[i + 2] * 3 + 1]) / 3;
+		center[2] = (vertex[index[i] * 3 + 2] + vertex[index[i + 1] * 3 + 2] + vertex[index[i + 2] * 3 + 2]) / 3;
 
-	//	float normalX = normals[i];
-	//	float normalY = normals[i + 1];
-	//	float normalZ = normals[i + 2];
+		// Calculate the end point of the face normal
+		float endpoint[3];
+		endpoint[0] = center[0] + normal[0];
+		endpoint[1] = center[1] + normal[1];
+		endpoint[2] = center[2] + normal[2];
 
-	//	// Define a scaling factor for the normal length
-	//	float normalScale = 0.1f;
+		// Draw the face normal as a line from the center to the end point
+		glBegin(GL_LINES);
+		glVertex3fv(center);
+		glVertex3fv(endpoint);
+		glEnd();
+	}
+	
+}
 
-	//	// Calculate the end point of the normal
-	//	float normalEndX = vertexX + normalX * normalScale;
-	//	float normalEndY = vertexY + normalY * normalScale;
-	//	float normalEndZ = vertexZ + normalZ * normalScale;
+void MeshData::DrawVertexN() {
+	CalculateVertexNormals();
+	//Draw Vertex Normals
+	/*if (App.editor->VertexShow) {*/
+	for (uint i = 0; i < num_vertex * 3; i += 3) {
+		float vertexX = vertex[i];
+		float vertexY = vertex[i + 1];
+		float vertexZ = vertex[i + 2];
 
-	//	// Draw the vertex normal as a line
-	//	glBegin(GL_LINES);
-	//	glVertex3f(vertexX, vertexY, vertexZ);
-	//	glVertex3f(normalEndX, normalEndY, normalEndZ);
-	//	glEnd();
-	//}
-	///*}*/
+		float normalX = normals[i];
+		float normalY = normals[i + 1];
+		float normalZ = normals[i + 2];
+
+		// Define a scaling factor for the normal length
+		float normalScale = 0.1f;
+
+		// Calculate the end point of the normal
+		float normalEndX = vertexX + normalX * normalScale;
+		float normalEndY = vertexY + normalY * normalScale;
+		float normalEndZ = vertexZ + normalZ * normalScale;
+
+		// Draw the vertex normal as a line
+		glBegin(GL_LINES);
+		glVertex3f(vertexX, vertexY, vertexZ);
+		glVertex3f(normalEndX, normalEndY, normalEndZ);
+		glEnd();
+	}
 }
 	
 

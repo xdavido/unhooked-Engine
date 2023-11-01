@@ -44,6 +44,7 @@ struct MeshData {
 	
     //Draw Mesh
     void DrawFBX();
+    
 
     // Normals
 
@@ -54,6 +55,8 @@ struct MeshData {
 	float* normals = nullptr;
 
 	void CalculateVertexNormals();
+    void DrawFacesN();
+    void DrawVertexN();
  
     void NormalizeNormals() {
         for (uint i = 0; i < num_normals; i += 3) {
