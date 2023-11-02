@@ -242,11 +242,8 @@ void MeshData::DrawFBX()
 }
 
 void MeshData::DrawFacesN() {
-	const float normalScale = 0.5f;
-	const float normalColor[3] = { 1.0f, 1.0f, 0.0f };
-
-	glEnableClientState(GL_COLOR_ARRAY);
-	glColorPointer(3, GL_FLOAT, 0, normalColor);
+	const float normalScale = 1.0f; // Adjust the scaling factor as needed
+	const float normalColor[3] = { 1.0f, 0.0f, 0.0f }; // Red color
 
 	for (uint i = 0; i < num_index; i += 3) {
 		// Calculate the face normal
@@ -265,25 +262,27 @@ void MeshData::DrawFacesN() {
 		endpoint[1] = center[1] + normal[1] * normalScale;
 		endpoint[2] = center[2] + normal[2] * normalScale;
 
+		// Set the color for this face normal
+		glColor3fv(normalColor);
+
 		// Draw the scaled face normal as a line from the center to the end point
 		glBegin(GL_LINES);
 		glVertex3fv(center);
 		glVertex3fv(endpoint);
 		glEnd();
 	}
-	glDisableClientState(GL_COLOR_ARRAY);
 }
 
 void MeshData::DrawVertexN() {
 
-	const float normalScale = 0.1f; // Adjust the scaling factor as needed
-	const float normalColor[3] = { 0.0f, 1.0f, 1.0f }; // Blue color
-
-	glEnableClientState(GL_COLOR_ARRAY);
-	glColorPointer(3, GL_FLOAT, 0, normalColor);
+	const float normalScale = 0.5f; // Adjust the scaling factor as needed
+	const float normalColor[3] = { 0.0f, 0.0f, 1.0f }; // Blue color
 
 	// Calculate vertex normals before drawing them
 	CalculateVertexNormals();
+
+	// Set the color for vertex normals
+	glColor3fv(normalColor);
 
 	// Draw Vertex Normals
 	for (uint i = 0; i < num_vertex; ++i) {
@@ -299,7 +298,6 @@ void MeshData::DrawVertexN() {
 		glVertex3fv(endpoint);
 		glEnd();
 	}
-	glDisableClientState(GL_COLOR_ARRAY);
 }
 // Called before quitting
 bool ModuleFBX::CleanUp()
