@@ -15,7 +15,6 @@
 class ModuleEditor : public Module
 {
 public:
-
 	ModuleEditor(Application* app, bool start_enabled = true);
 	~ModuleEditor();
 
@@ -41,31 +40,19 @@ public:
 
 	// A flag to control scrolling to the bottom of the console
 	bool scrollToBottom;
-
-	
 	bool gl_DEPTH_TEST, gl_CULL_FACE, gl_LIGHTING, gl_COLOR_MATERIAL, gl_TEXTURE_2D, gl_WIREFRAME = true;
-
 private:
 	const char* lastValue = "";
 	void MainMenuBar();
 	void SettingsMenu();
 	void AssetsWindow();
 	void ConsoleWindow();
-	
-	
 	void SetWireFrameMode(bool wireframe);
-
-
 	bool OpenAbout = false;
-
 	std::vector<std::string> MSG;
-
 	Color color = Color(0.0f, 0.0f, 0.0f);
 
 	int Height = 720, Width = 1080;
 	bool fullscreen = false, resizable = true, borderless = false, fullscreendesktop = false;
 };
-
-
-
 #endif // !_Module_Editor_
