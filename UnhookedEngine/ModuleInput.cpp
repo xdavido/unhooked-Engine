@@ -32,7 +32,6 @@ bool ModuleInput::Init()
 		LOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
-
 	return ret;
 }
 
@@ -121,8 +120,7 @@ update_status ModuleInput::PreUpdate(float dt)
 				dropped_filedir,
 				App->window->window
 			);
-
-			SDL_free(dropped_filedir);    // Free dropped_filedir memory
+			SDL_free(dropped_filedir);
 			break;
 		case SDL_WINDOWEVENT:
 		{
@@ -137,7 +135,6 @@ update_status ModuleInput::PreUpdate(float dt)
 
 	return UPDATE_CONTINUE;
 }
-
 
 // Called before quitting
 bool ModuleInput::CleanUp()

@@ -13,9 +13,6 @@
 
 #include "Glew/include/glew.h"
 
-//todo: REMOVE this before 1st delivery!!
-#include "glmath.h"
-
 #include <vector>
 
 #define MAX_LIGHTS 8
@@ -31,11 +28,8 @@ public:
 	update_status Update(float dt) override;
 	update_status PostUpdate(float dt);
 	bool CleanUp();
-
 	void ChangeColorScene(Color color);
-	
 	void OnResize(int width, int height);
-
 public:
 
 	void HandlePath(std::string path);
@@ -51,5 +45,4 @@ public:
 
 	std::vector<MeshData> MeshVertex;
 	GLuint textureID;
-
 };

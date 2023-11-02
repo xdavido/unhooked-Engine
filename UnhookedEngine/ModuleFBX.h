@@ -12,7 +12,6 @@
 #include "Assimp/include/mesh.h"
 #include "Assimp/include/postprocess.h"
 
-
 #include "MathGeoLib/include/Math/float3x3.h"
 #include "MathGeoLib/include/Math/float4x4.h"
 #include "Primitive.h"
@@ -95,9 +94,6 @@ public:
 
     vector<MeshData*> MeshVertex;
     string House_Path = "";
-
-private:
-    
 };
 
 #endif // MODULEFBX_H
