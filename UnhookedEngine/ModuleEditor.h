@@ -27,9 +27,9 @@ public:
 	double GetMemoryUsageInMB();
 
 	std::vector<float> mFPSLog;
-	bool wireframe = true;
-	bool VertexShow = true;
-	bool FaceShow = true;
+	bool wireframe = false;
+	bool VertexShow = false;
+	bool FaceShow = false;
 	float screenWidth;
 	float screenHeight;
 	bool showSettingsWindow;
@@ -40,7 +40,7 @@ public:
 
 	// A flag to control scrolling to the bottom of the console
 	bool scrollToBottom;
-	bool gl_DEPTH_TEST, gl_CULL_FACE, gl_LIGHTING, gl_COLOR_MATERIAL, gl_TEXTURE_2D, gl_WIREFRAME = true;
+	bool gl_DEPTH_TEST, gl_CULL_FACE, gl_LIGHTING = true , gl_COLOR_MATERIAL, gl_TEXTURE_2D = true;
 private:
 	const char* lastValue = "";
 	void MainMenuBar();
