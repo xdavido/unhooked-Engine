@@ -46,6 +46,7 @@ struct MeshData {
 	
     //Draw Mesh
     void DrawFBX();
+    
 
     //GO_Owner
     GameObject* Owner;
@@ -66,6 +67,8 @@ struct MeshData {
 	float* normals = nullptr;
 
 	void CalculateVertexNormals();
+    void DrawFacesN();
+    void DrawVertexN();
  
     void NormalizeNormals() {
         for (uint i = 0; i < num_normals; i += 3) {
@@ -78,8 +81,6 @@ struct MeshData {
             normals[i + 2] = z;
         }
     }
-
-private:
     void NormalizeVector(float& x, float& y, float& z) {
         float length = sqrt(x * x + y * y + z * z);
         if (length != 0.0f) {
@@ -88,6 +89,9 @@ private:
             z /= length;
         }
     }
+
+private:
+    
 };
 
 class ModuleFBX : public Module

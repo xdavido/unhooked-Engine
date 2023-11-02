@@ -3,9 +3,10 @@
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
 #include "SDL/include/SDL_opengl_glext.h"
+#include <filesystem>
 #include "Globals.h"
-#include "COMP_Mesh.h"
-#include "COMP_Camera.h"
+#include <windows.h>
+#include <psapi.h>
 
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -42,25 +43,29 @@ void ModuleEditor::Draw()
 
     MainMenuBar();
 
-    SettingsMenu();
+    if (showSettingsWindow)
+        SettingsMenu();
 
-    AssetsWindow();
+    if (showAssetsWindow)
+        AssetsWindow();
 
-    ConsoleWindow();
+    if (showConsoleWindow)
+        ConsoleWindow();
 
     if (OpenAbout == true)
     {
-        if (ImGui::Begin("About Uss"))
+        if (ImGui::Begin("About Us"))
         {
             ImGui::SeparatorText("ABOUT UNHOOKED ENGINE:");
-            ImGui::Text("Unhooked Engine v.0.1");
-            ImGui::Text("The new 3D Game Engine under CITM development");
-            ImGui::Text("David Ruiz Luengo & Pau Garriga Brotons");
-            ImGui::Text("3rd party Libraries:");
-
+            ImGui::TextColored(ImVec4(0.5f, 1.0f, 1.0f, 1.0f), "Unhooked Engine 1.0v");
+            ImGui::TextColored(ImVec4(0.5f, 1.0f, 1.0f, 1.0f), "The new 3D Game Engine under CITM developmen");
+            ImGui::TextColored(ImVec4(0.5f, 1.0f, 1.0f, 1.0f), "David Ruiz Luengo & Pau Garriga Brotons");
+            ImGui::TextColored(ImVec4(0.5f, 1.0f, 1.0f, 1.0f), "3rd party Libraries:");
             ImGui::End();
         }
+
     }
+ 
 
     //ImGui::ShowDemoWindow();
 
@@ -90,17 +95,19 @@ void ModuleEditor::MainMenuBar()
 
         if (ImGui::BeginMenu("Menu"))
         {
-            ImGui::Text("ToDo");
+            ImGui::MenuItem("Settings", NULL, &showSettingsWindow);
+            ImGui::MenuItem("Assets", NULL, &showAssetsWindow);
+            ImGui::MenuItem("Console", NULL, &showConsoleWindow);
             ImGui::EndMenu();
         }
-        
 
         if (ImGui::BeginMenu("Help"))
         {
-            if (ImGui::MenuItem("About"))
+            /*if (ImGui::MenuItem("About"))
             {
                 OpenAbout = !OpenAbout;
-            }
+            }*/
+            ImGui::MenuItem("About", NULL, &OpenAbout);
 
             if (ImGui::MenuItem("GitHub"))
             {
@@ -115,6 +122,8 @@ void ModuleEditor::MainMenuBar()
     }
 }
 
+
+
 void ModuleEditor::SettingsMenu()
 {
     float Settings2WindowWidth = 200.0f;
@@ -124,7 +133,7 @@ void ModuleEditor::SettingsMenu()
     if (gameAreaWidth < 200.0f)
         gameAreaWidth = 200.0f;
 
-    // AssetsWindow anclada a la derecha
+    // AssetsWindow to the right
     ImGui::SetNextWindowPos(ImVec2(gameAreaWidth, 19));
     ImGui::SetNextWindowSize(ImVec2(Settings2WindowWidth, ImGui::GetIO().DisplaySize.y - 19));
 
@@ -132,22 +141,88 @@ void ModuleEditor::SettingsMenu()
     {
         ImGui::PlotHistogram("FPS", mFPSLog.data(), mFPSLog.size(), 2, lastValue);
 
-        if (ImGui::CollapsingHeader("LOG"))
+        if (ImGui::CollapsingHeader("Information"))
         {
             ImGui::SeparatorText("OPEN GL:");
-            ImGui::Text("Vendor: %s", glGetString(GL_VENDOR));
-            ImGui::Text("Renderer: %s", glGetString(GL_RENDERER));
-            ImGui::Text("OpenGL version supported %s", glGetString(GL_VERSION));
-            ImGui::Text("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+            ImGui::Text("Vendor:");
+            //ImGui::SameLine();
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%s", glGetString(GL_VENDOR));
+            ImGui::Text("Renderer:");
+            //ImGui::SameLine();
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%s", glGetString(GL_RENDERER));
+            ImGui::Text("OpenGL version supported:");
+            //ImGui::SameLine();
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%s", glGetString(GL_VERSION));
+            ImGui::Text("GLSL:");
+            //ImGui::SameLine();
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+            SDL_version version;
+            SDL_GetVersion(&version);
+            ImGui::SeparatorText("System Information:");
+            ImGui::Text("Memory usage:");
+            //ImGui::SameLine();
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%.2f MB", GetMemoryUsageInMB());
+            
+            ImGui::Text("SDL Version:");
+            //ImGui::SameLine();
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%d.%d.%d", version.major, version.minor, version.patch);
+            
+            ImGui::Text("OpenGL Version:");
+            //ImGui::SameLine();
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%s", glGetString(GL_VERSION));
+            
+            ImGui::Text("GLSL Version:");
+            //ImGui::SameLine();
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+            
+        }
+        if (ImGui::CollapsingHeader("Input")) {
+            ImGuiIO& io = ImGui::GetIO();
+            int count = IM_ARRAYSIZE(io.MouseDown);
+            ImGui::Text("Mouse Position:");
+            ImGui::SameLine();
+            ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.5f, 1.0f), "%g, %g", io.MousePos.x, io.MousePos.y);
+            ImGui::Text("Mouse Motion:");
+            ImGui::SameLine();
+            ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.5f, 1.0f), "%g, %g", io.MouseDelta.x, io.MouseDelta.y);
+            ImGui::Text("Mouse down:");
+            for (int i = 0; i < count; i++) 
+                if (ImGui::IsMouseDown(i)) { 
+                    ImGui::SameLine();
+                    ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.5f, 1.0f), "b%d (%.02f secs)", i, io.MouseDownDuration[i]); 
+                }
+        }
+        if (ImGui::CollapsingHeader("Hardware")) {
 
-            ImGui::TextColored(ImVec4(1, 1, 0, 1), "Console");
+            float ramsize = SDL_GetSystemRAM();
+            ImGui::Text("RAM size:");
+            ImGui::SameLine();
+            ImGui::TextColored(ImVec4(0.5f, 0.5f, 1.0f, 1.0f), "%0.1fGb", ramsize / 1024);
 
-            ImGui::BeginChild("Scrolling");
-            for (size_t i = 0; i < MSG.size(); i++)
+            int cpucores = SDL_GetCPUCount();
+            ImGui::Text("CPUs:");
+            ImGui::SameLine();
+            ImGui::TextColored(ImVec4(0.5f, 0.5f, 1.0f, 1.0f), "%d (Cache: %dkb)", cpucores, SDL_GetCPUCacheLineSize());
+
+            ImGui::Separator();
+
+            const char* platform = SDL_GetPlatform();
+            ImGui::Text("Platform:");
+            ImGui::SameLine();
+            ImGui::TextColored(ImVec4(0.5f, 0.5f, 1.0f, 1.0f), "%s\n", platform);
+
+            int display_num = SDL_GetNumVideoDisplays();
+            ImGui::Text("Screens Count:");
+            ImGui::SameLine();
+            ImGui::TextColored(ImVec4(0.5f, 0.5f, 1.0f, 1.0f), "%d\n", display_num);
+
+            for (int i = 0; i < display_num; i++)
             {
-                ImGui::TextColored(ImVec4(0.78, 1, 1, 1), "%s", MSG.at(i).data());
+                const char* name = SDL_GetDisplayName(i);
+                ImGui::Text("Screen %d:", i+1);
+                ImGui::SameLine();
+                ImGui::TextColored(ImVec4(0.5f, 0.5f, 1.0f, 1.0f), "%s\n", name);
             }
-            ImGui::EndChild();
         }
 
         if (ImGui::CollapsingHeader("Render Options"))
@@ -225,9 +300,11 @@ void ModuleEditor::SettingsMenu()
             {
                 
             }
-          
-        }
+            if (ImGui::Checkbox("Show Face Normals", &FaceShow))
+            {
 
+            }
+        }
         if (ImGui::CollapsingHeader("Window Settings"))
         {
             ImGui::SeparatorText("Window");
@@ -242,7 +319,7 @@ void ModuleEditor::SettingsMenu()
 
             if (ImGui::Button("Apply Changes"))
             {
-                // init de ModuleWindow
+                App->window->SetNewWindow(Height, Width, fullscreen, resizable, borderless, fullscreendesktop);
                 MSG.push_back("Window Changes Applied");
             }
 
@@ -270,11 +347,9 @@ void ModuleEditor::AssetsWindow()
 {
     float assetsWindowWidth = 200.0f;
 
-    // AssetsWindow anclada a la izquierda
+    // AssetsWindow to the left
     ImGui::SetNextWindowPos(ImVec2(0, 19));
     ImGui::SetNextWindowSize(ImVec2(assetsWindowWidth, ImGui::GetIO().DisplaySize.y - 19));
-
-    
 
     if (ImGui::Begin("Assets", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse))
     {
@@ -291,7 +366,28 @@ void ModuleEditor::AssetsWindow()
         ImGui::End();
     }
 
-   
+    //float assetsWindowWidth = 200.0f;
+
+    //// AssetsWindow anchored to the left
+    //ImGui::SetNextWindowPos(ImVec2(0, 19));
+    //ImGui::SetNextWindowSize(ImVec2(assetsWindowWidth, ImGui::GetIO().DisplaySize.y - 19));
+
+    //if (ImGui::Begin("Assets", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse))
+    //{
+    //    // Iterate through scene objects and display them
+    //    for (const auto& sceneObject : sceneObjects)
+    //    {
+    //        if (ImGui::TreeNode(sceneObject.name.c_str()))
+    //        {
+    //            ImGui::Text("Position: (%f, %f, %f)", sceneObject.position.x, sceneObject.position.y, sceneObject.position.z);
+    //            
+
+    //            ImGui::TreePop();
+    //        }
+    //    }
+
+    //    ImGui::End();
+    //}
 }
 
 void ModuleEditor::ConsoleWindow()
@@ -342,6 +438,21 @@ void ModuleEditor::AddFPS(float aFPS)
     }
 }
 
+#include <windows.h>
+
+double ModuleEditor::GetMemoryUsageInMB()
+{
+    PROCESS_MEMORY_COUNTERS_EX pmc;
+    GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc));
+
+    SIZE_T virtualMemory = pmc.PrivateUsage;
+
+    // Convert bytes to megabytes
+    double memoryInMB = static_cast<double>(virtualMemory) / (1024.0 * 1024.0);
+
+    return memoryInMB;
+}
+
 void ModuleEditor::SetWireFrameMode(bool wireframe)
 {
     if (wireframe)
@@ -354,9 +465,4 @@ void ModuleEditor::SetWireFrameMode(bool wireframe)
     {
         App->FBX->DrawMesh();
     }
-}
-
-void ModuleEditor::savelogs(string log)
-{
-    logs.push_back(log);
 }

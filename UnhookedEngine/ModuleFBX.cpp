@@ -5,8 +5,6 @@
 #include "ModuleFBX.h"
 #include "ModuleTexture.h"
 #include "ModuleRenderer3D.h"
-#include "COMP_Mesh"
-#include "GameObject.h"
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 #include "ImGui/backends/imgui_impl_sdl2.h"
 #include "Primitive.h"
@@ -25,6 +23,7 @@
 
 ModuleFBX::ModuleFBX(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+
 }
 
 // Destructor
@@ -35,6 +34,7 @@ ModuleFBX::~ModuleFBX()
 // Called before render is available
 bool ModuleFBX::Start()
 {
+	App->editor->AddToConsole("Initializing external libraries...");
 	LOG("Creating 3D Renderer context");
 	bool ret = true;
 
@@ -43,31 +43,20 @@ bool ModuleFBX::Start()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
+	//House_Path = "Assets/BakerHouse.fbx";
+
+	LoadFBX(House_Path);
+
+	App->editor->AddToConsole("External libraries initialization complete");
 
 	return ret;
 	
 
 }
 
-void MeshData::InnitAABB() {
-	float* vertices_positions = new float[num_vertex * 3];
-	for (size_t i = 0; i < num_vertex; i++)
-	{
-		vertices_positions[i * 3] = vertex[i * VERTEX_ARGUMENTS];
-		vertices_positions[i * 3 + 1] = vertex[i * VERTEX_ARGUMENTS + 1];
-		vertices_positions[i * 3 + 2] = vertex[i * VERTEX_ARGUMENTS + 2];
-	}
-
-	localAABB.SetNegativeInfinity();
-	localAABB.Enclose((float3*)vertices_positions, num_vertex);
-	delete[] vertices_positions;
-}
-
 // Called every draw update
 update_status ModuleFBX::PreUpdate(float dt)
 {
-	
-
 	return UPDATE_CONTINUE;
 }
 
@@ -84,12 +73,13 @@ update_status ModuleFBX::PostUpdate(float dt)
 }
 
 void ModuleFBX::LoadFBX(string file_path) {
+	//meshData.CalculateVertexNormals();
+	App->editor->AddToConsole("Loading FBX...");
+	
 
 	const aiScene* scene = aiImportFile(file_path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
-		GameObject* gObj = new GameObject(App->hierarchy->roots);
-
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
 
@@ -98,6 +88,8 @@ void ModuleFBX::LoadFBX(string file_path) {
 			// copy vertex
 			_MeshVertex->num_vertex = scene->mMeshes[i]->mNumVertices;
 			_MeshVertex->vertex = new float[_MeshVertex->num_vertex * VERTEX_ARGUMENTS];
+
+
 			
 			for (int k = 0; k < _MeshVertex->num_vertex; k++) {
 
@@ -126,31 +118,28 @@ void ModuleFBX::LoadFBX(string file_path) {
 						else{
 							memcpy(&_MeshVertex->index[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
 						}
+						
+						// copy tex coords
 
 					}
-
 					_MeshVertex->texture_id = App->texture->textureID;
 					_MeshVertex->texture_height = App->texture->textureWidth;
 					_MeshVertex->texture_width = App->texture->textureWidth;
-				
 
 					CreateBuffer(_MeshVertex);
 					//_MeshVertex.CreateBufferTex(checkerImage);
-					COMP_Mesh* component = new COMP_Mesh(gObj);
-					_MeshVertex->Owner = gObj;
-					component->_MeshVertex = _MeshVertex;
-					if (gObj->components.size() == 1)
-						gObj->components.push_back(component);
 				}
 				else {
-
 					delete _MeshVertex;
 				}
 		}
-		aiReleaseImport(scene); return gObj;
+		aiReleaseImport(scene);
+		App->editor->AddToConsole("Fbx load successful");
 	}
-	else
+	else {
 		LOG("Error loading scene %s", file_path);
+		App->editor->AddToConsole("Error loading Fbx");
+	}
 
 }
 
@@ -255,14 +244,6 @@ void MeshData::DrawFBX()
 	glBindTexture(GL_TEXTURE_2D, texture_id);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
-
-	// transform matrix
-	glPushMatrix();
-
-	if (Owner != nullptr) {
-		glMultMatrixf(&Owner->mTransform->lTransform);
-	}
-
 	// Draw the mesh
 	glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
 
@@ -273,81 +254,77 @@ void MeshData::DrawFBX()
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_TEXTURE_COORD_ARRAY);
 	
-	
-
-
 
 	// Descomentar esto para ver Vertex y Face Normals
 
-	//// Draw Face Normals if the flag is set
-	///*if (App.editor->FaceShow) {*/
-	//for (uint i = 0; i < num_index; i += 3) {
-	//	// Calculate the face normal
-	//	float normal[3];
-	//	CalculateFaceNormal(&vertex[index[i] * 3], &vertex[index[i + 1] * 3], &vertex[index[i + 2] * 3], normal);
-
-	//	// Calculate the center of the face (average of vertices)
-	//	float center[3];
-	//	center[0] = (vertex[index[i] * 3] + vertex[index[i + 1] * 3] + vertex[index[i + 2] * 3]) / 3;
-	//	center[1] = (vertex[index[i] * 3 + 1] + vertex[index[i + 1] * 3 + 1] + vertex[index[i + 2] * 3 + 1]) / 3;
-	//	center[2] = (vertex[index[i] * 3 + 2] + vertex[index[i + 1] * 3 + 2] + vertex[index[i + 2] * 3 + 2]) / 3;
-
-	//	// Calculate the end point of the face normal
-	//	float endpoint[3];
-	//	endpoint[0] = center[0] + normal[0];
-	//	endpoint[1] = center[1] + normal[1];
-	//	endpoint[2] = center[2] + normal[2];
-
-	//	// Draw the face normal as a line from the center to the end point
-	//	glBegin(GL_LINES);
-	//	glVertex3fv(center);
-	//	glVertex3fv(endpoint);
-	//	glEnd();
-	//}
-	////}
-	//// 
-	//CalculateVertexNormals();
-	////Draw Vertex Normals
-	///*if (App.editor->VertexShow) {*/
-	//for (uint i = 0; i < num_vertex * 3; i += 3) {
-	//	float vertexX = vertex[i];
-	//	float vertexY = vertex[i + 1];
-	//	float vertexZ = vertex[i + 2];
-
-	//	float normalX = normals[i];
-	//	float normalY = normals[i + 1];
-	//	float normalZ = normals[i + 2];
-
-	//	// Define a scaling factor for the normal length
-	//	float normalScale = 0.1f;
-
-	//	// Calculate the end point of the normal
-	//	float normalEndX = vertexX + normalX * normalScale;
-	//	float normalEndY = vertexY + normalY * normalScale;
-	//	float normalEndZ = vertexZ + normalZ * normalScale;
-
-	//	// Draw the vertex normal as a line
-	//	glBegin(GL_LINES);
-	//	glVertex3f(vertexX, vertexY, vertexZ);
-	//	glVertex3f(normalEndX, normalEndY, normalEndZ);
-	//	glEnd();
-	//}
-	///*}*/
-}
+	//DrawFacesN();
+	//DrawVertexN();
 	
-void ModuleFBX::DestroyFBX(MeshData* _MeshVertex)
-{
-	for (size_t i = 0; i < MeshVertex.size(); i++)
-	{
-		if (MeshVertex[i] == _MeshVertex) {
-			MeshVertex.erase(MeshVertex.begin() + i);
-			delete MeshVertex;
-			MeshVertex = nullptr;
-			return;
-		}
+	/*if (App->editor->FaceShow) {
+		DrawFacesN();
 	}
 
+	if (App->editor->VertexShow) {
+		DrawVertexN();
+	}*/
 }
+
+void MeshData::DrawFacesN() {
+	for (uint i = 0; i < num_index; i += 3) {
+		// Calculate the face normal
+		float normal[3];
+		CalculateFaceNormal(&vertex[index[i] * 3], &vertex[index[i + 1] * 3], &vertex[index[i + 2] * 3], normal);
+
+		// Calculate the center of the face (average of vertices)
+		float center[3];
+		center[0] = (vertex[index[i] * 3] + vertex[index[i + 1] * 3] + vertex[index[i + 2] * 3]) / 3;
+		center[1] = (vertex[index[i] * 3 + 1] + vertex[index[i + 1] * 3 + 1] + vertex[index[i + 2] * 3 + 1]) / 3;
+		center[2] = (vertex[index[i] * 3 + 2] + vertex[index[i + 1] * 3 + 2] + vertex[index[i + 2] * 3 + 2]) / 3;
+
+		// Calculate the end point of the face normal
+		float endpoint[3];
+		endpoint[0] = center[0] + normal[0];
+		endpoint[1] = center[1] + normal[1];
+		endpoint[2] = center[2] + normal[2];
+
+		// Draw the face normal as a line from the center to the end point
+		glBegin(GL_LINES);
+		glVertex3fv(center);
+		glVertex3fv(endpoint);
+		glEnd();
+	}
+	
+}
+
+void MeshData::DrawVertexN() {
+	CalculateVertexNormals();
+	//Draw Vertex Normals
+	/*if (App.editor->VertexShow) {*/
+	for (uint i = 0; i < num_vertex * 3; i += 3) {
+		float vertexX = vertex[i];
+		float vertexY = vertex[i + 1];
+		float vertexZ = vertex[i + 2];
+
+		float normalX = normals[i];
+		float normalY = normals[i + 1];
+		float normalZ = normals[i + 2];
+
+		// Define a scaling factor for the normal length
+		float normalScale = 0.1f;
+
+		// Calculate the end point of the normal
+		float normalEndX = vertexX + normalX * normalScale;
+		float normalEndY = vertexY + normalY * normalScale;
+		float normalEndZ = vertexZ + normalZ * normalScale;
+
+		// Draw the vertex normal as a line
+		glBegin(GL_LINES);
+		glVertex3f(vertexX, vertexY, vertexZ);
+		glVertex3f(normalEndX, normalEndY, normalEndZ);
+		glEnd();
+	}
+}
+	
 
 // Called before quitting
 bool ModuleFBX::CleanUp()

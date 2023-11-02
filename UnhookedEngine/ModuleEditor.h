@@ -25,13 +25,7 @@ public:
 
 	void AddFPS(float aFPS);
 	void AddToConsole(const std::string& message);
-	void MainMenuBar();
-	void SettingsMenu();
-	void AssetsWindow();
-	void ConsoleWindow();
-	void savelogs(string log);
-
-	void SetWireFrameMode(bool wireframe);
+	double GetMemoryUsageInMB();
 
 	std::vector<float> mFPSLog;
 	bool wireframe = true;
@@ -39,6 +33,9 @@ public:
 	bool FaceShow = true;
 	float screenWidth;
 	float screenHeight;
+	bool showSettingsWindow;
+	bool showAssetsWindow;
+	bool showConsoleWindow;
 	// Define a vector to store console messages
 	std::vector<std::string> consoleMessages;
 
@@ -48,9 +45,15 @@ public:
 	
 	bool gl_DEPTH_TEST, gl_CULL_FACE, gl_LIGHTING, gl_COLOR_MATERIAL, gl_TEXTURE_2D, gl_WIREFRAME = true;
 
-public:
+private:
 	const char* lastValue = "";
+	void MainMenuBar();
+	void SettingsMenu();
+	void AssetsWindow();
+	void ConsoleWindow();
 	
+	
+	void SetWireFrameMode(bool wireframe);
 
 
 	bool OpenAbout = false;
