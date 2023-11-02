@@ -24,11 +24,13 @@ Application::Application()
 	AddModule(camera);
 	AddModule(input);
 
+	AddModule(texture);
+	AddModule(FBX);
+
 	// Renderer last!
 	AddModule(renderer3D);
 	AddModule(editor);
-	AddModule(FBX);
-	AddModule(texture);
+
 	//AddModule(gameobject);
 }
 
