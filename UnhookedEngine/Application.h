@@ -12,7 +12,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleEditor.h"
 #include "ModuleFBX.h"
-#include "ModuleGameObject.h"
+#include "ModuleScene.h"
 #include "ModuleTexture.h"
 
 //Application* app = nullptr;
@@ -26,7 +26,7 @@ public:
 	ModuleCamera3D* camera;
 	ModuleEditor* editor;
 	ModuleFBX* FBX;
-	ModuleGameObject* gameobject;
+	ModuleScene* scene;
 	ModuleTexture* texture;
 
 private:
