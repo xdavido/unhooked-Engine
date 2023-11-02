@@ -269,6 +269,12 @@ void MeshData::DrawFBX()
 }
 
 void MeshData::DrawFacesN() {
+	const float normalScale = 0.5f; // Adjust the scaling factor as needed
+	const float normalColor[3] = { 1.0f, 1.0f, 0.0f }; // Red color
+
+	glEnableClientState(GL_COLOR_ARRAY);
+	glColorPointer(3, GL_FLOAT, 0, normalColor);
+
 	for (uint i = 0; i < num_index; i += 3) {
 		// Calculate the face normal
 		float normal[3];
@@ -280,39 +286,42 @@ void MeshData::DrawFacesN() {
 		center[1] = (vertex[index[i] * VERTEX_ARGUMENTS + 1] + vertex[index[i + 1] * VERTEX_ARGUMENTS + 1] + vertex[index[i + 2] * VERTEX_ARGUMENTS + 1]) / 3;
 		center[2] = (vertex[index[i] * VERTEX_ARGUMENTS + 2] + vertex[index[i + 1] * VERTEX_ARGUMENTS + 2] + vertex[index[i + 2] * VERTEX_ARGUMENTS + 2]) / 3;
 
-		// Calculate the end point of the face normal
+		// Calculate the end point of the scaled face normal
 		float endpoint[3];
-		endpoint[0] = center[0] + normal[0];
-		endpoint[1] = center[1] + normal[1];
-		endpoint[2] = center[2] + normal[2];
+		endpoint[0] = center[0] + normal[0] * normalScale;
+		endpoint[1] = center[1] + normal[1] * normalScale;
+		endpoint[2] = center[2] + normal[2] * normalScale;
 
-		// Draw the face normal as a line from the center to the end point
+		// Draw the scaled face normal as a line from the center to the end point
 		glBegin(GL_LINES);
 		glVertex3fv(center);
 		glVertex3fv(endpoint);
 		glEnd();
 	}
 
-	
+	glDisableClientState(GL_COLOR_ARRAY);
 }
 
 void MeshData::DrawVertexN() {
 
+	const float normalScale = 0.1f; // Adjust the scaling factor as needed
+	const float normalColor[3] = { 0.0f, 1.0f, 1.0f }; // Blue color
+
 	glEnableClientState(GL_COLOR_ARRAY);
-	glColorPointer(3, GL_FLOAT, 0, 0);
+	glColorPointer(3, GL_FLOAT, 0, normalColor);
 
 	// Calculate vertex normals before drawing them
 	CalculateVertexNormals();
 
 	// Draw Vertex Normals
 	for (uint i = 0; i < num_vertex; ++i) {
-		// Calculate the end point of the vertex normal
+		// Calculate the end point of the scaled vertex normal
 		float endpoint[3];
-		endpoint[0] = vertex[i * VERTEX_ARGUMENTS] + normals[i * 3];
-		endpoint[1] = vertex[i * VERTEX_ARGUMENTS + 1] + normals[i * 3 + 1];
-		endpoint[2] = vertex[i * VERTEX_ARGUMENTS + 2] + normals[i * 3 + 2];
+		endpoint[0] = vertex[i * VERTEX_ARGUMENTS] + normals[i * 3] * normalScale;
+		endpoint[1] = vertex[i * VERTEX_ARGUMENTS + 1] + normals[i * 3 + 1] * normalScale;
+		endpoint[2] = vertex[i * VERTEX_ARGUMENTS + 2] + normals[i * 3 + 2] * normalScale;
 
-		// Draw the vertex normal as a line from the vertex position to the end point
+		// Draw the scaled vertex normal as a line from the vertex position to the end point
 		glBegin(GL_LINES);
 		glVertex3fv(&vertex[i * VERTEX_ARGUMENTS]);
 		glVertex3fv(endpoint);
