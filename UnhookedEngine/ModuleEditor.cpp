@@ -63,12 +63,8 @@ void ModuleEditor::Draw()
             ImGui::TextColored(ImVec4(0.5f, 1.0f, 1.0f, 1.0f), "3rd party Libraries:");
             ImGui::End();
         }
-
     }
  
-
-    //ImGui::ShowDemoWindow();
-
     ImGui::Render();
     ImGui::EndFrame();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -76,7 +72,6 @@ void ModuleEditor::Draw()
 
 bool ModuleEditor::CleanUp()
 {
-    
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
@@ -103,21 +98,14 @@ void ModuleEditor::MainMenuBar()
 
         if (ImGui::BeginMenu("Help"))
         {
-            /*if (ImGui::MenuItem("About"))
-            {
-                OpenAbout = !OpenAbout;
-            }*/
             ImGui::MenuItem("About", NULL, &OpenAbout);
-
             if (ImGui::MenuItem("GitHub"))
             {
                 ShellExecute(NULL, "open", "https://github.com/xdavido/unhooked-Engine", 0, 0, SW_SHOWNORMAL);
-
             }
 
             ImGui::EndMenu();
         }
-
         ImGui::EndMainMenuBar();
     }
 }
@@ -145,36 +133,24 @@ void ModuleEditor::SettingsMenu()
         {
             ImGui::SeparatorText("OPEN GL:");
             ImGui::Text("Vendor:");
-            //ImGui::SameLine();
             ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%s", glGetString(GL_VENDOR));
             ImGui::Text("Renderer:");
-            //ImGui::SameLine();
             ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%s", glGetString(GL_RENDERER));
             ImGui::Text("OpenGL version supported:");
-            //ImGui::SameLine();
             ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%s", glGetString(GL_VERSION));
             ImGui::Text("GLSL:");
-            //ImGui::SameLine();
             ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%s", glGetString(GL_SHADING_LANGUAGE_VERSION));
             SDL_version version;
             SDL_GetVersion(&version);
             ImGui::SeparatorText("System Information:");
             ImGui::Text("Memory usage:");
-            //ImGui::SameLine();
             ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%.2f MB", GetMemoryUsageInMB());
-            
             ImGui::Text("SDL Version:");
-            //ImGui::SameLine();
             ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%d.%d.%d", version.major, version.minor, version.patch);
-            
             ImGui::Text("OpenGL Version:");
-            //ImGui::SameLine();
             ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%s", glGetString(GL_VERSION));
-            
             ImGui::Text("GLSL Version:");
-            //ImGui::SameLine();
             ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%s", glGetString(GL_SHADING_LANGUAGE_VERSION));
-            
         }
         if (ImGui::CollapsingHeader("Input")) {
             ImGuiIO& io = ImGui::GetIO();
@@ -224,7 +200,6 @@ void ModuleEditor::SettingsMenu()
                 ImGui::TextColored(ImVec4(0.5f, 0.5f, 1.0f, 1.0f), "%s\n", name);
             }
         }
-
         if (ImGui::CollapsingHeader("Render Options"))
         {
             if (ImGui::Checkbox("GL_DEPTH_TEST", &gl_DEPTH_TEST))
@@ -296,14 +271,8 @@ void ModuleEditor::SettingsMenu()
             {
                 SetWireFrameMode(wireframe);
             }
-            if (ImGui::Checkbox("Show Vertex Normals", &VertexShow))
-            {
-                
-            }
-            if (ImGui::Checkbox("Show Face Normals", &FaceShow))
-            {
-
-            }
+            if (ImGui::Checkbox("Show Vertex Normals", &VertexShow)){}
+            if (ImGui::Checkbox("Show Face Normals", &FaceShow)){}
         }
         if (ImGui::CollapsingHeader("Window Settings"))
         {
@@ -322,7 +291,6 @@ void ModuleEditor::SettingsMenu()
                 App->window->SetNewWindow(Height, Width, fullscreen, resizable, borderless, fullscreendesktop);
                 MSG.push_back("Window Changes Applied");
             }
-
             ImGui::SeparatorText("Background Color");
 
             ImGui::SliderFloat("Red", &color.r, 0, 255);
@@ -330,7 +298,6 @@ void ModuleEditor::SettingsMenu()
             ImGui::SliderFloat("Blue", &color.b, 0, 255);
             App->renderer3D->ChangeColorScene(color);
         }
-
         // Button Save/Load
         ImGui::AlignTextToFramePadding();
         if (ImGui::Button("Save"))
@@ -338,7 +305,6 @@ void ModuleEditor::SettingsMenu()
             MSG.push_back("Boton Pulsado");
         }ImGui::SameLine();
         ImGui::Button("Load");
-
     }
     ImGui::End();
 }
@@ -365,29 +331,6 @@ void ModuleEditor::AssetsWindow()
         }
         ImGui::End();
     }
-
-    //float assetsWindowWidth = 200.0f;
-
-    //// AssetsWindow anchored to the left
-    //ImGui::SetNextWindowPos(ImVec2(0, 19));
-    //ImGui::SetNextWindowSize(ImVec2(assetsWindowWidth, ImGui::GetIO().DisplaySize.y - 19));
-
-    //if (ImGui::Begin("Assets", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse))
-    //{
-    //    // Iterate through scene objects and display them
-    //    for (const auto& sceneObject : sceneObjects)
-    //    {
-    //        if (ImGui::TreeNode(sceneObject.name.c_str()))
-    //        {
-    //            ImGui::Text("Position: (%f, %f, %f)", sceneObject.position.x, sceneObject.position.y, sceneObject.position.z);
-    //            
-
-    //            ImGui::TreePop();
-    //        }
-    //    }
-
-    //    ImGui::End();
-    //}
 }
 
 void ModuleEditor::ConsoleWindow()

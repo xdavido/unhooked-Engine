@@ -14,16 +14,11 @@
 #include <vector>
 #include <cmath>
 
-
-
 #define CHECKERS_HEIGHT 256/4
 #define CHECKERS_WIDTH  256/4
 
-
-
 ModuleFBX::ModuleFBX(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-
 }
 
 // Destructor
@@ -44,14 +39,11 @@ bool ModuleFBX::Start()
 	aiAttachLogStream(&stream);
 
 	//House_Path = "Assets/BakerHouse.fbx";
-
 	LoadFBX(House_Path);
 
 	App->editor->AddToConsole("External libraries initialization complete");
 
 	return ret;
-	
-
 }
 
 // Called every draw update
@@ -64,8 +56,6 @@ update_status ModuleFBX::Update(float dt)
 {
 	return UPDATE_CONTINUE;
 }
-
-
 // PostUpdate present buffer to screen
 update_status ModuleFBX::PostUpdate(float dt)
 {
@@ -76,21 +66,17 @@ void ModuleFBX::LoadFBX(string file_path) {
 	//meshData.CalculateVertexNormals();
 	App->editor->AddToConsole("Loading FBX...");
 	
-
 	const aiScene* scene = aiImportFile(file_path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
-
 			MeshData* _MeshVertex =new MeshData();
 
 			// copy vertex
 			_MeshVertex->num_vertex = scene->mMeshes[i]->mNumVertices;
 			_MeshVertex->vertex = new float[_MeshVertex->num_vertex * VERTEX_ARGUMENTS];
 
-
-			
 			for (int k = 0; k < _MeshVertex->num_vertex; k++) {
 
 				_MeshVertex->vertex[k * VERTEX_ARGUMENTS] = scene->mMeshes[i]->mVertices[k].x;
@@ -99,7 +85,6 @@ void ModuleFBX::LoadFBX(string file_path) {
 
 				_MeshVertex->vertex[k * VERTEX_ARGUMENTS + 3] = scene->mMeshes[i]->mTextureCoords[0][k].x;
 				_MeshVertex->vertex[k * VERTEX_ARGUMENTS + 4] = 1 - scene->mMeshes[i]->mTextureCoords[0][k].y;
-
 			}
 
 			LOG("New mesh with %d vertices", _MeshVertex->num_vertex);
@@ -118,9 +103,6 @@ void ModuleFBX::LoadFBX(string file_path) {
 						else{
 							memcpy(&_MeshVertex->index[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
 						}
-						
-						// copy tex coords
-
 					}
 					_MeshVertex->texture_id = App->texture->textureID;
 					_MeshVertex->texture_height = App->texture->textureWidth;
@@ -140,7 +122,6 @@ void ModuleFBX::LoadFBX(string file_path) {
 		LOG("Error loading scene %s", file_path);
 		App->editor->AddToConsole("Error loading Fbx");
 	}
-
 }
 
 void ModuleFBX::CreateBuffer(MeshData* Mesh_Vertex)
@@ -159,7 +140,6 @@ void ModuleFBX::CreateBuffer(MeshData* Mesh_Vertex)
 
 	//Add mesh to meshes vector
 	MeshVertex.push_back(Mesh_Vertex);
-
 }
 
 
@@ -220,12 +200,11 @@ void MeshData::CalculateVertexNormals() {
 
 void ModuleFBX::DrawMesh()
 {
-	//App->editor->AddToConsole("Drawing MeshVertex");
+
 	for (int i = 0; i < MeshVertex.size(); i++) {
 		MeshVertex[i]->DrawFBX();
 		
 	}
-	//App->editor->AddToConsole("Finalized Drawing MeshVertex");
 }
 
 void MeshData::DrawFBX()
