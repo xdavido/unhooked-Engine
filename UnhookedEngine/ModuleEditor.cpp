@@ -54,17 +54,18 @@ void ModuleEditor::Draw()
 
     if (OpenAbout == true)
     {
-        if (ImGui::Begin("About Uss"))
+        if (ImGui::Begin("About Us"))
         {
             ImGui::SeparatorText("ABOUT UNHOOKED ENGINE:");
-            ImGui::Text("Unhooked Engine v.0.1");
-            ImGui::Text("The new 3D Game Engine under CITM development");
-            ImGui::Text("David Ruiz Luengo & Pau Garriga Brotons");
-            ImGui::Text("3rd party Libraries:");
-
+            ImGui::TextColored(ImVec4(0.5f, 1.0f, 1.0f, 1.0f), "Unhooked Engine 1.0v");
+            ImGui::TextColored(ImVec4(0.5f, 1.0f, 1.0f, 1.0f), "The new 3D Game Engine under CITM developmen");
+            ImGui::TextColored(ImVec4(0.5f, 1.0f, 1.0f, 1.0f), "David Ruiz Luengo & Pau Garriga Brotons");
+            ImGui::TextColored(ImVec4(0.5f, 1.0f, 1.0f, 1.0f), "3rd party Libraries:");
             ImGui::End();
         }
+
     }
+ 
 
     //ImGui::ShowDemoWindow();
 
@@ -102,10 +103,11 @@ void ModuleEditor::MainMenuBar()
 
         if (ImGui::BeginMenu("Help"))
         {
-            if (ImGui::MenuItem("About"))
+            /*if (ImGui::MenuItem("About"))
             {
                 OpenAbout = !OpenAbout;
-            }
+            }*/
+            ImGui::MenuItem("About", NULL, &OpenAbout);
 
             if (ImGui::MenuItem("GitHub"))
             {
@@ -139,7 +141,7 @@ void ModuleEditor::SettingsMenu()
     {
         ImGui::PlotHistogram("FPS", mFPSLog.data(), mFPSLog.size(), 2, lastValue);
 
-        if (ImGui::CollapsingHeader("LOG"))
+        if (ImGui::CollapsingHeader("Information"))
         {
             ImGui::SeparatorText("OPEN GL:");
             ImGui::Text("Vendor:");
