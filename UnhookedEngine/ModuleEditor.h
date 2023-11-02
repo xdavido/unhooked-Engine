@@ -36,6 +36,7 @@ public:
 	bool showSettingsWindow;
 	bool showAssetsWindow;
 	bool showConsoleWindow;
+
 	// Define a vector to store console messages
 	std::vector<std::string> consoleMessages;
 
@@ -49,7 +50,6 @@ private:
 	const char* lastValue = "";
 	void MainMenuBar();
 	void SettingsMenu();
-	void AssetsWindow();
 	void ConsoleWindow();
 	
 	

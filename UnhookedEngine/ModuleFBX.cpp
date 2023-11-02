@@ -8,11 +8,11 @@
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 #include "ImGui/backends/imgui_impl_sdl2.h"
 #include "Primitive.h"
-
+#include "COMP_Mesh.h"
+#include "GameObject.h"
 #define MAX_KEYS 300
 
 #include <vector>
-#include <cmath>
 
 
 
@@ -34,6 +34,7 @@ ModuleFBX::~ModuleFBX()
 bool ModuleFBX::Start()
 {
 	App->editor->AddToConsole("Initializing external libraries...");
+
 	LOG("Creating 3D Renderer context");
 	bool ret = true;
 
@@ -42,9 +43,6 @@ bool ModuleFBX::Start()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
-	//House_Path = "Assets/BakerHouse.fbx";
-
-	LoadFBX(House_Path);
 
 	App->editor->AddToConsole("External libraries initialization complete");
 
@@ -73,7 +71,7 @@ update_status ModuleFBX::PostUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
-void ModuleFBX::LoadFBX(string file_path) {
+GameObject* ModuleFBX::LoadFBX(string file_path) {
 	//meshData.CalculateVertexNormals();
 	App->editor->AddToConsole("Loading FBX...");
 	
@@ -81,6 +79,8 @@ void ModuleFBX::LoadFBX(string file_path) {
 	const aiScene* scene = aiImportFile(file_path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
+		GameObject* gObj = new GameObject(App->hierarchy->roots);
+
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
 
@@ -117,15 +117,7 @@ void ModuleFBX::LoadFBX(string file_path) {
 						else{
 							memcpy(&_MeshVertex->index[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, 3 * sizeof(uint));
 						}
-						
-						// copy tex coords
-						/*_MeshVertex.texCoords = new float[_MeshVertex.num_vertex * 2];
-						for (size_t k = 0; k < sceneM->mNumVertices; k++) {
-							if (sceneM->mTextureCoords[0]) {
-								_MeshVertex.texCoords[k * 2] = sceneM->mTextureCoords[0][k].x;
-								_MeshVertex.texCoords[k * 2 + 1] = sceneM->mTextureCoords[0][k].y;
-							}
-						}*/
+					
 
 					}
 
@@ -135,8 +127,10 @@ void ModuleFBX::LoadFBX(string file_path) {
 				
 
 					CreateBuffer(_MeshVertex);
-					//_MeshVertex.CreateBufferTex(checkerImage);
-				
+					COMP_Mesh* component = new COMP_Mesh(gObj);
+					_MeshVertex->Owner = gObj;
+					component->mesh = _MeshVertex;
+					if (gObj->mComponents.size() == 1){ gObj->mComponents.push_back(component); }						
 				}
 				else {
 
@@ -144,6 +138,7 @@ void ModuleFBX::LoadFBX(string file_path) {
 				}
 		}
 		aiReleaseImport(scene);
+		return gObj;
 		App->editor->AddToConsole("Fbx load successful");
 	}
 	else {
@@ -230,12 +225,10 @@ void MeshData::CalculateVertexNormals() {
 
 void ModuleFBX::DrawMesh()
 {
-	//App->editor->AddToConsole("Drawing MeshVertex");
 	for (int i = 0; i < MeshVertex.size(); i++) {
 		MeshVertex[i]->DrawFBX();
 		
 	}
-	//App->editor->AddToConsole("Finalized Drawing MeshVertex");
 }
 
 void MeshData::DrawFBX()
@@ -254,9 +247,19 @@ void MeshData::DrawFBX()
 	glBindTexture(GL_TEXTURE_2D, texture_id);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
+
+	//transform matrix
+	glPushMatrix();
+
+	if (Owner != nullptr) {
+		glMultMatrixf(&Owner->transform->lTransform);
+	}
+
 	// Draw the mesh
 	glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
 
+	//clean transform matrix
+	glPopMatrix();
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	// Cleaning tex

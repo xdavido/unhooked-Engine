@@ -33,65 +33,6 @@ ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Modul
 ModuleRenderer3D::~ModuleRenderer3D()
 {}
 
-//static const GLfloat CubeVertices[] = {
-//		  //front
-//		  //0.2f, 0.2f, 0.0f, 1.0f, 1.0f,    // top right
-//		  //0.2f, -0.2f, 0.0f, 1.0f, 0.0f,   // bottom right
-//		  //-0.2f, -0.2f, 0.0f, 0.0f, 0.0f,  // bottom left
-//		  //-0.2f, 0.2f, 0.0f, 0.0f, 1.0f,   // top left 
-//
-//		  ////back
-//		  //0.2f, 0.2f, -0.4f, 1.0f, 1.0f,   // top right
-//		  //0.2f, -0.2f, -0.4f, 1.0f, 0.0f,  // bottom right
-//		  //-0.2f, -0.2f, -0.4f, 0.0f, 0.0f, // bottom left
-//		  //-0.2f, 0.2f, -0.4f, 0.0f, 1.0f,  // top left 
-//	-1,-1,-1, 0, 0,
-//	 1,-1,-1, 1, 0,
-//	 1, 1,-1, 2, 0,
-//	-1, 1,-1, 3, 0,
-//	-1,-1,-1, 4, 0,
-//
-//	-1,-1, 1, 0, 1,
-//	 1,-1, 1, 1, 1,
-//	 1, 1, 1, 2, 1,
-//	-1, 1, 1, 3, 1,
-//	-1,-1, 1, 4, 1,
-//
-//	-1, 1,-1, 0,-1,
-//	 1, 1,-1, 1,-1,
-//
-//	-1, 1, 1, 0, 2,
-//	 1, 1, 1, 1, 2
-//
-//};
-//static const GLuint CubeIndices[] = {
-//
-//	  //// front
-//	  //0, 1, 3,
-//	  //1, 2, 3,
-//	  //// back
-//	  //4, 5, 7,
-//	  //5, 6, 7,
-//	  //// right
-//	  //0, 1, 4,
-//	  //1, 4, 5,
-//	  //// left
-//	  //2, 3, 7,
-//	  //2, 6, 7,
-//	  //// top
-//	  //0, 3, 4,
-//	  //3, 4, 7,
-//	  //// bottom
-//	  //1, 2, 5,
-//	  //2, 5, 6
-//
-//	0, 1, 5,  5, 1, 6,
-//	 1, 2, 6,  6, 2, 7,
-//	 2, 3, 7,  7, 3, 8,
-//	 3, 4, 8,  8, 4, 9,
-//	10,11, 0,  0,11, 1,
-//	 5, 6,12, 12, 6,13
-//};
 
 // Called before render is available
 bool ModuleRenderer3D::Init()
@@ -217,60 +158,10 @@ update_status ModuleRenderer3D::Update(float dt)
 {
 	
 
-	if (App->input->droped)
-	{
-		HandlePath(App->input->dropped_filedir);
-		App->input->droped = false;
-	}
-
-	if (App->editor->wireframe)
-	{
-		glPolygonMode(GL_FRONT, GL_LINE);
-		glPolygonMode(GL_BACK, GL_LINE);
-		App->FBX->DrawMesh();
-		
-	}
-	else{
-
-		App->FBX->DrawMesh();
-	}
-	/*if (App->editor->gl_TEXTURE_2D)
-	{
-		
-		App->texture->CheckerTexture();
-		
-	}
-	else {
-		
-		App->texture->DestroyCheckerTexture();
-
-	}*/
-
-
 	return UPDATE_CONTINUE;
 
 }
 
-void ModuleRenderer3D::HandlePath(std::string extension_path)
-{
-	std::string extension = extension_path.substr(extension_path.find_last_of(".") + 1);
-
-	if (extension == "fbx" || extension == "FBX") {
-
-		App->FBX->LoadFBX(App->input->dropped_filedir);
-		return;
-	}
-	else if (extension == "png" || extension == "PNG") {
-		App->texture->LoadTexture(App->input->dropped_filedir);
-		return;
-	}
-	else if (extension == "dds" || extension == "DDS") {
-		
-		return;
-	}
-
-	LOG("File extension from path does not match any of the supported: %s", extension_path.c_str());
-}
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {

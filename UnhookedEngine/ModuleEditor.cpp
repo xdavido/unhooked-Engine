@@ -237,8 +237,7 @@ void ModuleEditor::SettingsMenu()
             {
 
             }
-            //ImGui::Checkbox("Vsync", &vsync);
-            //SetVsync(vsync);
+            
             
         }
 
@@ -280,54 +279,6 @@ void ModuleEditor::SettingsMenu()
     ImGui::End();
 }
 
-void ModuleEditor::AssetsWindow()
-{
-    float assetsWindowWidth = 200.0f;
-
-    // AssetsWindow anclada a la izquierda
-    ImGui::SetNextWindowPos(ImVec2(0, 19));
-    ImGui::SetNextWindowSize(ImVec2(assetsWindowWidth, ImGui::GetIO().DisplaySize.y - 19));
-
-    
-
-    if (ImGui::Begin("Assets", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse))
-    {
-        
-        if (ImGui::TreeNode("Root Object"))
-        {
-            if (ImGui::TreeNode("Child Object 1"))
-            {
-                ImGui::Text("Position: (x, y, z)");
-                ImGui::TreePop();
-            }
-            ImGui::TreePop();
-        }
-        ImGui::End();
-    }
-
-    //float assetsWindowWidth = 200.0f;
-
-    //// AssetsWindow anchored to the left
-    //ImGui::SetNextWindowPos(ImVec2(0, 19));
-    //ImGui::SetNextWindowSize(ImVec2(assetsWindowWidth, ImGui::GetIO().DisplaySize.y - 19));
-
-    //if (ImGui::Begin("Assets", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse))
-    //{
-    //    // Iterate through your scene objects and display them
-    //    for (const auto& sceneObject : sceneObjects)
-    //    {
-    //        if (ImGui::TreeNode(sceneObject.name.c_str()))
-    //        {
-    //            ImGui::Text("Position: (%f, %f, %f)", sceneObject.position.x, sceneObject.position.y, sceneObject.position.z);
-    //            // You can add more object-specific information here
-
-    //            ImGui::TreePop();
-    //        }
-    //    }
-
-    //    ImGui::End();
-    //}
-}
 
 void ModuleEditor::ConsoleWindow()
 {
@@ -398,10 +349,13 @@ void ModuleEditor::SetWireFrameMode(bool wireframe)
     {
         glPolygonMode(GL_FRONT, GL_FILL);
         glPolygonMode(GL_BACK, GL_FILL);
+        App->FBX->DrawMesh();
 
     }
     else
     {
+        glPolygonMode(GL_FRONT, GL_LINE);
+        glPolygonMode(GL_BACK, GL_LINE);
         App->FBX->DrawMesh();
     }
 }

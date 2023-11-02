@@ -4,7 +4,7 @@
 #include "ModuleWindow.h"
 
 #include "ModuleRenderer3D.h"
-#include "glew.h"
+#include "Glew/include/glew.h"
 #include "Primitive.h"
 
 
@@ -57,3 +57,9 @@ bool ModuleScene::CleanUp()
 	return true;
 }
 
+GameObject* ModuleScene::createObj(GameObject* parent)
+{
+	GameObject* b = new GameObject(parent);
+
+	return b;
+}

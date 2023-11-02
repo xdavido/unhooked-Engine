@@ -3,8 +3,7 @@
 
 Application::Application()
 {
-	/*Application myApp;
-	app = &myApp;*/
+
 
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
@@ -14,10 +13,8 @@ Application::Application()
 	FBX = new ModuleFBX(this);
 	texture = new ModuleTexture(this);
 	scene = new ModuleScene(this);
-
-	// The order of calls is very important!
-	// Modules will Init() Start() and Update in this order
-	// They will CleanUp() in reverse order
+	hierarchy = new ModuleHierarchy(this);
+	
 
 	// Main Modules
 	AddModule(window);
@@ -29,6 +26,7 @@ Application::Application()
 	AddModule(FBX);
 	AddModule(texture);
 	AddModule(scene);
+	AddModule(hierarchy);
 
 	// Renderer last!
 	AddModule(renderer3D);

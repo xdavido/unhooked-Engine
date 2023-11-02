@@ -112,15 +112,11 @@ update_status ModuleInput::PreUpdate(float dt)
 			break;
 		case (SDL_DROPFILE):
 			
+			HandlePath(e.drop.file);
 			dropped_filedir = e.drop.file;
 			droped = true;
 			// Shows directory of dropped file
-			SDL_ShowSimpleMessageBox(
-				SDL_MESSAGEBOX_INFORMATION,
-				"File dropped on window",
-				dropped_filedir,
-				App->window->window
-			);
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION,"File dropped on window",dropped_filedir,App->window->window);
 
 			SDL_free(dropped_filedir);    // Free dropped_filedir memory
 			break;
@@ -138,6 +134,24 @@ update_status ModuleInput::PreUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
+
+void ModuleRenderer3D::HandlePath(std::string extension_path)
+{
+	std::string extension = extension_path.substr(extension_path.find_last_of(".") + 1);
+
+	if (extension == "fbx" || extension == "FBX") {
+
+		App->FBX->LoadFBX(extension_path);
+		return;
+	}
+	else if (extension == "png" || extension == "PNG" || extension == "dds" || extension == "DDS") {
+		App->texture->LoadTexture(extension_path);
+		return;
+	}
+	
+
+	LOG("File extension from path does not match any of the supported: %s", extension_path.c_str());
+}
 
 // Called before quitting
 bool ModuleInput::CleanUp()

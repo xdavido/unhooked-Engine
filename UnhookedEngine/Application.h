@@ -14,8 +14,8 @@
 #include "ModuleFBX.h"
 #include "ModuleScene.h"
 #include "ModuleTexture.h"
+#include "ModuleHierarchy.h"
 
-//Application* app = nullptr;
 
 class Application
 {
@@ -28,6 +28,7 @@ public:
 	ModuleFBX* FBX;
 	ModuleScene* scene;
 	ModuleTexture* texture;
+	ModuleHierarchy* hierarchy;
 
 private:
 

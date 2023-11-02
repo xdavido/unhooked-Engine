@@ -24,12 +24,16 @@
 
 //todo: REMOVE this before 1st delivery!!
 #include "glmath.h"
+
 #include <vector>
+
 using namespace std;
 
 #define VERTEX_ARGUMENTS 5
 
 #define MAX_LIGHTS 8
+
+class GameObject;
 
 struct MeshData {
     uint id_index = 0;   // Index buffer ID in VRAM
@@ -42,9 +46,10 @@ struct MeshData {
     
     GLuint texture_id = 0, texture_width = 0, texture_height = 0;;
 	
+    GameObject* Owner;
+
     //Draw Mesh
     void DrawFBX();
-    
 
     // Normals
 
@@ -91,7 +96,7 @@ public:
 	update_status PreUpdate(float dt)override;
     update_status Update(float dt) override;
     update_status PostUpdate(float dt) override;
-	void LoadFBX(string file_path);
+    GameObject* LoadFBX(string file_path);
     void CreateBuffer(MeshData* Mesh_Vertex);
 
 	bool CleanUp();
