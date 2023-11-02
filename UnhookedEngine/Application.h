@@ -15,7 +15,6 @@
 
 #include "ModuleTexture.h"
 
-//Application* app = nullptr;
 
 class Application
 {

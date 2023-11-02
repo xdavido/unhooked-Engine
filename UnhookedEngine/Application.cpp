@@ -3,8 +3,6 @@
 
 Application::Application()
 {
-	/*Application myApp;
-	app = &myApp;*/
 
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
@@ -13,11 +11,6 @@ Application::Application()
 	editor = new ModuleEditor(this);
 	FBX = new ModuleFBX(this);
 	texture = new ModuleTexture(this);
-	//gameobject = new ModuleGameObject(this);
-
-	// The order of calls is very important!
-	// Modules will Init() Start() and Update in this order
-	// They will CleanUp() in reverse order
 
 	// Main Modules
 	AddModule(window);
@@ -31,7 +24,7 @@ Application::Application()
 	AddModule(renderer3D);
 	AddModule(editor);
 
-	//AddModule(gameobject);
+
 }
 
 Application::~Application()
