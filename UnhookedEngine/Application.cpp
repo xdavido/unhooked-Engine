@@ -13,7 +13,7 @@ Application::Application()
 	editor = new ModuleEditor(this);
 	FBX = new ModuleFBX(this);
 	texture = new ModuleTexture(this);
-	gameobject = new ModuleGameObject(this);
+	scene = new ModuleScene(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -24,12 +24,14 @@ Application::Application()
 	AddModule(camera);
 	AddModule(input);
 
-	// Renderer last!
-	AddModule(renderer3D);
+
 	AddModule(editor);
 	AddModule(FBX);
 	AddModule(texture);
-	AddModule(gameobject);
+	AddModule(scene);
+
+	// Renderer last!
+	AddModule(renderer3D);
 }
 
 Application::~Application()
