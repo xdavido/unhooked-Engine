@@ -60,10 +60,10 @@ bool ModuleTexture::Start()
 	ilClearColour(255, 255, 255, 000);
 
 
-	//House_Texture_Path = "Assets/textures/Baker_house.png";
+	House_Texture_Path = "Assets/Baker_house.png";
 
 	// Load the texture from the specified path.
-	//LoadTexture(House_Texture_Path);
+	LoadTexture(House_Texture_Path);
 
 	return true;
 

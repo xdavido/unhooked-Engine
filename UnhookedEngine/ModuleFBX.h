@@ -44,20 +44,10 @@ struct MeshData {
 	
     //Draw Mesh
     void DrawFBX();
-    
-
     // Normals
-
-    bool drawVertexNormals = true;
-    bool drawFaceNormals = true;
-
-	uint num_normals = 0;
-	float* normals = nullptr;
-
-	void CalculateVertexNormals();
-    void DrawFacesN();
-    void DrawVertexN();
- 
+    void CalculateVertexNormals();
+    uint num_normals = 0;
+    float* normals = nullptr;
     void NormalizeNormals() {
         for (uint i = 0; i < num_normals; i += 3) {
             float x = normals[i];
@@ -77,6 +67,12 @@ struct MeshData {
             z /= length;
         }
     }
+    bool drawVertexNormals = true;
+    bool drawFaceNormals = true;
+
+    //DRAW VERTEX AND FACES
+    void DrawFacesN();
+    void DrawVertexN();
 
 private:
     
@@ -94,7 +90,6 @@ public:
     update_status PostUpdate(float dt) override;
 	void LoadFBX(string file_path);
     void CreateBuffer(MeshData* Mesh_Vertex);
-
 	bool CleanUp();
     void DrawMesh();
 

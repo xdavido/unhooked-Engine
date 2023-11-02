@@ -43,7 +43,7 @@ bool ModuleFBX::Start()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
-	//House_Path = "Assets/BakerHouse.fbx";
+	House_Path = "Assets/BakerHouse.fbx";
 
 	LoadFBX(House_Path);
 
@@ -184,9 +184,9 @@ void MeshData::CalculateVertexNormals() {
     }
 	
     //Inicializamos todas las normales de los vértices a (0, 0, 0)
-    normals = new float[num_vertex * 3]();
+	normals = new float[num_vertex * 3]();
 
-    for (uint i = 0; i < num_index; i += 3) {
+    for (uint i = 0; i <num_index; i += 3) {
         uint index1 = index[i] * 3;
         uint index2 = index[i + 1] * 3;
         uint index3 = index[i + 2] * 3;
@@ -220,12 +220,23 @@ void MeshData::CalculateVertexNormals() {
 
 void ModuleFBX::DrawMesh()
 {
-	//App->editor->AddToConsole("Drawing MeshVertex");
 	for (int i = 0; i < MeshVertex.size(); i++) {
 		MeshVertex[i]->DrawFBX();
 		
 	}
-	//App->editor->AddToConsole("Finalized Drawing MeshVertex");
+	if (App->editor->FaceShow) {
+		for (int i = 0; i < MeshVertex.size(); i++) {
+			MeshVertex[i]->DrawFacesN();
+			
+		}
+	}
+
+	if (App->editor->VertexShow) {
+		for (int i = 0; i < MeshVertex.size(); i++) {
+			MeshVertex[i]->DrawVertexN();
+			
+		}
+	}
 }
 
 void MeshData::DrawFBX()
@@ -254,19 +265,7 @@ void MeshData::DrawFBX()
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_TEXTURE_COORD_ARRAY);
 	
-
-	// Descomentar esto para ver Vertex y Face Normals
-
-	//DrawFacesN();
-	//DrawVertexN();
 	
-	/*if (App->editor->FaceShow) {
-		DrawFacesN();
-	}
-
-	if (App->editor->VertexShow) {
-		DrawVertexN();
-	}*/
 }
 
 void MeshData::DrawFacesN() {
