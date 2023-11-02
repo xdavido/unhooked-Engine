@@ -135,7 +135,7 @@ update_status ModuleInput::PreUpdate(float dt)
 }
 
 
-void ModuleRenderer3D::HandlePath(std::string extension_path)
+void ModuleInput::HandlePath(std::string extension_path)
 {
 	std::string extension = extension_path.substr(extension_path.find_last_of(".") + 1);
 

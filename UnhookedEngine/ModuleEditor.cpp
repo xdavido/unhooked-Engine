@@ -49,8 +49,6 @@ void ModuleEditor::Draw()
     if (showSettingsWindow)
         SettingsMenu();
 
-    if (showAssetsWindow)
-        AssetsWindow();
 
     if (showConsoleWindow)
         ConsoleWindow();

@@ -4,23 +4,23 @@
 #include "ModuleWindow.h"
 
 #include "ModuleRenderer3D.h"
-#include "glew.h"
+#include "Glew/include/glew.h"
 #include "Primitive.h"
 
 ModuleHierarchy::ModuleHierarchy(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	roots = nullptr;
-	TargetDropped = nullptr;
-	objSelected = nullptr;
+	
 }
 
 ModuleHierarchy::~ModuleHierarchy()
-{}
+{
+}
 
 //-----------------------------------------------------------------
 bool ModuleHierarchy::Start()
 {
-	//LOG("Setting up the hierarchy");
+
+
 	bool ret = true;
 
 	roots = new GameObject();

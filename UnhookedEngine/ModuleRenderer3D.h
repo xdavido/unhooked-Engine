@@ -11,6 +11,10 @@
 #include "MathGeoLib/include/Math/float4x4.h"
 #include "Primitive.h"
 
+#include "ImGui/imgui.h"
+#include "ImGui/backends/imgui_impl_sdl2.h"
+#include "ImGui/backends/imgui_impl_opengl3.h"
+
 #include "Glew/include/glew.h"
 
 //todo: REMOVE this before 1st delivery!!
@@ -38,11 +42,9 @@ public:
 
 public:
 
-	void HandlePath(std::string path);
-
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
-	CPlane Grid;
+	//CPlane Grid;
 
 	bool TurnOff = false;
 

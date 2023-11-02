@@ -129,7 +129,7 @@ bool ModuleRenderer3D::Init()
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	Grid.axis = true;
+	//Grid.axis = true;
 
 	
 	
@@ -165,7 +165,7 @@ update_status ModuleRenderer3D::Update(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
-	Grid.Render();
+	//Grid.Render();
 	
 	App->editor->Draw();
 
