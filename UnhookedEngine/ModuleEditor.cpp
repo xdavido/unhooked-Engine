@@ -3,8 +3,9 @@
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
 #include "SDL/include/SDL_opengl_glext.h"
-#include <filesystem>
 #include "Globals.h"
+#include "COMP_Mesh.h"
+#include "COMP_Camera.h"
 
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -92,6 +93,7 @@ void ModuleEditor::MainMenuBar()
             ImGui::Text("ToDo");
             ImGui::EndMenu();
         }
+        
 
         if (ImGui::BeginMenu("Help"))
         {
@@ -289,28 +291,7 @@ void ModuleEditor::AssetsWindow()
         ImGui::End();
     }
 
-    //float assetsWindowWidth = 200.0f;
-
-    //// AssetsWindow anchored to the left
-    //ImGui::SetNextWindowPos(ImVec2(0, 19));
-    //ImGui::SetNextWindowSize(ImVec2(assetsWindowWidth, ImGui::GetIO().DisplaySize.y - 19));
-
-    //if (ImGui::Begin("Assets", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse))
-    //{
-    //    // Iterate through your scene objects and display them
-    //    for (const auto& sceneObject : sceneObjects)
-    //    {
-    //        if (ImGui::TreeNode(sceneObject.name.c_str()))
-    //        {
-    //            ImGui::Text("Position: (%f, %f, %f)", sceneObject.position.x, sceneObject.position.y, sceneObject.position.z);
-    //            // You can add more object-specific information here
-
-    //            ImGui::TreePop();
-    //        }
-    //    }
-
-    //    ImGui::End();
-    //}
+   
 }
 
 void ModuleEditor::ConsoleWindow()
@@ -373,4 +354,9 @@ void ModuleEditor::SetWireFrameMode(bool wireframe)
     {
         App->FBX->DrawMesh();
     }
+}
+
+void ModuleEditor::savelogs(string log)
+{
+    logs.push_back(log);
 }

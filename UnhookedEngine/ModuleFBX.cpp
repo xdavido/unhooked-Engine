@@ -5,6 +5,8 @@
 #include "ModuleFBX.h"
 #include "ModuleTexture.h"
 #include "ModuleRenderer3D.h"
+#include "COMP_Mesh"
+#include "GameObject.h"
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 #include "ImGui/backends/imgui_impl_sdl2.h"
 #include "Primitive.h"
@@ -41,9 +43,6 @@ bool ModuleFBX::Start()
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
 
-	//House_Path = "Assets/BakerHouse.fbx";
-
-	LoadFBX(House_Path);
 
 	return ret;
 	
@@ -89,6 +88,8 @@ void ModuleFBX::LoadFBX(string file_path) {
 	const aiScene* scene = aiImportFile(file_path.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
 	if (scene != nullptr && scene->HasMeshes())
 	{
+		GameObject* gObj = new GameObject(App->hierarchy->roots);
+
 		for (int i = 0; i < scene->mNumMeshes; i++)
 		{
 
@@ -135,14 +136,18 @@ void ModuleFBX::LoadFBX(string file_path) {
 
 					CreateBuffer(_MeshVertex);
 					//_MeshVertex.CreateBufferTex(checkerImage);
-				
+					COMP_Mesh* component = new COMP_Mesh(gObj);
+					_MeshVertex->Owner = gObj;
+					component->_MeshVertex = _MeshVertex;
+					if (gObj->components.size() == 1)
+						gObj->components.push_back(component);
 				}
 				else {
 
 					delete _MeshVertex;
 				}
 		}
-		aiReleaseImport(scene);
+		aiReleaseImport(scene); return gObj;
 	}
 	else
 		LOG("Error loading scene %s", file_path);
@@ -250,6 +255,14 @@ void MeshData::DrawFBX()
 	glBindTexture(GL_TEXTURE_2D, texture_id);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_index);
+
+	// transform matrix
+	glPushMatrix();
+
+	if (Owner != nullptr) {
+		glMultMatrixf(&Owner->mTransform->lTransform);
+	}
+
 	// Draw the mesh
 	glDrawElements(GL_TRIANGLES, num_index, GL_UNSIGNED_INT, NULL);
 

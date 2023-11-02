@@ -11,3 +11,6 @@ Component::~Component()
 {
 }
 
+void Component::Inspector()
+{
+}

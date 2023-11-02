@@ -3,9 +3,6 @@
 #include "Globals.h"
 #include "Timer.h"
 #include "Module.h"
-
-#include<vector>
-
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
@@ -13,12 +10,18 @@
 #include "ModuleEditor.h"
 #include "ModuleFBX.h"
 #include "ModuleTexture.h"
-//#include "ModuleHierarchy.h"
-//#include "ModuleScene.h"
+#include "ModuleHierarchy.h"
+#include "ModuleScene.h"
+#include<vector>
 
+#include "MemLeaks.h"
 
-
-//Application* app = nullptr;
+enum class GameState
+{
+	PLAY = 0,
+	PAUSE = 1,
+	STOP = 2
+};
 
 class Application
 {
@@ -30,25 +33,26 @@ public:
 	ModuleEditor* editor;
 	ModuleFBX* FBX;
 	ModuleTexture* texture;
-	//ModuleHierarchy hierarchy;
-	//ModuleScene* scene;
+	ModuleHierarchy* hierarchy;
+	ModuleScene* scene;
 
 
 private:
 
-	Timer	ms_timer;
+	float timeSpeed = 1;
 	float	dt;
+	float	dtG;
+	GameState gameState = GameState::STOP;
 	std::vector<Module*> list_modules;
 
 
 public:
 
 	int fps = 60;
-	Uint32 MsFrame;
-
-	Application();
+	
 	~Application();
-
+	void PreUpdate();
+	void PostUpdate();
 	static Application* GetApp();
 
 
@@ -56,11 +60,15 @@ public:
 	update_status Update();
 	bool CleanUp();
 
+	void SetDT(float dt);
+	float DTG();
+	
+
 private:
 
+	Application();
+	static Application* externalapp;
 	void AddModule(Module* mod);
-	void PrepareUpdate();
-	void FinishUpdate();
+
 };
 
-extern Application* externalapp;

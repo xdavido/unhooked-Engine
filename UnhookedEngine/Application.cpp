@@ -1,13 +1,10 @@
 #include "Application.h"
-#include<string>
-#include "Globals.h"
 
-extern Application* externalapp = nullptr;
+
+Application* Application::externalapp = nullptr;
 
 Application::Application()
 {
-	/*Application myApp;
-	app = &myApp;*/
 	externalapp = this;
 
 	window = new ModuleWindow(this);
@@ -17,8 +14,10 @@ Application::Application()
 	editor = new ModuleEditor(this);
 	FBX = new ModuleFBX(this);
 	texture = new ModuleTexture(this);
-	//hierarchy = new ModuleHierarchy(this);
-	//scene = new ModuleScene(this);
+	hierarchy = new ModuleHierarchy(this);
+	scene = new ModuleScene(this);
+
+	LOG("...");
 
 	// Main Modules
 	AddModule(window);
@@ -26,11 +25,11 @@ Application::Application()
 	AddModule(input);
 
 
-	AddModule(editor);
+	AddModule(texture);
 	AddModule(FBX);
-	//AddModule(hierarchy);
-	//AddModule(scene);
-
+	AddModule(hierarchy);
+	AddModule(scene);
+	AddModule(editor);
 	// Renderer last!
 	AddModule(renderer3D);
 	
@@ -66,29 +65,22 @@ bool Application::Init()
 		ret = list_modules[i]->Init();
 	}
 
-	// After all Init calls we call Start() in all modules
 	LOG("Application Start --------------");
 	for (size_t i = 0; i < list_modules.size(); i++)
 	{
 		ret = list_modules[i]->Start();
 	}
 
-	ms_timer.Start();
-	return ret;
+
+return ret;
 }
 
-void Application::PrepareUpdate()
+void Application::PreUpdate()
 {
-	dt = (float)ms_timer.Read() / 1000.0f;
-	ms_timer.Start();
+	if (gameState == GameState::PLAY) dtG = dt * timeSpeed;
+	else dtG = 0;
 }
 
-void Application::FinishUpdate()
-{
-	MsFrame = ms_timer.Read();
-	float FrameWait = (1000.f / (float)fps) - (float)MsFrame;
-	SDL_Delay(static_cast<Uint32>(fabs(FrameWait)));
-}
 
 update_status Application::Update()
 {
@@ -110,10 +102,17 @@ update_status Application::Update()
 		ret = list_modules[i]->PostUpdate(dt);
 	}
 
-	FinishUpdate();
 	return ret;
 }
 
+void Application::SetDT(float dt)
+{
+	this->dt = dt;
+}
+float Application::DTG()
+{
+	return dtG;
+}
 bool Application::CleanUp()
 {
 	bool ret = true;
@@ -124,8 +123,8 @@ bool Application::CleanUp()
 		delete list_modules[i];
 		list_modules[i] = nullptr;
 	}
-
 	list_modules.clear();
+
 	return ret;
 }
 

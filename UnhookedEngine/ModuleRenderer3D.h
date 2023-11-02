@@ -11,6 +11,10 @@
 #include "MathGeoLib/include/Math/float4x4.h"
 #include "Primitive.h"
 
+#include "ImGui/imgui.h"
+#include "ImGui/backends/imgui_impl_sdl2.h"
+#include "ImGui/backends/imgui_impl_opengl3.h"
+
 #include "Glew/include/glew.h"
 
 //todo: REMOVE this before 1st delivery!!
@@ -28,7 +32,7 @@ public:
 
 	bool Init();
 	update_status PreUpdate(float dt);
-	update_status Update(float dt) override;
+	update_status Update(float dt) ;
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
@@ -51,5 +55,7 @@ public:
 
 	std::vector<MeshData> MeshVertex;
 	GLuint textureID;
+
+	ImGuiIO* io = nullptr;
 
 };

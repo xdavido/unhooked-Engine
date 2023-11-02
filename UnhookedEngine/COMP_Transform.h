@@ -3,7 +3,10 @@
 #include "Component.h"
 #include "GameObject.h"
 #include "MathGeoLib/include/MathGeoLib.h"
+#include "MathGeoLib/include/Math/float3.h"
+#include "MathGeoLib/include/Math/float3x4.h"
 #include "ImGui/imgui.h"
+#include "glmath.h"
 
 
 class GameObject;
@@ -22,8 +25,10 @@ public:
 
 	float3 position, scale, rotation;
 
-	void SetTransformMatrix();
+	void SetTransformMatrix(float3 _position, float3 _rotation, float3 _scale);
 
-	float4x4 GetTransformMatrix();
+	//float4x4 GetTransformMatrix();
+
+	void Inspector();
 
 }; 

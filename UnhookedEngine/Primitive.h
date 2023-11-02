@@ -3,6 +3,8 @@
 #include "MathGeoLib/include/MathGeoLib.h"
 #include "ImGui/imgui.h"
 
+struct Color;
+
 enum PrimitiveTypes
 {
 	Primitive_Point,

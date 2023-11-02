@@ -2,7 +2,12 @@
 #include "Module.h"
 #include "Globals.h"
 #include <string>
+
+using namespace std;
 #define MAX_MOUSE_BUTTONS 5
+
+class GameObject;
+
 
 enum KEY_STATE
 {
@@ -68,7 +73,11 @@ public:
 	int mouse_y_motion;
 	//int mouse_z_motion;
 
+	void HandlePath(std::string extension_path);
+
 	char* dropped_filedir;
 	bool droped = false;
+	GameObject* objdebug2;
+
 	
 };

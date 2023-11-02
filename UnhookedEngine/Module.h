@@ -1,7 +1,7 @@
 #pragma once
-#include <time.h>
+
 class Application;
-struct PhysBody3D;
+
 
 class Module
 {
@@ -24,7 +24,8 @@ public:
 
 	virtual bool Start()
 	{
-		srand(time(NULL));
+
+		
 		return true;
 	}
 
@@ -48,8 +49,6 @@ public:
 		return true;
 	}
 
-	virtual void OnCollision(PhysBody3D* body1, PhysBody3D* body2)
-	{}
-
-
+	/*virtual void OnCollision(PhysBody3D* body1, PhysBody3D* body2)
+	{}*/
 };

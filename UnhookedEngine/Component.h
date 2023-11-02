@@ -17,6 +17,8 @@ public:
 	Component(GameObject* owner);
 	virtual ~Component();
 
+	virtual void Inspector();
+
 	COMP_Type type;
 	bool active;
 	GameObject* owner;

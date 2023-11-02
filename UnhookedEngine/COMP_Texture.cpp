@@ -26,7 +26,7 @@ COMP_Texture::~COMP_Texture()
 //{
 //	if (textureID != 0)
 //	{
-//		Application::GetApp()->texture->DestroyTexture(textureID);
+//		Application::GetApp()->texture->DestroyTexture();
 //	}
 //	textureID = Application::GetApp()->texture->LoadTexture(file_path);
 //

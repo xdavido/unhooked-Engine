@@ -1,7 +1,8 @@
 #pragma once
 #include "Globals.h"
 #include "ImGui/imgui.h"
-
+#include "Component.h"
+#include "COMP_Transform.h"
 #include <vector>
 #include <string>
 enum class COMP_Type;
@@ -16,6 +17,8 @@ public:
 	GameObject();
 	~GameObject();
 	
+	GameObject(GameObject* parent);
+
 	void AddComponent(COMP_Type type);
 
 	GameObject* mParent;
@@ -27,20 +30,21 @@ public:
 	std::string name;
 	char string[128] = "Game_Object";
 
-	void DeleteChild(GameObject* child);
-	bool ChangeParent(GameObject* NewParent);
-	bool CheckChildOf(GameObject* parent);
+	//void DeleteChild(GameObject* child);
+	//bool ChangeParent(GameObject* NewParent);
+	//bool CheckChildOf(GameObject* parent);
 
 	//void DeleteChild(GameObject child);
 
 	GameObject* GetParent();
-	COMP_Mesh* GetComponentMesh();
-	GameObject* GetCompMesh();
+	//COMP_Mesh* GetComponentMesh();
+	//GameObject* GetCompMesh();
 
 	bool fixed;
 
-	void FixRotationYZ();
+	//void FixRotationYZ();
 
-	void UpdateRecu();
+	//void UpdateRecu();
 
+	void InspectorWindow();
 }

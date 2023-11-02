@@ -25,6 +25,13 @@ public:
 
 	void AddFPS(float aFPS);
 	void AddToConsole(const std::string& message);
+	void MainMenuBar();
+	void SettingsMenu();
+	void AssetsWindow();
+	void ConsoleWindow();
+	void savelogs(string log);
+
+	void SetWireFrameMode(bool wireframe);
 
 	std::vector<float> mFPSLog;
 	bool wireframe = true;
@@ -41,14 +48,9 @@ public:
 	
 	bool gl_DEPTH_TEST, gl_CULL_FACE, gl_LIGHTING, gl_COLOR_MATERIAL, gl_TEXTURE_2D, gl_WIREFRAME = true;
 
-private:
+public:
 	const char* lastValue = "";
-	void MainMenuBar();
-	void SettingsMenu();
-	void AssetsWindow();
-	void ConsoleWindow();
 	
-	void SetWireFrameMode(bool wireframe);
 
 
 	bool OpenAbout = false;

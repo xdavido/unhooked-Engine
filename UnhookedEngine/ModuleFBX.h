@@ -96,10 +96,10 @@ public:
 	 ModuleFBX(Application* app, bool start_enabled = true);
 	 ~ModuleFBX();
 
-	bool Start() override;
-	update_status PreUpdate(float dt)override;
-    update_status Update(float dt) override;
-    update_status PostUpdate(float dt) override;
+	bool Start() ;
+	update_status PreUpdate(float dt);
+    update_status Update(float dt) ;
+    update_status PostUpdate(float dt) ;
 	void LoadFBX(string file_path);
     void CreateBuffer(MeshData* Mesh_Vertex);
 
