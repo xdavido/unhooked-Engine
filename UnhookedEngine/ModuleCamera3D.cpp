@@ -23,6 +23,7 @@ ModuleCamera3D::~ModuleCamera3D()
 bool ModuleCamera3D::Start()
 {
 	LOG("Setting up the camera");
+    App->editor->AddToConsole("Setting up the camera");
 	bool ret = true;
 
 	return ret;
@@ -32,16 +33,13 @@ bool ModuleCamera3D::Start()
 bool ModuleCamera3D::CleanUp()
 {
 	LOG("Cleaning camera");
-
+    App->editor->AddToConsole("Cleaning Camera");
 	return true;
 }
 
 // -----------------------------------------------------------------
 update_status ModuleCamera3D::Update(float dt)
 {
-    // Implement a debug camera with keys and mouse
-    // Now we can make this movement frame rate independent!
-
     float3 newPos(0, 0, 0);
     float speed = 1.0f * dt;
     float zoomspeed = 0.0f * dt;
@@ -90,7 +88,7 @@ update_status ModuleCamera3D::Update(float dt)
 
         float Sensitivity = 0.35f * dt;
 
-        // Define the custom reference point. This will change according to
+        // Define the custom reference point. This will be the position of the object
         float3 customReference(1.0f, 1.0f, 1.0f);
 
         // Calculate the position relative to the custom reference point
@@ -115,12 +113,6 @@ update_status ModuleCamera3D::Update(float dt)
 
             // Apply rotation to the relative position
             relativePosition = rotationQuat * relativePosition;
-
-            // Ensure the Y vector maintains the correct orientation
-            /*if (relativePosition.y < 0.0f)
-            {
-                relativePosition.y = 0.0f;
-            }*/
         }
 
         // Update the camera's Position based on the custom reference point

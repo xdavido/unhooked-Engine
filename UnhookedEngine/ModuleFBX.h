@@ -69,8 +69,6 @@ struct MeshData {
             normals[i + 2] = z;
         }
     }
-
-private:
     void NormalizeVector(float& x, float& y, float& z) {
         float length = sqrt(x * x + y * y + z * z);
         if (length != 0.0f) {
@@ -79,6 +77,9 @@ private:
             z /= length;
         }
     }
+
+private:
+    
 };
 
 class ModuleFBX : public Module

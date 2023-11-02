@@ -23,6 +23,7 @@
 
 ModuleFBX::ModuleFBX(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+
 }
 
 // Destructor
@@ -56,8 +57,6 @@ bool ModuleFBX::Start()
 // Called every draw update
 update_status ModuleFBX::PreUpdate(float dt)
 {
-	
-
 	return UPDATE_CONTINUE;
 }
 
@@ -89,6 +88,8 @@ void ModuleFBX::LoadFBX(string file_path) {
 			// copy vertex
 			_MeshVertex->num_vertex = scene->mMeshes[i]->mNumVertices;
 			_MeshVertex->vertex = new float[_MeshVertex->num_vertex * VERTEX_ARGUMENTS];
+
+
 			
 			for (int k = 0; k < _MeshVertex->num_vertex; k++) {
 
@@ -119,27 +120,16 @@ void ModuleFBX::LoadFBX(string file_path) {
 						}
 						
 						// copy tex coords
-						/*_MeshVertex.texCoords = new float[_MeshVertex.num_vertex * 2];
-						for (size_t k = 0; k < sceneM->mNumVertices; k++) {
-							if (sceneM->mTextureCoords[0]) {
-								_MeshVertex.texCoords[k * 2] = sceneM->mTextureCoords[0][k].x;
-								_MeshVertex.texCoords[k * 2 + 1] = sceneM->mTextureCoords[0][k].y;
-							}
-						}*/
 
 					}
-
 					_MeshVertex->texture_id = App->texture->textureID;
 					_MeshVertex->texture_height = App->texture->textureWidth;
 					_MeshVertex->texture_width = App->texture->textureWidth;
-				
 
 					CreateBuffer(_MeshVertex);
 					//_MeshVertex.CreateBufferTex(checkerImage);
-				
 				}
 				else {
-
 					delete _MeshVertex;
 				}
 		}
@@ -267,8 +257,8 @@ void MeshData::DrawFBX()
 
 	// Descomentar esto para ver Vertex y Face Normals
 
-	/*DrawFacesN();
-	DrawVertexN();*/
+	//DrawFacesN();
+	//DrawVertexN();
 	
 	/*if (App->editor->FaceShow) {
 		DrawFacesN();

@@ -19,9 +19,6 @@ ModuleEditor::~ModuleEditor()
 
 bool ModuleEditor::Init()
 {
-
-    
-
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
@@ -134,7 +131,7 @@ void ModuleEditor::SettingsMenu()
     if (gameAreaWidth < 200.0f)
         gameAreaWidth = 200.0f;
 
-    // AssetsWindow anclada a la derecha
+    // AssetsWindow to the right
     ImGui::SetNextWindowPos(ImVec2(gameAreaWidth, 19));
     ImGui::SetNextWindowSize(ImVec2(Settings2WindowWidth, ImGui::GetIO().DisplaySize.y - 19));
 
@@ -145,17 +142,87 @@ void ModuleEditor::SettingsMenu()
         if (ImGui::CollapsingHeader("LOG"))
         {
             ImGui::SeparatorText("OPEN GL:");
-            ImGui::Text("Vendor: %s", glGetString(GL_VENDOR));
-            ImGui::Text("Renderer: %s", glGetString(GL_RENDERER));
-            ImGui::Text("OpenGL version supported %s", glGetString(GL_VERSION));
-            ImGui::Text("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+            ImGui::Text("Vendor:");
+            //ImGui::SameLine();
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%s", glGetString(GL_VENDOR));
+            ImGui::Text("Renderer:");
+            //ImGui::SameLine();
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%s", glGetString(GL_RENDERER));
+            ImGui::Text("OpenGL version supported:");
+            //ImGui::SameLine();
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%s", glGetString(GL_VERSION));
+            ImGui::Text("GLSL:");
+            //ImGui::SameLine();
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%s", glGetString(GL_SHADING_LANGUAGE_VERSION));
             SDL_version version;
             SDL_GetVersion(&version);
             ImGui::SeparatorText("System Information:");
-            ImGui::Text("Memory Usage: %.2f MB", GetMemoryUsageInMB());
-            ImGui::Text("SDL Version: %d.%d.%d", version.major, version.minor, version.patch);
-            ImGui::Text("OpenGL Version: %s", glGetString(GL_VERSION));
-            ImGui::Text("GLSL Version: %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+            ImGui::Text("Memory usage:");
+            //ImGui::SameLine();
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%.2f MB", GetMemoryUsageInMB());
+            
+            ImGui::Text("SDL Version:");
+            //ImGui::SameLine();
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%d.%d.%d", version.major, version.minor, version.patch);
+            
+            ImGui::Text("OpenGL Version:");
+            //ImGui::SameLine();
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%s", glGetString(GL_VERSION));
+            
+            ImGui::Text("GLSL Version:");
+            //ImGui::SameLine();
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "%s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+            
+        }
+        if (ImGui::CollapsingHeader("Input")) {
+            ImGuiIO& io = ImGui::GetIO();
+            int count = IM_ARRAYSIZE(io.MouseDown);
+            ImGui::Text("Mouse Position:");
+            ImGui::SameLine();
+            ImGui::TextColored(ImVec4(1.0f, 0.0f, 1.0f, 1.0f), "%g, %g", io.MousePos.x, io.MousePos.y);
+            ImGui::Text("Mouse Motion:");
+            ImGui::SameLine();
+            ImGui::TextColored(ImVec4(1.0f, 0.0f, 1.0f, 1.0f), "%g, %g", io.MouseDelta.x, io.MouseDelta.y);
+            ImGui::Text("Mouse Wheel:");
+            ImGui::Text("Mouse down:");
+            for (int i = 0; i < count; i++) 
+                if (ImGui::IsMouseDown(i)) { 
+                    ImGui::SameLine();
+                    ImGui::TextColored(ImVec4(1.0f, 0.0f, 1.0f, 1.0f), "b%d (%.02f secs)", i, io.MouseDownDuration[i]); 
+                }
+
+        }
+        if (ImGui::CollapsingHeader("Hardware")) {
+
+            float ramsize = SDL_GetSystemRAM();
+            ImGui::Text("RAM size:");
+            ImGui::SameLine();
+            ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "%0.1fGb", ramsize / 1024);
+
+            int cpucores = SDL_GetCPUCount();
+            ImGui::Text("CPUs:");
+            ImGui::SameLine();
+            ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "%d (Cache: %dkb)", cpucores, SDL_GetCPUCacheLineSize());
+
+            ImGui::Separator();
+
+            const char* platform = SDL_GetPlatform();
+            ImGui::Text("Platform:");
+            ImGui::SameLine();
+            ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "%s\n", platform);
+
+            int display_num = SDL_GetNumVideoDisplays();
+            ImGui::Text("Screens Count:");
+            ImGui::SameLine();
+            ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "%d\n", display_num);
+
+            for (int i = 0; i < display_num; i++)
+            {
+                const char* name = SDL_GetDisplayName(i);
+                ImGui::Text("Screen %d:", i+1);
+                ImGui::SameLine();
+                ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "%s\n", name);
+            }
         }
 
         if (ImGui::CollapsingHeader("Render Options"))
@@ -237,11 +304,7 @@ void ModuleEditor::SettingsMenu()
             {
 
             }
-            //ImGui::Checkbox("Vsync", &vsync);
-            //SetVsync(vsync);
-            
         }
-
         if (ImGui::CollapsingHeader("Window Settings"))
         {
             ImGui::SeparatorText("Window");
@@ -284,11 +347,9 @@ void ModuleEditor::AssetsWindow()
 {
     float assetsWindowWidth = 200.0f;
 
-    // AssetsWindow anclada a la izquierda
+    // AssetsWindow to the left
     ImGui::SetNextWindowPos(ImVec2(0, 19));
     ImGui::SetNextWindowSize(ImVec2(assetsWindowWidth, ImGui::GetIO().DisplaySize.y - 19));
-
-    
 
     if (ImGui::Begin("Assets", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse))
     {
@@ -313,13 +374,13 @@ void ModuleEditor::AssetsWindow()
 
     //if (ImGui::Begin("Assets", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse))
     //{
-    //    // Iterate through your scene objects and display them
+    //    // Iterate through scene objects and display them
     //    for (const auto& sceneObject : sceneObjects)
     //    {
     //        if (ImGui::TreeNode(sceneObject.name.c_str()))
     //        {
     //            ImGui::Text("Position: (%f, %f, %f)", sceneObject.position.x, sceneObject.position.y, sceneObject.position.z);
-    //            // You can add more object-specific information here
+    //            
 
     //            ImGui::TreePop();
     //        }
