@@ -179,49 +179,47 @@ void ModuleEditor::SettingsMenu()
             int count = IM_ARRAYSIZE(io.MouseDown);
             ImGui::Text("Mouse Position:");
             ImGui::SameLine();
-            ImGui::TextColored(ImVec4(1.0f, 0.0f, 1.0f, 1.0f), "%g, %g", io.MousePos.x, io.MousePos.y);
+            ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.5f, 1.0f), "%g, %g", io.MousePos.x, io.MousePos.y);
             ImGui::Text("Mouse Motion:");
             ImGui::SameLine();
-            ImGui::TextColored(ImVec4(1.0f, 0.0f, 1.0f, 1.0f), "%g, %g", io.MouseDelta.x, io.MouseDelta.y);
-            ImGui::Text("Mouse Wheel:");
+            ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.5f, 1.0f), "%g, %g", io.MouseDelta.x, io.MouseDelta.y);
             ImGui::Text("Mouse down:");
             for (int i = 0; i < count; i++) 
                 if (ImGui::IsMouseDown(i)) { 
                     ImGui::SameLine();
-                    ImGui::TextColored(ImVec4(1.0f, 0.0f, 1.0f, 1.0f), "b%d (%.02f secs)", i, io.MouseDownDuration[i]); 
+                    ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.5f, 1.0f), "b%d (%.02f secs)", i, io.MouseDownDuration[i]); 
                 }
-
         }
         if (ImGui::CollapsingHeader("Hardware")) {
 
             float ramsize = SDL_GetSystemRAM();
             ImGui::Text("RAM size:");
             ImGui::SameLine();
-            ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "%0.1fGb", ramsize / 1024);
+            ImGui::TextColored(ImVec4(0.5f, 0.5f, 1.0f, 1.0f), "%0.1fGb", ramsize / 1024);
 
             int cpucores = SDL_GetCPUCount();
             ImGui::Text("CPUs:");
             ImGui::SameLine();
-            ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "%d (Cache: %dkb)", cpucores, SDL_GetCPUCacheLineSize());
+            ImGui::TextColored(ImVec4(0.5f, 0.5f, 1.0f, 1.0f), "%d (Cache: %dkb)", cpucores, SDL_GetCPUCacheLineSize());
 
             ImGui::Separator();
 
             const char* platform = SDL_GetPlatform();
             ImGui::Text("Platform:");
             ImGui::SameLine();
-            ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "%s\n", platform);
+            ImGui::TextColored(ImVec4(0.5f, 0.5f, 1.0f, 1.0f), "%s\n", platform);
 
             int display_num = SDL_GetNumVideoDisplays();
             ImGui::Text("Screens Count:");
             ImGui::SameLine();
-            ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "%d\n", display_num);
+            ImGui::TextColored(ImVec4(0.5f, 0.5f, 1.0f, 1.0f), "%d\n", display_num);
 
             for (int i = 0; i < display_num; i++)
             {
                 const char* name = SDL_GetDisplayName(i);
                 ImGui::Text("Screen %d:", i+1);
                 ImGui::SameLine();
-                ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "%s\n", name);
+                ImGui::TextColored(ImVec4(0.5f, 0.5f, 1.0f, 1.0f), "%s\n", name);
             }
         }
 
