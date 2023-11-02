@@ -12,6 +12,8 @@
 #include "ImGui/backends/imgui_impl_sdl2.h"
 #include "ImGui/backends/imgui_impl_opengl3.h"
 
+
+
 class ModuleEditor : public Module
 {
 public:
@@ -40,7 +42,9 @@ public:
 
 	// A flag to control scrolling to the bottom of the console
 	bool scrollToBottom;
-	bool gl_DEPTH_TEST, gl_CULL_FACE, gl_LIGHTING = true , gl_COLOR_MATERIAL, gl_TEXTURE_2D = true;
+	bool gl_DEPTH_TEST, gl_CULL_FACE, gl_LIGHTING = true, gl_COLOR_MATERIAL, isTextured = true, Checkers = false;
+
+
 private:
 	const char* lastValue = "";
 	void MainMenuBar();
@@ -54,5 +58,7 @@ private:
 
 	int Height = 720, Width = 1080;
 	bool fullscreen = false, resizable = true, borderless = false, fullscreendesktop = false;
+
+	
 };
 #endif // !_Module_Editor_

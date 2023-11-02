@@ -15,6 +15,11 @@ ModuleTexture::~ModuleTexture()
 {
 }
 
+bool ModuleTexture::Init()
+{
+
+	return true;
+}
 bool ModuleTexture::Start()
 {
  {
@@ -59,10 +64,10 @@ bool ModuleTexture::Start()
 	ilInit();
 	ilClearColour(255, 255, 255, 000);
 
-
+	
 	House_Texture_Path = "Assets/textures/Baker_house.png";
 
-	// Load the texture from the specified path.
+	//// Load the texture from the specified path.
 	LoadTexture(House_Texture_Path);
 
 	return true;
@@ -98,48 +103,13 @@ bool ModuleTexture::LoadTexture(string file_path)
 		printf("Unable to load %s\n", file_path.c_str());
 	}
 
-	//// Extract loaded image data
-	//BYTE* data = ilGetData();
-	//ILuint imgWidth, imgHeight;
-	//imgWidth = ilGetInteger(IL_IMAGE_WIDTH);
-	//imgHeight = ilGetInteger(IL_IMAGE_HEIGHT);
-	//int const type = ilGetInteger(IL_IMAGE_TYPE);
-	//int const format = ilGetInteger(IL_IMAGE_FORMAT);
-
-	//// Change DevIL buffer ID to Glew buffer ID (create buffer by copying binded buffer)
-	//GLuint imageId = ilutGLBindTexImage();
-	//glBindTexture(GL_TEXTURE_2D, imageId);
-
-	//// How texture behaves outside 0,1 range (S->x, T->y)
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
-	//// Texture behaviour after resize (MIN->smaller , MAG->bigger)
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-	//// Create Texture
-	//glTexImage2D(GL_TEXTURE_2D, 0, format, imgWidth, imgHeight, 0, format, type, data);
-	//glGenerateMipmap(GL_TEXTURE_2D);
-
-	// CLEANUP
-
-	// Delete DevIL image buffer
+	
 	ilDeleteImages(1, &devilImageId);
-	//ilBindImage(0);
-
-	// Unbind glew buffer
+	
 
 	return isTextureLoaded;
 }
 
-
-bool ModuleTexture::Init()
-{
-	
-
-	return true;
-}
 
 
 

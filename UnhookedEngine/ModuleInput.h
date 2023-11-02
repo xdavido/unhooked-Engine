@@ -4,6 +4,8 @@
 #include <string>
 #define MAX_MOUSE_BUTTONS 5
 
+using namespace std;
+
 enum KEY_STATE
 {
 	KEY_IDLE = 0,
@@ -68,5 +70,5 @@ public:
 	int mouse_y_motion;
 	char* dropped_filedir;
 	bool droped = false;
-	
+	void HandlePath(std::string extension_path);
 };

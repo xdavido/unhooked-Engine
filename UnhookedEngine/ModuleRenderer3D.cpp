@@ -133,7 +133,7 @@ bool ModuleRenderer3D::Init()
 	Grid.axis = true;
 
 	
-	
+
 	return ret;
 }
 
@@ -161,7 +161,7 @@ update_status ModuleRenderer3D::Update(float dt)
 
 	if (App->input->droped)
 	{
-		HandlePath(App->input->dropped_filedir);
+		App->input->HandlePath(App->input->dropped_filedir);
 		App->input->droped = false;
 	}
 
@@ -174,6 +174,8 @@ update_status ModuleRenderer3D::Update(float dt)
 	}
 	else{
 
+		glPolygonMode(GL_FRONT, GL_FILL);
+		glPolygonMode(GL_BACK, GL_FILL);
 		App->FBX->DrawMesh();
 	}
 	
@@ -183,22 +185,6 @@ update_status ModuleRenderer3D::Update(float dt)
 
 }
 
-void ModuleRenderer3D::HandlePath(std::string extension_path)
-{
-	std::string extension = extension_path.substr(extension_path.find_last_of(".") + 1);
-
-	if (extension == "fbx" || extension == "FBX") {
-
-		App->FBX->LoadFBX(App->input->dropped_filedir);
-		return;
-	}
-	else if (extension == "png" || extension == "PNG" || extension == "dds" || extension == "DDS") {
-		App->texture->LoadTexture(App->input->dropped_filedir);
-		return;
-	}
-
-	LOG("File extension from path does not match any of the supported: %s", extension_path.c_str());
-}
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {

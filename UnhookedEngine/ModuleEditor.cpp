@@ -254,25 +254,23 @@ void ModuleEditor::SettingsMenu()
                     MSG.push_back("GL_COLOR_MATERIAL Disabled");
                 }
             }
-            if (ImGui::Checkbox("Texture", &gl_TEXTURE_2D))
-            {
-                if (gl_TEXTURE_2D)
-                {
-                    glEnable(GL_TEXTURE_2D);
-                    MSG.push_back("GL_TEXTURE_2D Enabled");
-                }
-                else
-                {
-                    glDisable(GL_TEXTURE_2D);
-                    MSG.push_back("GL_TEXTURE_2D Disabled");
-                }
-            }
+            
             if (ImGui::Checkbox("Wireframe Mode", &wireframe))
             {
                 SetWireFrameMode(wireframe);
             }
             if (ImGui::Checkbox("Show Vertex Normals", &VertexShow)){}
             if (ImGui::Checkbox("Show Face Normals", &FaceShow)){}
+        }
+        if (ImGui::CollapsingHeader("Texture Settings"))
+        {
+            if (ImGui::Button("Destroy Texture"))
+            {
+                App->texture->DestroyTexture();
+
+                MSG.push_back("Deleted");
+            }ImGui::SameLine();
+          
         }
         if (ImGui::CollapsingHeader("Window Settings"))
         {
@@ -402,10 +400,13 @@ void ModuleEditor::SetWireFrameMode(bool wireframe)
     {
         glPolygonMode(GL_FRONT, GL_FILL);
         glPolygonMode(GL_BACK, GL_FILL);
-
+        App->FBX->DrawMesh();
     }
     else
     {
-        App->FBX->DrawMesh();
+        glPolygonMode(GL_FRONT, GL_LINE);
+        glPolygonMode(GL_BACK, GL_LINE);
     }
 }
+
+
