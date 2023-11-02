@@ -9,7 +9,9 @@
 
 ModuleHierarchy::ModuleHierarchy(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	
+	roots = nullptr;
+	TargetDropped = nullptr;
+	objSelected = nullptr;
 }
 
 ModuleHierarchy::~ModuleHierarchy()
