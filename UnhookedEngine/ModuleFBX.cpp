@@ -272,13 +272,13 @@ void MeshData::DrawFacesN() {
 	for (uint i = 0; i < num_index; i += 3) {
 		// Calculate the face normal
 		float normal[3];
-		CalculateFaceNormal(&vertex[index[i] * 3], &vertex[index[i + 1] * 3], &vertex[index[i + 2] * 3], normal);
+		CalculateFaceNormal(&vertex[index[i] * VERTEX_ARGUMENTS], &vertex[index[i + 1] * VERTEX_ARGUMENTS], &vertex[index[i + 2] * VERTEX_ARGUMENTS], normal);
 
 		// Calculate the center of the face (average of vertices)
 		float center[3];
-		center[0] = (vertex[index[i] * 3] + vertex[index[i + 1] * 3] + vertex[index[i + 2] * 3]) / 3;
-		center[1] = (vertex[index[i] * 3 + 1] + vertex[index[i + 1] * 3 + 1] + vertex[index[i + 2] * 3 + 1]) / 3;
-		center[2] = (vertex[index[i] * 3 + 2] + vertex[index[i + 1] * 3 + 2] + vertex[index[i + 2] * 3 + 2]) / 3;
+		center[0] = (vertex[index[i] * VERTEX_ARGUMENTS] + vertex[index[i + 1] * VERTEX_ARGUMENTS] + vertex[index[i + 2] * VERTEX_ARGUMENTS]) / 3;
+		center[1] = (vertex[index[i] * VERTEX_ARGUMENTS + 1] + vertex[index[i + 1] * VERTEX_ARGUMENTS + 1] + vertex[index[i + 2] * VERTEX_ARGUMENTS + 1]) / 3;
+		center[2] = (vertex[index[i] * VERTEX_ARGUMENTS + 2] + vertex[index[i + 1] * VERTEX_ARGUMENTS + 2] + vertex[index[i + 2] * VERTEX_ARGUMENTS + 2]) / 3;
 
 		// Calculate the end point of the face normal
 		float endpoint[3];
@@ -292,36 +292,34 @@ void MeshData::DrawFacesN() {
 		glVertex3fv(endpoint);
 		glEnd();
 	}
+
 	
 }
 
 void MeshData::DrawVertexN() {
+
+	glEnableClientState(GL_COLOR_ARRAY);
+	glColorPointer(3, GL_FLOAT, 0, 0);
+
+	// Calculate vertex normals before drawing them
 	CalculateVertexNormals();
-	//Draw Vertex Normals
-	/*if (App.editor->VertexShow) {*/
-	for (uint i = 0; i < num_vertex * 3; i += 3) {
-		float vertexX = vertex[i];
-		float vertexY = vertex[i + 1];
-		float vertexZ = vertex[i + 2];
 
-		float normalX = normals[i];
-		float normalY = normals[i + 1];
-		float normalZ = normals[i + 2];
+	// Draw Vertex Normals
+	for (uint i = 0; i < num_vertex; ++i) {
+		// Calculate the end point of the vertex normal
+		float endpoint[3];
+		endpoint[0] = vertex[i * VERTEX_ARGUMENTS] + normals[i * 3];
+		endpoint[1] = vertex[i * VERTEX_ARGUMENTS + 1] + normals[i * 3 + 1];
+		endpoint[2] = vertex[i * VERTEX_ARGUMENTS + 2] + normals[i * 3 + 2];
 
-		// Define a scaling factor for the normal length
-		float normalScale = 0.1f;
-
-		// Calculate the end point of the normal
-		float normalEndX = vertexX + normalX * normalScale;
-		float normalEndY = vertexY + normalY * normalScale;
-		float normalEndZ = vertexZ + normalZ * normalScale;
-
-		// Draw the vertex normal as a line
+		// Draw the vertex normal as a line from the vertex position to the end point
 		glBegin(GL_LINES);
-		glVertex3f(vertexX, vertexY, vertexZ);
-		glVertex3f(normalEndX, normalEndY, normalEndZ);
+		glVertex3fv(&vertex[i * VERTEX_ARGUMENTS]);
+		glVertex3fv(endpoint);
 		glEnd();
 	}
+
+	glDisableClientState(GL_COLOR_ARRAY);
 }
 	
 
